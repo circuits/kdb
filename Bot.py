@@ -19,6 +19,9 @@ class Bot(IRC.Client):
 	EAT_ALL		= 2
 	EAT_NONE		= 3
 
+	def __init__(self):
+		self.running = True
+	
 	# Commands
 
 	def doEVAL(self, source, target, expression):
@@ -37,6 +40,10 @@ class Bot(IRC.Client):
 
 	def doQUIT(self, source, target):
 		self.ircQUIT()
+
+	def doDIE(self, source, target):
+		self.ircQUIT()
+		self.running = False
 
 	def doNICK(self, source, target, nick):
 		self.ircNICK(nick)
@@ -202,6 +209,9 @@ class Bot(IRC.Client):
 			elif command == 'quit':
 				data.incCount('commands')
 				self.doQUIT(source, target)
+			elif command == 'die':
+				data.incCount('commands')
+				self.doDIE(source, target)
 			elif command == 'nick':
 				data.incCount('commands')
 				nick = tokens.next()
