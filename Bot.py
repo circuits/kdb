@@ -20,6 +20,7 @@ class Bot(IRC.Client):
 	EAT_NONE		= 3
 
 	def __init__(self):
+		IRC.Client.__init__(self)
 		self.running = True
 	
 	# Commands
