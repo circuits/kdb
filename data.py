@@ -14,6 +14,7 @@ import conf, pickle
 #Global Variables
 startTime = time.time()
 counts = {}
+traffic = (0, 0)
 
 #Python Environment
 #envGlobals = {"__builtins__": {}}

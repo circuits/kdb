@@ -54,6 +54,21 @@ class Bot(IRC.Client):
 		cpu = time.clock()
 		msg = 'Uptime: ' + uptime + ' (CPU: ' + str(cpu) + ')'
 		self.ircPRIVMSG(target, msg)
+
+	def doNSTATS(self, source, target):
+		traffic = data.traffic
+
+		(in_value, in_postfix) = utils.bytes(traffic[0])
+		(out_value, out_postfix) = utils.bytes(traffic[1])
+		(total_value, total_postfix) = utils.bytes(traffic[0] + traffic[1])
+
+		in_str = str(in_value) + in_postfix
+		out_str = str(out_value) + out_postfix
+		total_str = str(total_value) + total_postfix
+
+		msg = "Traffic: (I, O, T) = (%s, %s, %s)" % (in_str, out_str, total_str)
+
+		self.ircPRIVMSG(target, msg)
 	
 	def doSTATUS(self, source, target):
 		c = data.getCount('commands')
@@ -160,7 +175,21 @@ class Bot(IRC.Client):
 
 		self.ircPRIVMSG(target, msg)
 	
-	# Events
+	# IRC Commands
+
+	def ircRAW(self, line):
+		IRC.Client.ircRAW(self, line)
+		(traffic_in, traffic_out) = data.traffic
+		traffic_out = traffic_out + len(line) + 1
+		data.traffic = (traffic_in, traffic_out)
+
+	# IRC Events
+
+	def onRAW(self, line):
+		IRC.Client.onRAW(self, line)
+		(traffic_in, traffic_out) = data.traffic
+		traffic_in = traffic_in + len(line)
+		data.traffic = (traffic_in, traffic_out)
 
 	def onCTCP(self, source, target, type, message):
 	
@@ -220,6 +249,9 @@ class Bot(IRC.Client):
 			elif command == 'uptime':
 				data.incCount('commands')
 				self.doUPTIME(source, target)
+			elif command == 'nstats':
+				data.incCount('commands')
+				self.doNSTATS(source, target)
 			elif command == 'status':
 				data.incCount('commands')
 				self.doSTATUS(source, target)
