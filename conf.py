@@ -32,7 +32,7 @@ servers = []
 servers.append(("dede", 6667))
 
 # Channel Settings
-channels = ["#ShortCircuit", "#SE"]
+channels = ["#ShortCircuit", "#SE", "#Office"]
 
 # Bot Settings
 me = {}
