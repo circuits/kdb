@@ -105,15 +105,23 @@ class Bot(IRC.Client):
 	
 	def doHOST(self, source, target, host):
 		if re.search('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', host):
+			try:
+				(name, aliasList, addressList) = socket.gethostbyaddr(host)
+			except socket.herror, (errNum, errStr):
+				name = errStr
 			if source[0] == target:
-				msg = 'Hostname: ' + socket.gethostbyaddr(host)
+				msg = "Hostname: %s" + name
 			else:
-				msg = source[0] + ', Hostname: ' + socket.gethostbyaddr(host)
+				msg = "%s, Hostname: %s" % (source[0], name)
 		else:
+			try:
+				(name, aliasList, addressList) = socket.gethostbyname(host)
+			except socket.herror, (errNum, errStr):
+				name = errStr
 			if source[0] == target:
-				msg = 'IP: ' + socket.gethostbyname(host)
+				msg = "IP: %s" % name
 			else:
-				msg = source[0] + ', IP: ' + socket.gethostbyname(host)
+				msg = "%s, IP: %s" % (source[0], name)
 		self.ircPRIVMSG(target, msg)
 	
 	def doTELL(self, source, target, who, subject):
