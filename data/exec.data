@@ -1,0 +1,8 @@
+(lp0
+S'def foo(): return "bar"'
+p1
+aS'import time'
+p2
+aS'import math'
+p3
+a.

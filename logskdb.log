@@ -1,0 +1,40 @@
+Connecting to server: dede on port: 6667
+OUT: USER kdb localhost dede :ShortCircuit Knowledge Bot
+OUT: NICK kdb
+OUT: JOIN #ShortCircuit
+OUT: JOIN #SE
+IN:: :irc.shortcircuit.net.au NOTICE AUTH :*** Looking up your hostname...
+IN:: :irc.shortcircuit.net.au NOTICE AUTH :*** Found your hostname (cached)
+IN:: :irc.shortcircuit.net.au 001 kdb :Welcome to the ShortCircuit IRC Network kdb!kdb@daisy.mills
+IN:: :irc.shortcircuit.net.au 002 kdb :Your host is irc.shortcircuit.net.au, running version Unreal3.2-RC2fix
+IN:: :irc.shortcircuit.net.au 003 kdb :This server was created Sun Apr 25 2004 at 00:58:19 EST
+IN:: :irc.shortcircuit.net.au 004 kdb irc.shortcircuit.net.au Unreal3.2-RC2fix iowghraAsORTVSxNCWqBzvdHtGp lvhopsmntikrRcaqOALQbSeKVfMGCuzNT
+IN:: :irc.shortcircuit.net.au 005 kdb MAP KNOCK SAFELIST HCN MAXCHANNELS=10 MAXBANS=60 NICKLEN=30 TOPICLEN=307 KICKLEN=307 MAXTARGETS=20 AWAYLEN=307 :are supported by this server
+IN:: :irc.shortcircuit.net.au 005 kdb WALLCHOPS WATCH=128 SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=be,kfL,l,psmntirRcOAQKVGCuzNSMT NETWORK=ShortCircuit CASEMAPPING=ascii EXTBAN=~,cqr :are supported by this server
+IN:: :irc.shortcircuit.net.au 251 kdb :There are 14 users and 12 invisible on 3 servers
+IN:: :irc.shortcircuit.net.au 252 kdb 4 :operator(s) online
+IN:: :irc.shortcircuit.net.au 254 kdb 17 :channels formed
+IN:: :irc.shortcircuit.net.au 255 kdb :I have 13 clients and 1 servers
+IN:: :irc.shortcircuit.net.au 265 kdb :Current Local Users: 13  Max: 81
+IN:: :irc.shortcircuit.net.au 266 kdb :Current Global Users: 26  Max: 94
+IN:: :irc.shortcircuit.net.au 422 kdb :MOTD File is missing
+IN:: :kdb MODE kdb :+iwx
+IN:: :kdb!kdb@ShortCircuit-3E0BC912.mills JOIN :#shortcircuit
+IN:: :irc.shortcircuit.net.au 332 kdb #shortcircuit :Welcome to ShortCircuit - Webpage: http://wiki.shortcircuit.net.au/IRC/ - Services are up! - 3Join #SE for a good time ;)
+IN:: :irc.shortcircuit.net.au 333 kdb #shortcircuit prologic 1090125764
+IN:: :irc.shortcircuit.net.au 353 kdb = #shortcircuit :kdb Hellson` @Shiva64 @Romster @anne brendan ~ProChan @prologic @[James]
+IN:: :irc.shortcircuit.net.au 366 kdb #shortcircuit :End of /NAMES list.
+IN:: :kdb!kdb@ShortCircuit-3E0BC912.mills JOIN :#se
+IN:: :irc.shortcircuit.net.au 332 kdb #se :12Software Engineering/ShortCircuit Entertainment Channel
+IN:: :irc.shortcircuit.net.au 333 kdb #se prologic 1090125807
+IN:: :irc.shortcircuit.net.au 353 kdb = #se :kdb Hellson` @Shiva64 dj-axi Romster @AberOut @zaphod @anne brendan ~ProChan @prologic @[James]
+IN:: :irc.shortcircuit.net.au 366 kdb #se :End of /NAMES list.
+IN:: :Global!Service@services.shortcircuit.net.au PRIVMSG kdb :VERSION
+IN:: :Global!Service@services.shortcircuit.net.au NOTICE kdb :[Logon NEWS] - (30-3-2002) - test
+IN:: :Global!Service@services.shortcircuit.net.au NOTICE kdb :[Logon NEWS] - (30-3-2002) - test
+IN:: :Global!Service@services.shortcircuit.net.au NOTICE kdb :[Logon NEWS] - (30-3-2002) - test
+IN:: :prologic!prologic@ShortCircuit-3E0BC912.mills PRIVMSG kdb :list 5
+ERROR: global name 'string' is not defined
+{'__builtins__': {}}
+{'__builtins__': {}}
+OUT: QUIT :

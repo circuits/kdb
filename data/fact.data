@@ -1,0 +1,4058 @@
+(lp0
+(dp1
+S'content'
+p2
+S'ExtraOrdinary Man'
+p3
+sS'who'
+p4
+S'Ject'
+p5
+sS'type'
+p6
+S'is'
+p7
+sS'subject'
+p8
+S'Ject'
+p9
+sa(dp10
+S'content'
+p11
+S'my grandpa'
+p12
+sS'who'
+p13
+S'Ject'
+p14
+sS'type'
+p15
+S'is'
+p16
+sS'subject'
+p17
+S'hellson'
+p18
+sa(dp19
+S'content'
+p20
+S'such a cool language'
+p21
+sS'who'
+p22
+S'prologic'
+p23
+sS'type'
+p24
+S'is'
+p25
+sS'subject'
+p26
+S'Python'
+p27
+sa(dp28
+S'content'
+p29
+S't'
+p30
+sS'who'
+p31
+S'prologic'
+p32
+sS'type'
+p33
+S'is'
+p34
+sS'subject'
+p35
+S"help reply Hi $nick, I'm a bot. Type 'commands' to see my command l"
+p36
+sa(dp37
+g29
+S'go suck your own dick!'
+p38
+sg31
+S'prologic'
+p39
+sg33
+S'reply'
+p40
+sg35
+S'suck me off'
+p41
+sa(dp42
+g29
+S'go suck your own dick!'
+p43
+sg31
+S'clubber'
+p44
+sg33
+g40
+sg35
+S'suck my dick'
+p45
+sa(dp46
+g29
+S'no you shutup!'
+p47
+sg31
+S'prologic'
+p48
+sg33
+g40
+sg35
+S'shutup'
+p49
+sa(dp50
+g29
+S'could become quite fun :)'
+p51
+sg31
+S'prologic'
+p52
+sg33
+g34
+sg35
+S'th'
+p53
+sa(dp54
+S'content'
+p55
+S'hot very hot'
+p56
+sS'who'
+p57
+S'clubber'
+p58
+sS'type'
+p59
+S'is'
+p60
+sS'subject'
+p61
+S'she'
+p62
+sa(dp63
+S'content'
+p64
+S'bye bye $nick, come again soon :)'
+p65
+sS'who'
+p66
+S'prologic'
+p67
+sS'type'
+p68
+S'reply'
+p69
+sS'subject'
+p70
+S'bye'
+p71
+sa(dp72
+g64
+S'$150'
+p73
+sg66
+S'clubber'
+p74
+sg68
+S'is'
+p75
+sg70
+S'he told me a 17" monitor'
+p76
+sa(dp77
+g64
+S'here'
+p78
+sg66
+S'clubber'
+p79
+sg68
+g75
+sg70
+S'ill see what else and how cheap it'
+p80
+sa(dp81
+g64
+S'stuffed ;\\'
+p82
+sg66
+S'clubber'
+p83
+sg68
+S'are'
+p84
+sg70
+S'others'
+p85
+sa(dp86
+g64
+S'about $25 maybe around $30'
+p87
+sg66
+S'clubber'
+p88
+sg68
+g84
+sg70
+S'i do know a price of a 50 spindle pack DVD'
+p89
+sa(dp90
+S'content'
+p91
+S"Type: 'host <host/ip>' to get me to do a host check on <host/ip> and display the result."
+p92
+sS'who'
+p93
+S'prologic'
+p94
+sS'type'
+p95
+S'reply'
+p96
+sS'subject'
+p97
+S'help host'
+p98
+sa(dp99
+g91
+S"Type: 'status' to display my current status."
+p100
+sg93
+S'prologic'
+p101
+sg95
+g96
+sg97
+S'help status'
+p102
+sa(dp103
+g91
+S"Type: 'uptime' to see my current uptime and cpu usage."
+p104
+sg93
+S'prologic'
+p105
+sg95
+g96
+sg97
+S'help uptime'
+p106
+sa(dp107
+S'content'
+p108
+S'#help'
+p109
+sS'who'
+p110
+S'prologic'
+p111
+sS'type'
+p112
+S'is'
+p113
+sS'subject'
+p114
+S'Help'
+p115
+sa(dp116
+S'content'
+p117
+S"eval, exec, quit, nick, uptime, status, forget, no, host (Type: 'help <command>' for more help on <command>)"
+p118
+sS'who'
+p119
+S'prologic'
+p120
+sS'type'
+p121
+S'reply'
+p122
+sS'subject'
+p123
+S'commands'
+p124
+sa(dp125
+g117
+S'very hard out there'
+p126
+sg119
+S'prologic'
+p127
+sg121
+S'is'
+p128
+sg123
+S'the web hosting market'
+p129
+sa(dp130
+g117
+S'ui'
+p131
+sg119
+S'dj-axi'
+p132
+sg121
+S'are'
+p133
+sg123
+S'how reliable'
+p134
+sa(dp135
+g117
+S'a laugh'
+p136
+sg119
+S'dj-axi'
+p137
+sg121
+g128
+sg123
+S'2 hours'
+p138
+sa(dp139
+g117
+S'a laugh compared to that'
+p140
+sg119
+S'dj-axi'
+p141
+sg121
+g128
+sg123
+S'yours'
+p142
+sa(dp143
+g117
+S'what I mean'
+p144
+sg119
+S'prologic'
+p145
+sg121
+g128
+sg123
+S'to set up bpay'
+p146
+sa(dp147
+g117
+S'done though :)'
+p148
+sg119
+S'prologic'
+p149
+sg121
+g128
+sg123
+S'give me a couple of days to figure out how bpay'
+p150
+sa(dp151
+g117
+S''
+p152
+sg119
+S'prologic'
+p153
+sg121
+g128
+sg123
+S'then $165 it'
+p154
+sa(dp155
+g117
+S'the website'
+p156
+sg119
+S'prologic'
+p157
+sg121
+g128
+sg123
+S'http://shortcircuit.net.au/'
+p158
+sa(dp159
+g117
+S'a reliable company, that i can access at most certain times of the day and fdo my job with comfort and no hassle with u...'
+p160
+sg119
+S'dj-axi'
+p161
+sg121
+g128
+sg123
+S'all i am looking for a'
+p162
+sa(dp163
+g117
+S'this company7 tjhat suits my job'
+p164
+sg119
+S'dj-axi'
+p165
+sg121
+g133
+sg123
+S'if u think u'
+p166
+sa(dp167
+g117
+S'you ?'
+p168
+sg119
+S'prologic'
+p169
+sg121
+g133
+sg123
+S'who'
+p170
+sa(dp171
+g117
+S'saying'
+p172
+sg119
+S'prologic'
+p173
+sg121
+g128
+sg123
+S"it's annoying my ability to read what dj-axi"
+p174
+sa(dp175
+g117
+S'up here'
+p176
+sg119
+S'Hellson`'
+p177
+sg121
+g128
+sg123
+S'as long as the server'
+p178
+sa(dp179
+g117
+g152
+sg119
+S'prologic'
+p180
+sg121
+g128
+sg123
+S'it'
+p181
+sa(dp182
+g117
+S'20'
+p183
+sg119
+S'prologic'
+p184
+sg121
+g128
+sg123
+S'that and the text size'
+p185
+sa(dp186
+g117
+S'playing a game'
+p187
+sg119
+S'Shiva64'
+p188
+sg121
+g128
+sg123
+S'heh all ill be doing'
+p189
+sa(dp190
+g117
+S'a crate, a small chair, and a board on top of them lol'
+p191
+sg119
+S'Shiva64'
+p192
+sg121
+g128
+sg123
+S'the only thing im using for a table for now,'
+p193
+sa(dp194
+g117
+S'hello $nick'
+p195
+sg119
+S'prologic'
+p196
+sg121
+g122
+sg123
+S'hello'
+p197
+sa(dp198
+g117
+S'asleep'
+p199
+sg119
+S'pl_zzzz'
+p200
+sg121
+g128
+sg123
+S'james'
+p201
+sa(dp202
+g117
+S"prologic when he's asleep"
+p203
+sg119
+S'pl_zzzz'
+p204
+sg121
+g128
+sg123
+S'pl_zzzz'
+p205
+sa(dp206
+g117
+S'just fantastic'
+p207
+sg119
+S'prologic'
+p208
+sg121
+g128
+sg123
+S'this'
+p209
+sa(dp210
+g117
+S'growing :)'
+p211
+sg119
+S'prologic'
+p212
+sg121
+g128
+sg123
+S'this network'
+p213
+sa(dp214
+g117
+S'one of my old friends.. about fucking time he showed up ;)'
+p215
+sg119
+S'Shiva64'
+p216
+sg121
+g128
+sg123
+S'Kaz'
+p217
+sa(dp218
+g117
+S'also a dork'
+p219
+sg119
+S'anne'
+p220
+sg121
+g128
+sg123
+S'but prologic'
+p221
+sa(dp222
+g117
+S"Add the 'also' feature to keep multiple facts about things."
+p223
+sg119
+S'prologic'
+p224
+sg121
+g122
+sg123
+S'todo'
+p225
+sa(dp226
+g117
+S'one'
+p227
+sg119
+S'anne'
+p228
+sg121
+g128
+sg123
+S'it kind of'
+p229
+sa(dp230
+g117
+S'irc.allniteparty.org'
+p231
+sg119
+S'prologic'
+p232
+sg121
+g128
+sg123
+S'allniteparty'
+p233
+sa(dp234
+g117
+S'kdb?'
+p235
+sg119
+S'Kaz'
+p236
+sg121
+g128
+sg123
+S'what the heck'
+p237
+sa(dp238
+g117
+S'you go away!'
+p239
+sg119
+S'prologic'
+p240
+sg121
+g122
+sg123
+S'go away'
+p241
+sa(dp242
+g117
+S'like... my home network almost lol'
+p243
+sg119
+S'Kaz'
+p244
+sg121
+g128
+sg123
+S'yeah um... this'
+p245
+sa(dp246
+g117
+g152
+sg119
+S'prologic'
+p247
+sg121
+g128
+sg123
+S'yeh it'
+p248
+sa(dp249
+g117
+S'in charge'
+p250
+sg119
+S'pl_away'
+p251
+sg121
+g128
+sg123
+S'Shiva64'
+p252
+sa(dp253
+g117
+S'hot* erm..'
+p254
+sg119
+S'Shiva64'
+p255
+sg121
+g128
+sg123
+S'*thinks adult Link'
+p256
+sa(dp257
+g117
+S'On! Enter !slots to try your luck!'
+p258
+sg119
+S'Kaz'
+p259
+sg121
+g133
+sg123
+S'\x033 *Slots'
+p260
+sa(dp261
+g117
+S'a bad thing lol'
+p262
+sg119
+S'Shiva64'
+p263
+sg121
+g128
+sg123
+S'because everytime she comes in here by herself.. she tears my room up, and she learned that coming in here'
+p264
+sa(dp265
+g117
+S'fucked up lol'
+p266
+sg119
+S'Shiva64'
+p267
+sg121
+g128
+sg123
+S'uhh... the white'
+p268
+sa(dp269
+g117
+S'better'
+p270
+sg119
+S'bitch'
+p271
+sg121
+g133
+sg123
+S'i have flags mine'
+p272
+sa(dp273
+g117
+S'already in use.'
+p274
+sg119
+S'bitch'
+p275
+sg121
+g128
+sg123
+S'BaDgIrL Nickname'
+p276
+sa(dp277
+g117
+S'already in use.'
+p278
+sg119
+S'bitch'
+p279
+sg121
+g128
+sg123
+S'BaDgiRL Nickname'
+p280
+sa(dp281
+g117
+S'born'
+p282
+sg119
+S'Kaz'
+p283
+sg121
+g128
+sg123
+S'thus KaBoo'
+p284
+sa(dp285
+g117
+S'one of those wild ones'
+p286
+sg119
+S'Shiva64'
+p287
+sg121
+g128
+sg123
+S'Cleo'
+p288
+sa(dp289
+g117
+S'shit though'
+p290
+sg119
+S'Kaz'
+p291
+sg121
+g128
+sg123
+S"I'm sure this"
+p292
+sa(dp293
+g117
+S'Kaz weird'
+p294
+sg119
+S'Shiva64'
+p295
+sg121
+g128
+sg123
+S'.8ball'
+p296
+sa(dp297
+g117
+S'an asshole,             \x030,1'
+p298
+sg119
+S'Shiva64'
+p299
+sg121
+g128
+sg123
+S'\x0312,1     \\_)   //  '
+p300
+sa(dp301
+g117
+S'a    \x030,1'
+p302
+sg119
+S'Shiva64'
+p303
+sg121
+g128
+sg123
+S"\x0312,1     /    `-'\\  and my best friend"
+p304
+sa(dp305
+g117
+S'LUKE SKYWALKER MY SON!'
+p306
+sg119
+S'DrTHVaDeR'
+p307
+sg121
+g133
+sg123
+S"You aren't ChocoBokoBot... You"
+p308
+sa(dp309
+g117
+S'here'
+p310
+sg119
+S'anne'
+p311
+sg121
+g128
+sg123
+S'uh oh dave'
+p312
+sa(dp313
+g117
+S'in here'
+p314
+sg119
+S'anne'
+p315
+sg121
+g133
+sg123
+S'wow 8 people'
+p316
+sa(dp317
+g117
+S'you ^_^'
+p318
+sg119
+S'Abernus'
+p319
+sg121
+g133
+sg123
+S'how'
+p320
+sa(dp321
+g117
+S'about to completely break'
+p322
+sg119
+S'Shiva64'
+p323
+sg121
+g128
+sg123
+S'mine'
+p324
+sa(dp325
+g117
+S'you from jess and her phone?'
+p326
+sg119
+S'Abernus'
+p327
+sg121
+g133
+sg123
+S'how far'
+p328
+sa(dp329
+g117
+S'in her bag'
+p330
+sg119
+S'prologic'
+p331
+sg121
+g128
+sg123
+S'her phone'
+p332
+sa(dp333
+g117
+S'one for scheming'
+p334
+sg119
+S'prologic'
+p335
+sg121
+g128
+sg123
+S'Abernus'
+p336
+sa(dp337
+g117
+S'MTU'
+p338
+sg119
+S'Hellson'
+p339
+sg121
+g128
+sg123
+S'n wtf'
+p340
+sa(dp341
+g117
+S'james'
+p342
+sg119
+S'Hellson'
+p343
+sg121
+g128
+sg123
+S"i don't even know what MTU"
+p344
+sa(dp345
+g117
+S'Maximum Transfer Unit'
+p346
+sg119
+S'prologic'
+p347
+sg121
+g128
+sg123
+S'MTU'
+p348
+sa(dp349
+g117
+S'soooo boring'
+p350
+sg119
+S'Rukkh'
+p351
+sg121
+g128
+sg123
+S'the lecturrer'
+p352
+sa(dp353
+g117
+S'still limited to less than 1.5Kb'
+p354
+sg119
+S'prologic'
+p355
+sg121
+g133
+sg123
+S'despite the speed of networks we have today, IP frames'
+p356
+sa(dp357
+S'content'
+p358
+S'you'
+p359
+sS'who'
+p360
+S'Romster'
+p361
+sS'type'
+p362
+S'are'
+p363
+sS'subject'
+p364
+S'so how'
+p365
+sa(dp366
+g358
+S'worse since last time you were here'
+p367
+sg360
+S'prologic'
+p368
+sg362
+S'is'
+p369
+sg364
+S'my vision'
+p370
+sa(dp371
+S'content'
+p372
+S'Red'
+p373
+sS'who'
+p374
+S'prologic'
+p375
+sS'type'
+p376
+S'are'
+p377
+sS'subject'
+p378
+S'both your nicks'
+p379
+sa(dp380
+g372
+S'needed'
+p381
+sg374
+S'prologic'
+p382
+sg376
+S'is'
+p383
+sg378
+S'and your presence around here'
+p384
+sa(dp385
+g372
+S'u?'
+p386
+sg374
+S'Romster'
+p387
+sg376
+g377
+sg378
+S'dj-axi[out] hmm who'
+p388
+sa(dp389
+g372
+S'good'
+p390
+sg374
+S'dj-axi[out]'
+p391
+sg376
+g383
+sg378
+S'so im gona transfer all my other domains; beastclub.com.au , boostclub.com dj-axi.com if his service'
+p392
+sa(dp393
+S'content'
+p394
+S'wonderfull'
+p395
+sS'who'
+p396
+S'prologic'
+p397
+sS'type'
+p398
+S'is'
+p399
+sS'subject'
+p400
+S"it's debugger"
+p401
+sa(dp402
+g394
+S'it'
+p403
+sg396
+S'Abernus'
+p404
+sg398
+g399
+sg400
+S"oh.. that's not a command"
+p405
+sa(dp406
+g394
+S'Pascal, Python, PHP and BASH'
+p407
+sg396
+S'prologic'
+p408
+sg398
+S'are'
+p409
+sg400
+S'however, active languages'
+p410
+sa(dp411
+g394
+S'not static'
+p412
+sg396
+S'prologic'
+p413
+sg398
+g409
+sg400
+S'they'
+p414
+sa(dp415
+g394
+S"Type: 'exec <statement>' to get me to execute <statement>."
+p416
+sg396
+S'prologic'
+p417
+sg398
+S'reply'
+p418
+sg400
+S'help exec'
+p419
+sa(dp420
+g394
+S"Type: 'eval <expression>' to get me to evaluate <expression> and display the result."
+p421
+sg396
+S'prologic'
+p422
+sg398
+g418
+sg400
+S'help eval'
+p423
+sa(dp424
+g394
+S'a nerd'
+p425
+sg396
+S'anne'
+p426
+sg398
+g399
+sg400
+S'prologic'
+p427
+sa(dp428
+g394
+S'a sweet funny girl'
+p429
+sg396
+S'anne'
+p430
+sg398
+g399
+sg400
+S'anne'
+p431
+sa(dp432
+g394
+g152
+sg396
+S'anne'
+p433
+sg398
+g399
+sg400
+S'so i had to say'
+p434
+sa(dp435
+g394
+S'called shortcircuit now'
+p436
+sg396
+S'anne'
+p437
+sg398
+g399
+sg400
+S'i think that this network'
+p438
+sa(dp439
+g394
+S'still a registered business name'
+p440
+sg396
+S'Abernus'
+p441
+sg398
+g399
+sg400
+S'but prologitech'
+p442
+sa(dp443
+g394
+S'too lazy to read the back logs eventho its very short'
+p444
+sg396
+S'anne'
+p445
+sg398
+g399
+sg400
+S'see james'
+p446
+sa(dp447
+g394
+S'that quit message supposed to mean'
+p448
+sg396
+S'anne'
+p449
+sg398
+g399
+sg400
+S'ugh dj-axi what the fuck'
+p450
+sa(dp451
+g394
+S'his nick'
+p452
+sg396
+S'dj-axi'
+p453
+sg398
+g399
+sg400
+S'bigbastard'
+p454
+sa(dp455
+g394
+g152
+sg396
+S'dj-axi'
+p456
+sg398
+g399
+sg400
+S'he'
+p457
+sa(dp458
+g394
+g152
+sg396
+S'prologic'
+p459
+sg398
+g409
+sg400
+S'oh there you'
+p460
+sa(dp461
+S'content'
+p462
+S'wrong with my code'
+p463
+sS'who'
+p464
+S'prologic'
+p465
+sS'type'
+p466
+S'is'
+p467
+sS'subject'
+p468
+S'something'
+p469
+sa(dp470
+S'content'
+p471
+S'this'
+p472
+sS'who'
+p473
+S'prologic'
+p474
+sS'type'
+p475
+S'is'
+p476
+sS'subject'
+p477
+S'but the reaon I love coding irc bots'
+p478
+sa(dp479
+g471
+S'to create an artificial intelligent being'
+p480
+sg473
+S'prologic'
+p481
+sg475
+g476
+sg477
+S'one of my goals in life'
+p482
+sa(dp483
+g471
+S"a whole environment in it's own right"
+p484
+sg473
+S'prologic'
+p485
+sg475
+g476
+sg477
+S'because IRC'
+p486
+sa(dp487
+g471
+S'such a nice language, it should be fairly easy to hack out some stuff to try out'
+p488
+sg473
+S'prologic'
+p489
+sg475
+g476
+sg477
+S'and since Python'
+p490
+sa(dp491
+g471
+S'the only game where the creatures actually are intelligent'
+p492
+sg473
+S'prologic'
+p493
+sg475
+g476
+sg477
+S'it was and'
+p494
+sa(dp495
+g471
+S'so bloody fun to play with'
+p496
+sg473
+S'prologic'
+p497
+sg475
+S'are'
+p498
+sg477
+S'the creatures in them'
+p499
+sa(dp500
+g471
+S'hit'
+p501
+sg473
+S'Shiva64'
+p502
+sg475
+g476
+sg477
+S"i also hope it doesnt need a big time vid card.. 'cause mine"
+p503
+sa(dp504
+S'content'
+p505
+S'a really hard game to download'
+p506
+sS'who'
+p507
+S'prologic'
+p508
+sS'type'
+p509
+S'is'
+p510
+sS'subject'
+p511
+S'It'
+p512
+sa(dp513
+S'content'
+p514
+S'a naughty naughty boy :)'
+p515
+sS'who'
+p516
+S'prologic'
+p517
+sS'type'
+p518
+S'is'
+p519
+sS'subject'
+p520
+S'clubber'
+p521
+sa(dp522
+S'content'
+p523
+S'that the "Learning" function can be easily extended'
+p524
+sS'who'
+p525
+S'prologic'
+p526
+sS'type'
+p527
+S'is'
+p528
+sS'subject'
+p529
+S"the good thing about kdb's new rewrite"
+p530
+sa(dp531
+g523
+S':)'
+p532
+sg525
+S'prologic'
+p533
+sg527
+S'are'
+p534
+sg529
+S'but you'
+p535
+sa(dp536
+g523
+S'awesome'
+p537
+sg525
+S'Shiva64'
+p538
+sg527
+g534
+sg529
+S'cats'
+p539
+sa(dp540
+g523
+S'sexy'
+p541
+sg525
+S'anne'
+p542
+sg527
+g528
+sg529
+S'rukkh'
+p543
+sa(dp544
+g523
+S'being made all the time'
+p545
+sg525
+S'prologic'
+p546
+sg527
+g534
+sg529
+S'and improvements'
+p547
+sa(dp548
+g523
+S'sexier'
+p549
+sg525
+S'Shiva64'
+p550
+sg527
+g528
+sg529
+S'Romster'
+p551
+sa(dp552
+g523
+S'*hits Romster over the head*'
+p553
+sg525
+S'prologic'
+p554
+sg527
+S'reply'
+p555
+sg529
+S'slap Romster'
+p556
+sa(dp557
+g523
+S'the square root of -1'
+p558
+sg525
+S'zaphod'
+p559
+sg527
+g528
+sg529
+S'j'
+p560
+sa(dp561
+g523
+S'V(f) = intergral of -infinity to infinity of V(t). e^(-j.2.pi.ft). dt'
+p562
+sg525
+S'zaphod'
+p563
+sg527
+g528
+sg529
+S'fourierTransform'
+p564
+sa(dp565
+g523
+S'ok :x'
+p566
+sg525
+S'brendan'
+p567
+sg527
+g555
+sg529
+S'please be quiet'
+p568
+sa(dp569
+g523
+S'the answer to life the universe and everything'
+p570
+sg525
+S'zaphod'
+p571
+sg527
+g528
+sg529
+S'42'
+p572
+sa(dp573
+g523
+S'flat'
+p574
+sg525
+S'brendan'
+p575
+sg527
+g528
+sg529
+S'earth'
+p576
+sa(dp577
+g523
+S'say "Don\'t Panic\' in big shiny friendly letters on the front cover'
+p578
+sg525
+S'zaphod'
+p579
+sg527
+g528
+sg529
+S'now all it needs to do'
+p580
+sa(dp581
+g523
+S'it in brissy?'
+p582
+sg525
+S'clubber'
+p583
+sg527
+g528
+sg529
+S'what time'
+p584
+sa(dp585
+g523
+S'usually when I got to sleep'
+p586
+sg525
+S'prologic'
+p587
+sg527
+g528
+sg529
+S'about @600'
+p588
+sa(dp589
+g523
+S'the same beat everywhere'
+p590
+sg525
+S'prologic'
+p591
+sg527
+g528
+sg529
+S'where a beat'
+p592
+sa(dp593
+S'content'
+p594
+S'wether the bot responds faster if I use a smaller select delay on the sockets'
+p595
+sS'who'
+p596
+S'prologic'
+p597
+sS'type'
+p598
+S'is'
+p599
+sS'subject'
+p600
+S'now what I want to test'
+p601
+sa(dp602
+S'content'
+p603
+S'an Object of some sort'
+p604
+sS'who'
+p605
+S'prologic'
+p606
+sS'type'
+p607
+S'is'
+p608
+sS'subject'
+p609
+S'everything'
+p610
+sa(dp611
+g603
+S'python good for'
+p612
+sg605
+S'Romster'
+p613
+sg607
+g608
+sg609
+S'hmm prologic I dunno whats'
+p614
+sa(dp615
+g603
+S'ugly and bloasted and full of crap'
+p616
+sg605
+S'prologic'
+p617
+sg607
+g608
+sg609
+S'perl'
+p618
+sa(dp619
+g603
+S'slower than Python and less productive'
+p620
+sg605
+S'prologic'
+p621
+sg607
+g608
+sg609
+S'java'
+p622
+sa(dp623
+g603
+S'a replacment to all the horrid languages'
+p624
+sg605
+S'Romster'
+p625
+sg607
+g608
+sg609
+S'I get the picture so python'
+p626
+sa(dp627
+g603
+S'not very nicely designed langauges'
+p628
+sg605
+S'prologic'
+p629
+sg607
+S'are'
+p630
+sg609
+S'perl and php'
+p631
+sa(dp632
+g603
+S'nice langauges to use'
+p633
+sg605
+S'prologic'
+p634
+sg607
+g630
+sg609
+S'Python, Haskell, Pascal'
+p635
+sa(dp636
+g603
+S'okay'
+p637
+sg605
+S'prologic'
+p638
+sg607
+g630
+sg609
+S'PHP, BASH'
+p639
+sa(dp640
+g603
+S"all modifyed so much that it's not funny"
+p641
+sg605
+S'Romster'
+p642
+sg607
+g630
+sg609
+S'php java and perl'
+p643
+sa(dp644
+g603
+S'okay'
+p645
+sg605
+S'prologic'
+p646
+sg607
+g630
+sg609
+S'PHP, Java, C'
+p647
+sa(dp648
+g603
+S'okay'
+p649
+sg605
+S'prologic'
+p650
+sg607
+g630
+sg609
+S'PHP, C, BASH'
+p651
+sa(dp652
+g603
+S'disgusting'
+p653
+sg605
+S'prologic'
+p654
+sg607
+g630
+sg609
+S'C++, Java, Perl'
+p655
+sa(dp656
+g603
+S'highly productive languages'
+p657
+sg605
+S'prologic'
+p658
+sg607
+g630
+sg609
+S'Pascal, Haskell, Python'
+p659
+sa(dp660
+g603
+S'easier to read too'
+p661
+sg605
+S'Romster'
+p662
+sg607
+g608
+sg609
+S'I see that pascal'
+p663
+sa(dp664
+g603
+S'not so highly productive, but are okay to use'
+p665
+sg605
+S'prologic'
+p666
+sg607
+g630
+sg609
+S'BASH, C, PHP'
+p667
+sa(dp668
+g603
+S'not very productive and not so good to use'
+p669
+sg605
+S'prologic'
+p670
+sg607
+g630
+sg609
+S'Perl, Java, C++'
+p671
+sa(dp672
+g603
+S"fast enough anyway, so it shouldn't matter"
+p673
+sg605
+S'prologic'
+p674
+sg607
+g630
+sg609
+S'however computers'
+p675
+sa(dp676
+g603
+S"for speed it's slow as anything"
+p677
+sg605
+S'Romster'
+p678
+sg607
+g608
+sg609
+S'well I know how java'
+p679
+sa(dp680
+g603
+S'portable'
+p681
+sg605
+S'prologic'
+p682
+sg607
+g608
+sg609
+S'also Python'
+p683
+sa(dp684
+g603
+S'a switch and some lan cable and I can hook my 4 computers up.'
+p685
+sg605
+S'Romster'
+p686
+sg607
+g608
+sg609
+S'oh i got some network cards all I need now'
+p687
+sa(dp688
+g603
+S'a formula chart u can use'
+p689
+sg605
+S'Romster'
+p690
+sg607
+g608
+sg609
+S'there'
+p691
+sa(dp692
+g603
+S'Volts x Amps'
+p693
+sg605
+S'prologic'
+p694
+sg607
+g608
+sg609
+S'Watts'
+p695
+sa(dp696
+g603
+S'best for 24 volts or more'
+p697
+sg605
+S'Romster'
+p698
+sg607
+g608
+sg609
+S"I could make a 12 volt version if your interested since it's ok for low power anything over 1500 watts"
+p699
+sa(dp700
+g603
+S'less at 12 volts'
+p701
+sg605
+S'Romster'
+p702
+sg607
+g608
+sg609
+S'effecency'
+p703
+sa(dp704
+g603
+S'more effecent at less current'
+p705
+sg605
+S'Romster'
+p706
+sg607
+g630
+sg609
+S'and also lead acid batteries'
+p707
+sa(dp708
+g603
+S'as it is now'
+p709
+sg605
+S'Romster'
+p710
+sg607
+g608
+sg609
+S'no the pc power supply will have a input of 48 and the rest'
+p711
+sa(dp712
+g603
+S'almost being worked on now'
+p713
+sg605
+S'Romster'
+p714
+sg607
+g608
+sg609
+S"I'm already into the designing part actually a prototype"
+p715
+sa(dp716
+g603
+S"all diferent for each model and also the degausing coil needs ac to demagatise so i'd prolly make or buy a 48 volt to 240 volt ac inverter for the monitors"
+p717
+sg605
+S'Romster'
+p718
+sg607
+g630
+sg609
+S"dunno what i'll do for the monitors as the psus"
+p719
+sa(dp720
+g603
+S'interesting.'
+p721
+sg605
+S'Romster'
+p722
+sg607
+g608
+sg609
+S"yeah I know it's boring Shiva64 but this"
+p723
+sa(dp724
+g603
+S'more common for solar installations'
+p725
+sg605
+S'Romster'
+p726
+sg607
+g608
+sg609
+S'48'
+p727
+sa(dp728
+g603
+S'very nice'
+p729
+sg605
+S'prologic'
+p730
+sg607
+g608
+sg609
+S'Shiva64, this song you sent me'
+p731
+sa(dp732
+S'content'
+p733
+S'not questioning it'
+p734
+sS'who'
+p735
+S'prologic'
+p736
+sS'type'
+p737
+S'are'
+p738
+sS'subject'
+p739
+S'you'
+p740
+sa(dp741
+g733
+S'coming their way tomorrow'
+p742
+sg735
+S'anne'
+p743
+sg737
+S'is'
+p744
+sg739
+S'a catagory 3 hurricane'
+p745
+sa(dp746
+g733
+S'condominium'
+p747
+sg735
+S'prologic'
+p748
+sg737
+g744
+sg739
+S'condo'
+p749
+sa(dp750
+g733
+S'an apartment only smaller'
+p751
+sg735
+S'prologic'
+p752
+sg737
+g744
+sg739
+S'condominium'
+p753
+sa(dp754
+g733
+g152
+sg735
+S'anne'
+p755
+sg737
+g744
+sg739
+S'see where the dot'
+p756
+sa(dp757
+g733
+g152
+sg735
+S'anne'
+p758
+sg737
+g738
+sg739
+S'thats wher my parents'
+p759
+sa(dp760
+g733
+g152
+sg735
+S'anne'
+p761
+sg737
+g744
+sg739
+S'the s one that'
+p762
+sa(dp763
+g733
+S'?'
+p764
+sg735
+S'prologic'
+p765
+sg737
+g744
+sg739
+S'where the last D'
+p766
+sa(dp767
+g733
+S'destroyed ?'
+p768
+sg735
+S'prologic'
+p769
+sg737
+g744
+sg739
+S'they have insurance though if their apartment'
+p770
+sa(dp771
+S'content'
+p772
+S'200 now :)'
+p773
+sS'who'
+p774
+S'prologic'
+p775
+sS'type'
+p776
+S'is'
+p777
+sS'subject'
+p778
+S'your level'
+p779
+sa(dp780
+S'content'
+p781
+S'the latest bleeding edge software, but be warned it can abd will break and does contains bugs'
+p782
+sS'who'
+p783
+S'prologic'
+p784
+sS'type'
+p785
+S'is'
+p786
+sS'subject'
+p787
+S'Debian/Unstable'
+p788
+sa(dp789
+g781
+S"the latest software, but not bleeding edge, and may not/should not break your system and usually doesn't contain any major bugs"
+p790
+sg783
+S'prologic'
+p791
+sg785
+g786
+sg787
+S'Debian/Testing'
+p792
+sa(dp793
+g781
+S"frozen after a period of many years, so it's very stable, but old software."
+p794
+sg783
+S'prologic'
+p795
+sg785
+g786
+sg787
+S'Debian/Stable'
+p796
+sa(dp797
+g781
+S'not small :)'
+p798
+sg783
+S'prologic'
+p799
+sg785
+g786
+sg787
+S'the Package list'
+p800
+sa(dp801
+g781
+S'fairly constant to the US'
+p802
+sg783
+S'prologic'
+p803
+sg785
+g786
+sg787
+S'my speed'
+p804
+sa(dp805
+g781
+S'my desktop usually and does contain all packages that my servers contain'
+p806
+sg783
+S'prologic'
+p807
+sg785
+g786
+sg787
+S'thing I like though'
+p808
+sa(dp809
+g781
+S'a Proxy for APT which saves on traffic if you have more than 1 Debian box.'
+p810
+sg783
+S'prologic'
+p811
+sg785
+g786
+sg787
+S'apt-proxy'
+p812
+sa(dp813
+g781
+S'the best of em all'
+p814
+sg783
+S'prologic'
+p815
+sg785
+g786
+sg787
+S'Debian'
+p816
+sa(dp817
+g781
+S'a rip-off of others'
+p818
+sg783
+S'prologic'
+p819
+sg785
+S'are'
+p820
+sg787
+S"I don't particularly like distros that"
+p821
+sa(dp822
+g781
+S'no longer anything like RH....its worse'
+p823
+sg783
+S'zaphod'
+p824
+sg785
+g786
+sg787
+S'mandrake'
+p825
+sa(dp826
+g781
+S'some of the few distros (original)'
+p827
+sg783
+S'prologic'
+p828
+sg785
+g820
+sg787
+S'Debian, Slackware, Redhat, CRUX'
+p829
+sa(dp830
+g781
+S'meant to be the big one in europe'
+p831
+sg783
+S'zaphod'
+p832
+sg785
+g786
+sg787
+S'Suse'
+p833
+sa(dp834
+g781
+S'just trying out other distros for fun'
+p835
+sg783
+S'prologic'
+p836
+sg785
+g820
+sg787
+S'or they'
+p837
+sa(dp838
+g781
+S'so good :)'
+p839
+sg783
+S'prologic'
+p840
+sg785
+g786
+sg787
+S"it's hardly suprising, because Debian"
+p841
+sa(dp842
+g781
+S'usinf fedora core2'
+p843
+sg783
+S'zaphod'
+p844
+sg785
+g786
+sg787
+S'yeah, my algorithms and data structures lecturer'
+p845
+sa(dp846
+g781
+S'one of the reasons I do use Testing'
+p847
+sg783
+S'prologic'
+p848
+sg785
+g786
+sg787
+S'which'
+p849
+sa(dp850
+g781
+S'about to leave'
+p851
+sg783
+S'prologic'
+p852
+sg785
+g786
+sg787
+S'Jess'
+p853
+sa(dp854
+g781
+S'doing'
+p855
+sg783
+S'zaphod'
+p856
+sg785
+g820
+sg787
+S'yeah i better go see what these tilers'
+p857
+sa(dp858
+g781
+S'written in Python'
+p859
+sg783
+S'prologic'
+p860
+sg785
+g786
+sg787
+S'Kaz, yes kdb'
+p861
+sa(dp862
+g781
+S'buying the other printer'
+p863
+sg783
+S'prologic'
+p864
+sg785
+g786
+sg787
+S'someone'
+p865
+sa(dp866
+g781
+S'the other 4 machines I have'
+p867
+sg783
+S'prologic'
+p868
+sg785
+g820
+sg787
+S'dido, dave, dede and dito'
+p869
+sa(dp870
+g781
+S'the Mail Server'
+p871
+sg783
+S'prologic'
+p872
+sg785
+g786
+sg787
+S'dido'
+p873
+sa(dp874
+g781
+S'the Shell Server'
+p875
+sg783
+S'prologic'
+p876
+sg785
+g786
+sg787
+S'dave'
+p877
+sa(dp878
+g781
+S'the Web Server'
+p879
+sg783
+S'prologic'
+p880
+sg785
+g786
+sg787
+S'dede'
+p881
+sa(dp882
+g781
+S'the Router'
+p883
+sg783
+S'prologic'
+p884
+sg785
+g786
+sg787
+S'dito'
+p885
+sa(dp886
+g781
+S"prologic's Desktop"
+p887
+sg783
+S'prologic'
+p888
+sg785
+g786
+sg787
+S'daisy'
+p889
+sa(dp890
+g781
+S'upgraded'
+p891
+sg783
+S'prologic'
+p892
+sg785
+g786
+sg787
+S'ok desktop'
+p893
+sa(dp894
+g781
+S'you from the exchange ?'
+p895
+sg783
+S'prologic'
+p896
+sg785
+g820
+sg787
+S'how far away'
+p897
+sa(dp898
+g781
+S"close.. but we just ain't within the range"
+p899
+sg783
+S'Shiva64'
+p900
+sg785
+g786
+sg787
+S'all i know our phone company'
+p901
+sa(dp902
+g781
+S'stupid'
+p903
+sg783
+S'prologic'
+p904
+sg785
+g786
+sg787
+S'that'
+p905
+sa(dp906
+g781
+g152
+sg783
+S'prologic'
+p907
+sg785
+g786
+sg787
+S'they only refuse becaose of what the company policy'
+p908
+sa(dp909
+g781
+S'capable of more bandwidth than 56Kbps ?'
+p910
+sg783
+S'prologic'
+p911
+sg785
+g820
+sg787
+S'you mean the phone lines in america'
+p912
+sa(dp913
+g781
+S'a bandwidth measure'
+p914
+sg783
+S'prologic'
+p915
+sg785
+g786
+sg787
+S'56Kbps'
+p916
+sa(dp917
+g781
+S'just the bandwidth measure'
+p918
+sg783
+S'prologic'
+p919
+sg785
+g786
+sg787
+S'512Kbps'
+p920
+sa(dp921
+g781
+S'a bandwidth measure and is a Kilo Bit per Second'
+p922
+sg783
+S'prologic'
+p923
+sg785
+g786
+sg787
+S'Kbps'
+p924
+sa(dp925
+g781
+S'bits per second (bps) or Bytes/Sec (B/s) and cince theres 8 bits to a byte...'
+p926
+sg783
+S'zaphod[afk]'
+p927
+sg785
+g786
+sg787
+S'the difference'
+p928
+sa(dp929
+g781
+S'8 bits'
+p930
+sg783
+S'prologic'
+p931
+sg785
+g786
+sg787
+S'byte'
+p932
+sa(dp933
+g781
+S'1024 bytes'
+p934
+sg783
+S'prologic'
+p935
+sg785
+g786
+sg787
+S'KB'
+p936
+sa(dp937
+g781
+S'1024 KBs'
+p938
+sg783
+S'prologic'
+p939
+sg785
+g786
+sg787
+S'MB'
+p940
+sa(dp941
+g781
+S'1024 MBs'
+p942
+sg783
+S'prologic'
+p943
+sg785
+g786
+sg787
+S'GB'
+p944
+sa(dp945
+g781
+S'1024 GBs'
+p946
+sg783
+S'prologic'
+p947
+sg785
+g786
+sg787
+S'TB'
+p948
+sa(dp949
+g781
+S'measured now ?'
+p950
+sg783
+S'prologic'
+p951
+sg785
+g786
+sg787
+S'understand how bandwidth'
+p952
+sa(dp953
+g781
+S'not 100Mb/s'
+p954
+sg783
+S'prologic'
+p955
+sg785
+g786
+sg787
+S'however, 100Mbps'
+p956
+sa(dp957
+g781
+g152
+sg783
+S'prologic'
+p958
+sg785
+g786
+sg787
+S'I think it'
+p959
+sa(dp960
+g781
+S'still only the 1Mb/s i think'
+p961
+sg783
+S'zaphod[afk]'
+p962
+sg785
+g786
+sg787
+S'well linux to linux'
+p963
+sa(dp964
+g781
+S"not as fast as daisy's"
+p965
+sg783
+S'prologic'
+p966
+sg785
+g786
+sg787
+S"dave's hard disk"
+p967
+sa(dp968
+g781
+S'alot.. *drools*'
+p969
+sg783
+S'Shiva64'
+p970
+sg785
+g786
+sg787
+S'but still... 2GB total'
+p971
+sa(dp972
+g781
+S'coming to buy my bike'
+p973
+sg783
+S'prologic'
+p974
+sg785
+g786
+sg787
+S'someone else'
+p975
+sa(dp976
+g781
+S'interested in it atm'
+p977
+sg783
+S'prologic'
+p978
+sg785
+g820
+sg787
+S'2 people'
+p979
+sa(dp980
+g781
+S'old and shit ;\\'
+p981
+sg783
+S'clubber'
+p982
+sg785
+g786
+sg787
+S'but that one'
+p983
+sa(dp984
+g781
+S'all'
+p985
+sg783
+S'prologic'
+p986
+sg785
+g786
+sg787
+S'just got a flat tyre'
+p987
+sa(dp988
+g781
+S'beyond broken.. gears are fucked... and a few other things wrong with it'
+p989
+sg783
+S'Shiva64'
+p990
+sg785
+g820
+sg787
+S'the spokes on mine'
+p991
+sa(dp992
+g781
+S'pretty fucking strong.. you try leg weightlifting 300lbs... but i still could never go that long/fast in a day on my bike O.o'
+p993
+sg783
+S'Shiva64'
+p994
+sg785
+g820
+sg787
+S'my legs'
+p995
+sa(dp996
+g781
+g152
+sg783
+S'prologic'
+p997
+sg785
+g786
+sg787
+S'but someone'
+p998
+sa(dp999
+g781
+S'something"'
+p1000
+sg783
+S'prologic'
+p1001
+sg785
+g786
+sg787
+S'well if you go "kdb'
+p1002
+sa(dp1003
+g781
+S'ugly'
+p1004
+sg783
+S'anne'
+p1005
+sg785
+g786
+sg787
+S'kdb'
+p1006
+sa(dp1007
+S'content'
+p1008
+S'still here'
+p1009
+sS'who'
+p1010
+S'pl_away'
+p1011
+sS'type'
+p1012
+S'is'
+p1013
+sS'subject'
+p1014
+S'my bitchx session'
+p1015
+sa(dp1016
+g1008
+S'a Unix/Linux club about every fortnight held at UQ campus in Brisbane, see: http://www.humbug.org.au'
+p1017
+sg1010
+S'prologic'
+p1018
+sg1012
+g1013
+sg1014
+S'HumBug'
+p1019
+sa(dp1020
+g1008
+S'battered ;\\'
+p1021
+sg1010
+S'clubber'
+p1022
+sg1012
+g1013
+sg1014
+S'pro, my dads car'
+p1023
+sa(dp1024
+g1008
+S'long gone now'
+p1025
+sg1010
+S'anne'
+p1026
+sg1012
+g1013
+sg1014
+S'i think the storm'
+p1027
+sa(dp1028
+g1008
+S'paying for a new one :P'
+p1029
+sg1010
+S'clubber'
+p1030
+sg1012
+g1013
+sg1014
+S'and had dints, so now that the other guy'
+p1031
+sa(dp1032
+g1008
+S'dead'
+p1033
+sg1010
+S'anne'
+p1034
+sg1012
+g1013
+sg1014
+S'pro'
+p1035
+sa(dp1036
+g1008
+S'james is always hungry'
+p1037
+sg1010
+S'anne'
+p1038
+sg1012
+g1013
+sg1014
+S'dave the thing'
+p1039
+sa(dp1040
+g1008
+S'thank you $nick'
+p1041
+sg1010
+S'prologic'
+p1042
+sg1012
+S'reply'
+p1043
+sg1014
+S'good boy'
+p1044
+sa(dp1045
+g1008
+S'not a lot'
+p1046
+sg1010
+S'prologic'
+p1047
+sg1012
+g1013
+sg1014
+S'6 hours when you got my disease'
+p1048
+sa(dp1049
+g1008
+S'still running'
+p1050
+sg1010
+S'prologic'
+p1051
+sg1012
+g1013
+sg1014
+S"fuc'n xmms"
+p1052
+sa(dp1053
+g1008
+g152
+sg1010
+S'Shiva64'
+p1054
+sg1012
+g1013
+sg1014
+S'whatever that'
+p1055
+sa(dp1056
+g1008
+S"a multi-media player for linux, it's interface is very similar to winamp"
+p1057
+sg1010
+S'prologic'
+p1058
+sg1012
+g1013
+sg1014
+S'xmms'
+p1059
+sa(dp1060
+g1008
+S'url spaces'
+p1061
+sg1010
+S'prologic'
+p1062
+sg1012
+S'are'
+p1063
+sg1014
+S"the %20's"
+p1064
+sa(dp1065
+g1008
+S'here on my hard disk'
+p1066
+sg1010
+S'prologic'
+p1067
+sg1012
+g1013
+sg1014
+S'like the music'
+p1068
+sa(dp1069
+g1008
+S'that Jess can also listen'
+p1070
+sg1010
+S'prologic'
+p1071
+sg1012
+g1013
+sg1014
+S'reason being'
+p1072
+sa(dp1073
+g1008
+S'run'
+p1074
+sg1010
+S'prologic'
+p1075
+sg1012
+g1013
+sg1014
+S'it only crashes when vmware'
+p1076
+sa(dp1077
+g1008
+g152
+sg1010
+S'prologic'
+p1078
+sg1012
+g1013
+sg1014
+S'assuming you know what vmware'
+p1079
+sa(dp1080
+g1008
+S'a peice of software created by the VMWare company, http://www.vmware.com and is used to run other Operating Systems on a host computer.'
+p1081
+sg1010
+S'prologic'
+p1082
+sg1012
+g1013
+sg1014
+S'vmware'
+p1083
+sa(dp1084
+g1008
+S'installed on dune'
+p1085
+sg1010
+S'prologic'
+p1086
+sg1012
+g1013
+sg1014
+S'subversion'
+p1087
+sa(dp1088
+g1008
+S'stupid'
+p1089
+sg1010
+S'prologic'
+p1090
+sg1012
+g1013
+sg1014
+S'in my document that describse why windows'
+p1091
+sa(dp1092
+g1008
+S'how the fuck to install Win98SE, from WinXP Home.. I have the boot disc and everything my uncle gave me.. but he just never told me how to fucking do everything'
+p1093
+sg1010
+S'Shiva64'
+p1094
+sg1012
+g1013
+sg1014
+S'all i wanna know'
+p1095
+sa(dp1096
+g1008
+S'the basic steps'
+p1097
+sg1010
+S'prologic'
+p1098
+sg1012
+g1063
+sg1014
+S'These'
+p1099
+sa(dp1100
+g1008
+g152
+sg1010
+S'prologic'
+p1101
+sg1012
+g1013
+sg1014
+S'so I know what the error'
+p1102
+sa(dp1103
+g1008
+g152
+sg1010
+S'prologic'
+p1104
+sg1012
+g1013
+sg1014
+S"that's how easy Python really"
+p1105
+sa(dp1106
+g1008
+S'gone'
+p1107
+sg1010
+S'Kaz'
+p1108
+sg1012
+g1013
+sg1014
+S'5 k of my script'
+p1109
+sa(dp1110
+g1008
+S'compiled in case you'
+p1111
+sg1010
+S'prologic'
+p1112
+sg1012
+g1013
+sg1014
+S'Everything on CRUX'
+p1113
+sa(dp1114
+g1008
+g152
+sg1010
+S'prologic'
+p1115
+sg1012
+g1013
+sg1014
+S'wanted to know what the difference'
+p1116
+sa(dp1117
+g1008
+S'only for the i686'
+p1118
+sg1010
+S'prologic'
+p1119
+sg1012
+g1013
+sg1014
+S'But CRUX'
+p1120
+sa(dp1121
+g1008
+S'?'
+p1122
+sg1010
+S'prologic'
+p1123
+sg1012
+g1013
+sg1014
+S'what'
+p1124
+sa(dp1125
+g1008
+S'your website monthly/yearly Kaz? lol'
+p1126
+sg1010
+S'Shiva64'
+p1127
+sg1012
+g1013
+sg1014
+S'how much'
+p1128
+sa(dp1129
+g1008
+S'terrible now'
+p1130
+sg1010
+S'Kaz'
+p1131
+sg1012
+g1013
+sg1014
+S'my website'
+p1132
+sa(dp1133
+g1008
+S"under what's called version control"
+p1134
+sg1010
+S'prologic'
+p1135
+sg1012
+g1013
+sg1014
+S'mh home directory'
+p1136
+sa(dp1137
+g1008
+S'evil.. cant use my download program.. *wants to be able to resume* lol'
+p1138
+sg1010
+S'Shiva64'
+p1139
+sg1012
+g1013
+sg1014
+S'prologic.. ur directory'
+p1140
+sa(dp1141
+g1008
+S"there any reason why Windows can't make zip files?"
+p1142
+sg1010
+S'Kaz'
+p1143
+sg1012
+g1013
+sg1014
+S'hey,'
+p1144
+sa(dp1145
+g1008
+S'not capable of making zips by itself'
+p1146
+sg1010
+S'prologic'
+p1147
+sg1012
+g1013
+sg1014
+S'windows'
+p1148
+sa(dp1149
+g1008
+S'http://www.winzip.com'
+p1150
+sg1010
+S'prologic'
+p1151
+sg1012
+g1013
+sg1014
+S'winzip'
+p1152
+sa(dp1153
+g1008
+S'a windoze program to clean harmfull cookies and some viruses and worms which result in browsing the internet with browsers like Internet Explorer.'
+p1154
+sg1010
+S'prologic'
+p1155
+sg1012
+g1013
+sg1014
+S'adaware'
+p1156
+sa(dp1157
+g1008
+S'evil'
+p1158
+sg1010
+S'prologic'
+p1159
+sg1012
+g1013
+sg1014
+S'spyware'
+p1160
+sa(dp1161
+g1008
+S'that windows is the biggest piece of shit'
+p1162
+sg1010
+S'Hellson'
+p1163
+sg1012
+g1013
+sg1014
+S'my opinion'
+p1164
+sa(dp1165
+g1008
+S'late'
+p1166
+sg1010
+S'prologic'
+p1167
+sg1012
+g1013
+sg1014
+S'my client'
+p1168
+sa(dp1169
+g1008
+S'here'
+p1170
+sg1010
+S'prologic'
+p1171
+sg1012
+g1013
+sg1014
+S'client'
+p1172
+sa(dp1173
+g1008
+S'ever gonna change honestly'
+p1174
+sg1010
+S'Shiva64'
+p1175
+sg1012
+g1013
+sg1014
+S'if people werent so fucking lazy to learn, and other people letting them be lazy, nothing'
+p1176
+sa(dp1177
+g1008
+S'too much'
+p1178
+sg1010
+S'pl_away'
+p1179
+sg1012
+g1013
+sg1014
+S'most people thing a few mins works'
+p1180
+sa(dp1181
+g1008
+g152
+sg1010
+S'pl_away'
+p1182
+sg1012
+g1063
+sg1014
+S"most people dont' realize how easy things really"
+p1183
+sa(dp1184
+g1008
+S'how to download n watch movies n play games'
+p1185
+sg1010
+S'Hellson'
+p1186
+sg1012
+g1013
+sg1014
+S"the only thing he's learn't"
+p1187
+sa(dp1188
+g1008
+S'at least willing to try'
+p1189
+sg1010
+S'pl_away'
+p1190
+sg1012
+g1063
+sg1014
+S'ones who'
+p1191
+sa(dp1192
+g1008
+S'completely fucked itself'
+p1193
+sg1010
+S'pl_away'
+p1194
+sg1012
+g1013
+sg1014
+S'this world'
+p1195
+sa(dp1196
+g1008
+S'good overall.. but not when it comes to somethings..'
+p1197
+sg1010
+S'Shiva64'
+p1198
+sg1012
+g1013
+sg1014
+S'technology'
+p1199
+sa(dp1200
+g1008
+S'not that clever'
+p1201
+sg1010
+S'pl_away'
+p1202
+sg1012
+g1063
+sg1014
+S'Thankfully Terrorists'
+p1203
+sa(dp1204
+g1008
+S'a good thing'
+p1205
+sg1010
+S'pl_away'
+p1206
+sg1012
+g1013
+sg1014
+S'Technology'
+p1207
+sa(dp1208
+g1008
+S'increasing'
+p1209
+sg1010
+S'pl_away'
+p1210
+sg1012
+g1013
+sg1014
+S"it's knowledge"
+p1211
+sa(dp1212
+g1008
+S'the printer is epson and scanner is canon'
+p1213
+sg1010
+S'clubber'
+p1214
+sg1012
+g1013
+sg1014
+S'all i know'
+p1215
+sa(dp1216
+g1008
+S'your printer Shiva64 ?'
+p1217
+sg1010
+S'pl_away'
+p1218
+sg1012
+g1013
+sg1014
+S'what model'
+p1219
+sa(dp1220
+g1008
+S"only about 70 US cents isn't it ?"
+p1221
+sg1010
+S'pl_away'
+p1222
+sg1012
+g1013
+sg1014
+S'oud dollar'
+p1223
+sa(dp1224
+g1008
+S'a feature-full text editor with Syntax Highlighing for many langauges. See: http://www.editplus.com'
+p1225
+sg1010
+S'pl_away'
+p1226
+sg1012
+g1013
+sg1014
+S'EditPlus'
+p1227
+sa(dp1228
+g1008
+S'gay'
+p1229
+sg1010
+S'Hellson'
+p1230
+sg1012
+g1013
+sg1014
+S'fuck wireless'
+p1231
+sa(dp1232
+g1008
+S'hard to find parets for, and are not really cheap'
+p1233
+sg1010
+S'clubber'
+p1234
+sg1012
+g1063
+sg1014
+S'range rovers'
+p1235
+sa(dp1236
+g1008
+S'late'
+p1237
+sg1010
+S'pl_away'
+p1238
+sg1012
+g1063
+sg1014
+S'I hate clients that'
+p1239
+sa(dp1240
+g1008
+S'u after?'
+p1241
+sg1010
+S'Hellson'
+p1242
+sg1012
+g1063
+sg1014
+S'thats a shit computer what situation'
+p1243
+sa(dp1244
+g1008
+S'the comp u want'
+p1245
+sg1010
+S'Hellson'
+p1246
+sg1012
+g1013
+sg1014
+S'i go this'
+p1247
+sa(dp1248
+g1008
+S'still sittin there going erm'
+p1249
+sg1010
+S'Hellson'
+p1250
+sg1012
+g1013
+sg1014
+S'n the cunts go ah good ok thanks for that n the sales cunt'
+p1251
+sa(dp1252
+g1008
+S'now playing \x0312,11 \x02< \xab\x02lastclear.txt\x02\xbb >\x0311,10 \xab\xab\xab \xb7.\xb8\xb8.\xb7\xb4\xaf'
+p1253
+sg1010
+S'Kaz'
+p1254
+sg1012
+g1013
+sg1014
+S'\x0311,10 \xaf`\xb7.\xb8\xb8.\xb7\xbb\xbb\xbb \x0311,12Kaz'
+p1255
+sa(dp1256
+g1008
+S'open on sunday?'
+p1257
+sg1010
+S'Hellson'
+p1258
+sg1012
+g1013
+sg1014
+S'n e one know if dick smiths or tandy elecs'
+p1259
+sa(dp1260
+g1008
+S'open'
+p1261
+sg1010
+S'Hellson'
+p1262
+sg1012
+g1063
+sg1014
+S'just wanna know if the cunts'
+p1263
+sa(dp1264
+g1008
+S'open'
+p1265
+sg1010
+S'pl_away'
+p1266
+sg1012
+g1063
+sg1014
+S'yes they'
+p1267
+sa(dp1268
+g1008
+g152
+sg1010
+S'Hellson'
+p1269
+sg1012
+g1013
+sg1014
+S'i need to know what the cable'
+p1270
+sa(dp1271
+g1008
+S'very good for annoyin people'
+p1272
+sg1010
+S'Hellson'
+p1273
+sg1012
+g1013
+sg1014
+S'this script'
+p1274
+sa(dp1275
+g1008
+S'now playing \x0312,1 \x02< \xab\x02mirc.GID\x02\xbb >\x031,10 \x02\xab\xab\xab \xb7.\xb8\xb8.\xb7\xb4\xaf'
+p1276
+sg1010
+S'Kaz'
+p1277
+sg1012
+g1013
+sg1014
+S'\x02\x031,10 \xaf`\xb7.\xb8\xb8.\xb7\xbb\xbb\xbb \x031,14Kaz'
+p1278
+sa(dp1279
+S'content'
+p1280
+g152
+sS'who'
+p1281
+S'prologic'
+p1282
+sS'type'
+p1283
+S'is'
+p1284
+sS'subject'
+p1285
+S"I'm glad it"
+p1286
+sa(dp1287
+g1280
+S'not a lot :)'
+p1288
+sg1281
+S'prologic'
+p1289
+sg1283
+g1284
+sg1285
+S'and 15% profit'
+p1290
+sa(dp1291
+g1280
+S'here'
+p1292
+sg1281
+S'prologic'
+p1293
+sg1283
+g1284
+sg1285
+S'think pizza'
+p1294
+sa(dp1295
+S'content'
+p1296
+S'clean'
+p1297
+sS'who'
+p1298
+S'prologic'
+p1299
+sS'type'
+p1300
+S'is'
+p1301
+sS'subject'
+p1302
+S'the code'
+p1303
+sa(dp1304
+S'content'
+p1305
+S'wrong'
+p1306
+sS'who'
+p1307
+S'prologic'
+p1308
+sS'type'
+p1309
+S'is'
+p1310
+sS'subject'
+p1311
+S'maths'
+p1312
+sa(dp1313
+S'content'
+p1314
+S'completely fucking destroyed'
+p1315
+sS'who'
+p1316
+S'Kaz'
+p1317
+sS'type'
+p1318
+S'is'
+p1319
+sS'subject'
+p1320
+S'My script'
+p1321
+sa(dp1322
+g1314
+S'fun'
+p1323
+sg1316
+S'prologic'
+p1324
+sg1318
+g1319
+sg1320
+S'coding'
+p1325
+sa(dp1326
+g1314
+S'for me tonight'
+p1327
+sg1316
+S'prologic'
+p1328
+sg1318
+g1319
+sg1320
+S'like it'
+p1329
+sa(dp1330
+g1314
+S"destroying my code, or this laptop is deleting it or something, but It's 15 k less than yesterday night after I recoded my mp3 player"
+p1331
+sg1316
+S'Kaz'
+p1332
+sg1318
+g1319
+sg1320
+S'mirc'
+p1333
+sa(dp1334
+S'content'
+p1335
+g152
+sS'who'
+p1336
+S'prologic'
+p1337
+sS'type'
+p1338
+S'is'
+p1339
+sS'subject'
+p1340
+S'oh yes it'
+p1341
+sa(dp1342
+S'content'
+p1343
+S'where my modem is attatched to'
+p1344
+sS'who'
+p1345
+S'Shiva64'
+p1346
+sS'type'
+p1347
+S'is'
+p1348
+sS'subject'
+p1349
+S'i cant do shit with it.. my latest vid drivers, aint compatible with it... PLUS apparently Win98SE only detects COM1, and not COM3, which'
+p1350
+sa(dp1351
+g1343
+g152
+sg1345
+S'prologic'
+p1352
+sg1347
+g1348
+sg1349
+S'obvoiusly it'
+p1353
+sa(dp1354
+g1343
+g152
+sg1345
+S'prologic'
+p1355
+sg1347
+g1348
+sg1349
+S'just goes to show you hwo crap windows really'
+p1356
+sa(dp1357
+g1343
+S'all uploaded on my image host...'
+p1358
+sg1345
+S'Shiva64'
+p1359
+sg1347
+S'are'
+p1360
+sg1349
+S'i hope the newest sprites'
+p1361
+sa(dp1362
+S'content'
+p1363
+S"the main two files you're concerned with right now"
+p1364
+sS'who'
+p1365
+S'prologic'
+p1366
+sS'type'
+p1367
+S'are'
+p1368
+sS'subject'
+p1369
+S'those'
+p1370
+sa(dp1371
+S'content'
+p1372
+S'so nice'
+p1373
+sS'who'
+p1374
+S'prologic'
+p1375
+sS'type'
+p1376
+S'is'
+p1377
+sS'subject'
+p1378
+S'syntax high lighting'
+p1379
+sa(dp1380
+g1372
+g152
+sg1374
+S'prologic'
+p1381
+sg1376
+S'are'
+p1382
+sg1378
+S'where all the other .stx files'
+p1383
+sa(dp1384
+g1372
+S'a nice feature'
+p1385
+sg1374
+S'prologic'
+p1386
+sg1376
+g1377
+sg1378
+S'but it'
+p1387
+sa(dp1388
+g1372
+S'increasing'
+p1389
+sg1374
+S'prologic'
+p1390
+sg1376
+g1377
+sg1378
+S's knowledge'
+p1391
+sa(dp1392
+S'content'
+p1393
+S'on again'
+p1394
+sS'who'
+p1395
+S'prologic'
+p1396
+sS'type'
+p1397
+S'is'
+p1398
+sS'subject'
+p1399
+S'The Programming Competition'
+p1400
+sa(dp1401
+g1393
+S'one of the best firewalls for Windoze'
+p1402
+sg1395
+S'prologic'
+p1403
+sg1397
+g1398
+sg1399
+S'Zone Alarm'
+p1404
+sa(dp1405
+g1393
+S'that Python link you promised?'
+p1406
+sg1395
+S'tonym'
+p1407
+sg1397
+g1398
+sg1399
+S'Prologic, where'
+p1408
+sa(dp1409
+g1393
+S'NOT a registered nickname.'
+p1410
+sg1395
+S'prologic'
+p1411
+sg1397
+g1398
+sg1399
+S'-ProChan- tonym'
+p1412
+sa(dp1413
+g1393
+S'a Mass Op of all users on a channel, requires level 190 or above access to the channel'
+p1414
+sg1395
+S'prologic'
+p1415
+sg1397
+g1398
+sg1399
+S'a mop'
+p1416
+sa(dp1417
+g1393
+S'http://doc.python.org/'
+p1418
+sg1395
+S'prologic'
+p1419
+sg1397
+g1398
+sg1399
+S'Python Docs'
+p1420
+sa(dp1421
+g1393
+S'"Tutorial" on Python Docs'
+p1422
+sg1395
+S'prologic'
+p1423
+sg1397
+g1398
+sg1399
+S'Python Tutorial'
+p1424
+sa(dp1425
+g1393
+S'secure :)'
+p1426
+sg1395
+S'prologic'
+p1427
+sg1397
+g1398
+sg1399
+S'IRC'
+p1428
+sa(dp1429
+g1393
+S'your folks doing with there property in Florida?'
+p1430
+sg1395
+S'tonym'
+p1431
+sg1397
+S'are'
+p1432
+sg1399
+S'Hi anne, how'
+p1433
+sa(dp1434
+g1393
+S'on its way'
+p1435
+sg1395
+S'anne'
+p1436
+sg1397
+g1398
+sg1399
+S'and another one'
+p1437
+sa(dp1438
+g1393
+S'behind it'
+p1439
+sg1395
+S'anne'
+p1440
+sg1397
+g1398
+sg1399
+S'and then a ts5'
+p1441
+sa(dp1442
+S'content'
+p1443
+S'in really weird places'
+p1444
+sS'who'
+p1445
+S'prologic'
+p1446
+sS'type'
+p1447
+S'are'
+p1448
+sS'subject'
+p1449
+S'and the keys'
+p1450
+sa(dp1451
+S'content'
+p1452
+S'the 0th character'
+p1453
+sS'who'
+p1454
+S'prologic'
+p1455
+sS'type'
+p1456
+S'is'
+p1457
+sS'subject'
+p1458
+S'eg: str[0]'
+p1459
+sa(dp1460
+g1452
+S'with Yes?'
+p1461
+sg1454
+S'tonym'
+p1462
+sg1456
+S'reply'
+p1463
+sg1458
+S'you should get it to'
+p1464
+sa.
