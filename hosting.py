@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from misc import *
 
 hddCost = (125.40, 120)
@@ -25,11 +23,11 @@ def transfer_price(transfer, addMarkup = True):
 		price = addPercent(price, markup)
 	return price
 
-def maintainence_price():
+def maintainence_price(addMarkup = True):
 	"Calculate the price of maintainence"
 
-	price = (float(maintainenceCost[1]) / float(maintainenceCost[0])) / 1000.0
-	price = price * transfer
+	price = float(maintainenceCost[1]) / float(maintainenceCost[0])
+	price = price
 	if addMarkup:
 		price = addPercent(price, markup)
 	return price
@@ -52,5 +50,5 @@ def hosting_price(space, transfer, discount = 0):
 		else:
 			return None
 	else:
-		price = space_price(space) + transfer_price(transfer)
+		price = space_price(space) + transfer_price(transfer) + maintainence_price()
 		return price
