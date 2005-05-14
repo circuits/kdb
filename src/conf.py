@@ -23,20 +23,33 @@ import os
 # Path Settings
 paths = {}
 paths["base"] = os.getcwd()
-paths["plugins"] = "%s/%s" % (paths["base"], "/plugins")
-paths["data"] = "%s/%s" % (paths["base"], "/data")
-paths["logs"] = "%s/%s" % (paths["base"], "/logs")
+paths["plugins"] = "%s/%s" % (paths["base"], "plugins")
+paths["data"] = "%s/%s" % (paths["base"], "data")
+paths["logs"] = "%s/%s" % (paths["base"], "logs")
 
 # Plugins
 
-plugins = ["Hello"]
+plugins = [
+	"hello",
+	"factoids",
+	"pyint",
+	"irccommands",
+	"stats",
+	"plugins",
+	"timer",
+	"host",
+	"spell",
+	#"Trivia",
+	"help"]
 
 # Server Settings
 servers = []
 servers.append(("dede", 6667))
 
 # Channel Settings
-channels = ["#SE"]
+channels = [
+	"#se",
+	"#lab"]
 
 # Bot Settings
 me = {}
