@@ -8,8 +8,15 @@
 Main
 """
 
-import os, signal, sys, traceback, time
-import Utils, IRCBot
+import os
+import sys
+import time
+import signal
+import traceback
+
+from pymills import utils
+from pymills import ircbot
+
 import conf
 
 def run(daemon, args):
@@ -31,11 +38,11 @@ def start(daemon = True):
 	print "-- Starting kdb...\n"
 
 	if daemon:
-		logfile = conf.paths["logs"] + "/" + Utils.getProgName() + '.log'
-		Utils.daemonize('/dev/null', logfile, logfile)
+		logfile = conf.paths["logs"] + "/" + utils.getProgName() + '.log'
+		utils.daemonize('/dev/null', logfile, logfile)
 
-	pidfile = "%s/%s.pid" % (conf.paths["logs"], Utils.getProgName())
-	Utils.writePID(pidfile)
+	pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
+	utils.writePID(pidfile)
 
 	nick = conf.me["nick"]
 	user = conf.me["user"]
@@ -43,10 +50,8 @@ def start(daemon = True):
 	servers = conf.servers
 	channels = conf.channels
 
-	kdb = IRCBot.Core.Bot()
+	kdb = ircbot.Bot()
 	kdb.loadPlugins(conf.paths["plugins"], conf.plugins)
-
-	print repr(kdb.plugins)
 
 	done = False
 	errors = 0
@@ -84,7 +89,7 @@ def start(daemon = True):
 
 def stop():
 	try:
-		pidfile = "%s/%s.pid" % (conf.paths["logs"], Utils.getProgName())
+		pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
 		os.kill(int(open(pidfile).read()), signal.SIGTERM)
 		print "-- kdb Stopped"
 	except Exception, e:
@@ -97,7 +102,7 @@ def restart():
 
 def rehash():
 	try:
-		pidfile = "%s/%s.pid" % (conf.paths["logs"], Utils.getProgName())
+		pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
 		os.kill(int(open(pidfile).read()), signal.SIGHUP)
 		print "-- kdb Rehashed"
 	except Exception, e:

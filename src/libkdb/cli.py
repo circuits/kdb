@@ -10,9 +10,12 @@ Command Line Interface
 
 import sys
 
-from Utils import getProgName
-from CmdOpt import CmdOpt
-import libkdb, Main, conf
+from pymills.cmdopt import CmdOpt
+from pymills.utils import getProgName
+
+import conf
+import main
+import libkdb
 
 # Program Usage
 usage = "\
@@ -42,23 +45,23 @@ getProgName() \
 short = "hnV"
 long = ["help", "nofork", "version"]
 
-def main():
+def run():
 
-	cmdopt = CmdOpt(short, long, usage, False, False)
+	cmdopt = CmdOpt(short, long, usage, allowEmpty=False)
 
-	opts = cmdopt.options()
-	args = cmdopt.args
+	options = cmdopt.getOptions()
+	arguments = cmdopt.getArguments()
 
-	if opts.has(("-V", "--version")):
+	if ("-V", "--version") in options:
 		print libkdb.__version__
 		sys.exit(0)
 	
-	daemon = not opts.has(("-n", "--nofork"))
+	daemon = not ("-n", "--nofork") in options
 
-	if args == []:
+	if arguments == []:
 		print usage
 		sys.exit(0)
 	
-	Main.run(daemon, args)
+	main.run(daemon, arguments)
 
-main()
+run()
