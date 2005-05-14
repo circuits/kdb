@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find . -type f -regex ".*\.pyc" -exec rm {} \;
+rm -f logs/*
