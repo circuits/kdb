@@ -10,5 +10,5 @@
 	>]>
 
 <tree>
-<node type="todo" done="no"><data>TODO List</data></node>
+<node done="no"><data>TODO List</data></node>
 </tree>
