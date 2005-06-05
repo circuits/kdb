@@ -47,7 +47,7 @@ long = ["help", "nofork", "version"]
 
 def run():
 
-	cmdopt = CmdOpt(short, long, usage, allowEmpty=False)
+	cmdopt = CmdOpt(short, long)
 
 	options = cmdopt.getOptions()
 	arguments = cmdopt.getArguments()

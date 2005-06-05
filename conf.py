@@ -30,7 +30,7 @@ paths["logs"] = "%s/%s" % (paths["base"], "logs")
 # Plugins
 
 plugins = [
-	"hello",
+	#"hello",
 	"factoids",
 	"pyint",
 	"irccommands",
