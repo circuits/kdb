@@ -1,0 +1,6 @@
+(lp0
+S'def foo(): return "foo"'
+p1
+aS'foo="bar"'
+p2
+a.
