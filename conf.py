@@ -30,16 +30,13 @@ paths["logs"] = "%s/%s" % (paths["base"], "logs")
 # Plugins
 
 plugins = [
-	#"hello",
 	"factoids",
 	"pyint",
 	"irccommands",
 	"stats",
 	"plugins",
-	"timer",
 	"host",
 	"spell",
-	#"Trivia",
 	"help"]
 
 # Server Settings
