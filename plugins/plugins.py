@@ -71,10 +71,11 @@ class Plugins(ircbot.Plugin):
 			if tokens.peek().upper() == "PLUGINS":
 				tokens.next()
 
-				if tokens.peek().upper() == "LIST":
-					tokens.next()
-					self.doLIST(target)
-				elif tokens.peek().upper() == "INFO":
-					tokens.next()
-					plugin = tokens.next()
-					self.doINFO(target, plugin)
+				if tokens.more():
+					if tokens.peek().upper() == "LIST":
+						tokens.next()
+						self.doLIST(target)
+					elif tokens.peek().upper() == "INFO":
+						tokens.next()
+						plugin = tokens.next()
+						self.doINFO(target, plugin)
