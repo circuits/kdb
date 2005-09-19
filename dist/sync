@@ -1,0 +1,7 @@
+#!/bin/sh
+
+HOST="prologic@dede.mills"
+DIR="~/www/downloads/software/"
+
+scp *.tar.gz "$HOST:$DIR"
+ssh $HOST "chmod 644 $DIR/*"
