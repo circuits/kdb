@@ -195,6 +195,9 @@ class Factoids(ircbot.Plugin):
 		self.m = 0 # modifications count
 		self.q = 0 # questions count
 
+	def __del__(self):
+		del self.facts
+
 	def getHelp(self, command):
 
 		if command == None:

@@ -84,6 +84,8 @@ def start(daemon = True):
 			print "ERROR: Too many errors! Aborting..."
 			done = True
 	
+	kdb.__del__()
+
 	print "No. errors: %d" % errors
 	sys.exit(0)
 
