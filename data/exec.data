@@ -3,4 +3,8 @@ S'def foo(): return "foo"'
 p1
 aS'foo="bar"'
 p2
+aS'if 2 == 2: 2+2'
+p3
+aS'if 2 == 2: print 2+2'
+p4
 a.

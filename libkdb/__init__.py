@@ -7,7 +7,7 @@
 
 __name__ = "kdb"
 __desc__ = "Knowledge (IRC) Bot"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "James Mills"
 __email__ = "%s <prologic@shortcircuit.net.au>" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"

@@ -47,7 +47,7 @@ class Stats(ircbot.Plugin):
 	def doUPTIME(self, target):
 		uptime = duration(time.time() - self.startTime)
 		cpu = time.clock()
-		msg = 'Uptime: ' + uptime + ' (CPU: ' + str(cpu) + ')'
+		msg = "Uptime: %s+%s:%s:%s (CPU: %s)" % (uptime + (cpu,))
 		self.bot.ircPRIVMSG(target, msg)
 
 	def doNSTATS(self, target):
