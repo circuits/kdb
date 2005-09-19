@@ -7,4 +7,12 @@ aS'if 2 == 2: 2+2'
 p3
 aS'if 2 == 2: print 2+2'
 p4
+aS'type = "".__class__.__class__; type.__base__.__subclasses__()'
+p5
+aS'type = "".__class__.__class__; print type.__base__.__subclasses__()'
+p6
+aS'"".__class__.__class__.__base__.__subclasses__()'
+p7
+aS'1+1'
+p8
 a.

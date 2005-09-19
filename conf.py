@@ -42,11 +42,9 @@ plugins = [
 # Server Settings
 servers = []
 servers.append(("dede", 6667))
-#servers.append(("irc.freenode.net", 6667))
 
 # Channel Settings
 channels = [
-#	"#wiki",
 	"#se",
 	"#lab"]
 
