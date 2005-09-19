@@ -1,0 +1,14 @@
+#!/bin/sh
+
+PACKAGE=kdb
+
+if [ ! -f dist/$PACKAGE-`getver`.tar.gz ]; then
+	python setup.py sdist
+	svn add dist/$PACKAGE-`getver`.tar.gz
+	svn ci -m "Added" dist/$PACKAGE-`getver`.tar.gz
+	cd dist && ./sync && cd ..
+else
+	echo "Nothing to do"
+fi
+
+./clean
