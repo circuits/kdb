@@ -253,6 +253,8 @@ class Factoids(ircbot.Plugin):
 			limit = int(num)
 			facts = self.facts.listFacts(limit)
 			msg = "%s: %s" % (source[0], string.join(facts, ", "))
+		except TypeError:
+			msg = "No number specified."
 		except ValueError:
 			msg = "Invalid number specified."
 		self.bot.ircPRIVMSG(target, msg)
