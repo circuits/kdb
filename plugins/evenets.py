@@ -28,7 +28,7 @@ class Evenets(ircbot.Plugin):
 	"Evenets Plugin"
 
 	def __init__(self, bot):
-		IRCBot.Core.Plugin.__init__(self, bot)
+		ircbot.Core.Plugin.__init__(self, bot)
 
 	def getHelp(self, command):
 		"""Returns a Help String

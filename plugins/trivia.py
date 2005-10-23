@@ -14,9 +14,9 @@ __ver__ = "0.0.1"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import os
-import re
-import time
-import string
+#import re
+#import time
+#import string
 
 from pymills import db
 from pymills import ircbot
@@ -187,7 +187,7 @@ class Trivia(ircbot.Plugin):
 				msg = "ERROR: Category %s already exists! (id = %d)" % (data, id)
 		elif type.upper() == "Q":
 			tokens = Tokenizer(data)
-			category = #TODO: ...
+			#category = #TODO: ...
 			question = self.triviadb.findQuestion(data)
 			if question.empty():
 				self.triviadb.addQuestion(data)
