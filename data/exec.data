@@ -15,4 +15,24 @@ aS'"".__class__.__class__.__base__.__subclasses__()'
 p7
 aS'1+1'
 p8
+aS'test="Dave"'
+p9
+aS'a = [1, 2, 3]'
+p10
+aS'del a[1]'
+p11
+aS'b = [1, 2, 3, 4]'
+p12
+aS'del b[0]'
+p13
+aS'del b[0]'
+p14
+aS'del b[0]'
+p15
+aS'del b[0]'
+p16
+aS"b = ['apple', 'banana', 'custard', 'dip']"
+p17
+aS"list.remove(b,'custard')"
+p18
 a.
