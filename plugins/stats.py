@@ -10,7 +10,7 @@ Stats Plugin
 
 __name__ = "Stats"
 __desc__ = "Stats Plugin"
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import time
@@ -19,6 +19,8 @@ from pymills import ircbot
 from pymills.misc import bytes
 from pymills.misc import duration
 from pymills.utils import Tokenizer
+
+import libkdb
 
 def init():
 	pass
@@ -34,11 +36,13 @@ class Stats(ircbot.Plugin):
 	def getHelp(self, command):
 
 		if command == None:
-			help = "Commands: UPTIME, NSTATS"
+			help = "Commands: UPTIME, NSTATS VERSION"
 		elif command.upper() == "UPTIME":
 			help = "(Displays current uptime) - Syntax: UPTIME"
 		elif command.upper() == "NSTATS":
 			help = "(Displays current network stats) - Syntax: NSTATS"
+		elif command.upper() == "VERSION":
+			help = "(Displays version/build information) - Syntax: VERSION"
 		else:
 			help = "Invalid Command: %s" % command
 
@@ -65,6 +69,17 @@ class Stats(ircbot.Plugin):
 
 		self.bot.ircPRIVMSG(target, msg)
 
+	def doVERSION(self, target):
+		msg = "%s [ %s ] v%s by %s - %s - %s" % (
+				libkdb.__name__,
+				libkdb.__desc__,
+				libkdb.__version__,
+				libkdb.__email__,
+				libkdb.__copyright__,
+				libkdb.__url__)
+
+		self.bot.ircPRIVMSG(target, msg)
+
 	def onMESSAGE(self, source, target, message):
 
 		(addressed, target, message) = self.isAddressed(source, target, message)
@@ -79,3 +94,6 @@ class Stats(ircbot.Plugin):
 			elif tokens.peek().upper() == "NSTATS":
 				tokens.next()
 				self.doNSTATS(target)
+			elif tokens.peek().upper() == "VERSION":
+				tokens.next()
+				self.doVERSION(target)

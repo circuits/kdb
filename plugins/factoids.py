@@ -10,7 +10,7 @@ Factoids Plugin
 
 __name__ = "Factoids"
 __desc__ = "Factoids Plugin"
-__ver__ = "0.0.1"
+__ver__ = "0.2.0"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import os
@@ -41,26 +41,39 @@ y INTEGER);
 def init():
 	if not os.path.isfile(database):
 		db = db.SQLite(database)
-		db.query(schema)
+		db.execute(schema)
+		db.update()
 
-class Facts(db.SQLite):
+class DummySQLite:
+
+	def execute(self, *args):
+		pass
+
+class Facts(db.SQLObject):
 
 	def __init__(self):
-		db.SQLite.__init__(self, database)
+		if os.path.isfile(database):
+			conn = db.SQLite(database)
+		else:
+			conn = DummySQLite()
+
+		db.SQLObject.__init__(self, conn)
 	
 	def _getFact(self, fact):
 		fields = ["who", "fact", "type", "value"]
 		table = "facts"
 		condition = "fact LIKE \"%s\"" % fact
 		limit = 1
-		return self.select(fields, table, condition, limit)
+		return self.select(condition=condition, order=None, 
+				limit=limit, table=table, fields=fields)
 
 	def _findFact(self, fact):
 		fields = ["id"]
 		table = "facts"
 		condition = "fact LIKE \"%s\"" % fact
 		limit = 1
-		records = self.select(fields, table, condition, limit)
+		records =  self.select(condition=condition, order=None, 
+				limit=limit, table=table, fields=fields)
 		return records.get("id")
 
 	def _delFact(self, fact):
@@ -76,7 +89,7 @@ class Facts(db.SQLite):
 	def getCount(self):
 		fields = ["COUNT(*) AS count"]
 		table = "facts"
-		records = self.select(fields, table)
+		records = self.select(table=table, fields=fields)
 		return records.get("count")
 
 	def addFact(self, who, fact, type, value):
@@ -91,11 +104,20 @@ class Facts(db.SQLite):
 	def listFacts(self, limit):
 		fields = ["fact"]
 		table = "facts"
-		records = self.select(fields, table, None, limit)
+		records =  self.select(condition=None, order=None, 
+				limit=limit, table=table, fields=fields)
 		facts = []
 		for record in records:
 			facts.append(record["fact"])
 		return facts
+
+	def getFactsLike(self, fact, limit):
+		fields = ["fact"]
+		table = "facts"
+		condition = "fact LIKE \"%%%s%%\"" % fact
+		records =  self.select(condition=condition, order=None, 
+				limit=limit, table=table, fields=fields)
+		return map(lambda x: x.get("fact"), records)
 	
 	def getFact(self, bot, source, fact):
 		fact = self._getFact(fact)
@@ -201,7 +223,7 @@ class Factoids(ircbot.Plugin):
 	def getHelp(self, command):
 
 		if command == None:
-			help = "Commands: STATUS, FORGET, NO, TELL"
+			help = "Commands: STATUS, FORGET, NO, TELL, LIST"
 		elif command.upper() == "STATUS":
 			help = "(Display current status info) - Syntax: STATUS"
 		elif command.upper() == "FORGET":
@@ -210,6 +232,8 @@ class Factoids(ircbot.Plugin):
 			help = "(Redefines a fact) - Syntax: NO <fact> <is|are> <value>"
 		elif command.upper() == "TELL":
 			help = "(Tells someone about a fact) - Syntax: TELL <nick> <fact>"
+		elif command.upper() == "LIST":
+			help = "(Lists factoids) - Syntax: LIST <n>"
 		else:
 			help = "Invalid Command: %s" % command
 
@@ -258,6 +282,20 @@ class Factoids(ircbot.Plugin):
 		except ValueError:
 			msg = "Invalid number specified."
 		self.bot.ircPRIVMSG(target, msg)
+	
+	def doFIND(self, source, target, fact, num):
+		try:
+			limit = int(num)
+			facts = self.facts.getFactsLike(fact, limit)
+			facts = filter(lambda x: x is not None, facts)
+			msg = "Factoids found %d : %s" % (len(facts), 
+					string.join(facts, ","))
+		except TypeError:
+			msg = "No number specified."
+		except ValueError:
+			msg = "Invalid number specified."
+
+		self.bot.ircPRIVMSG(target, msg)
 
 	def onMESSAGE(self, source, target, message):
 
@@ -285,6 +323,11 @@ class Factoids(ircbot.Plugin):
 				self.c += 1
 				num = tokens.next()
 				self.doLIST(source, target, num)
+			elif command == 'find':
+				self.c += 1
+				fact = tokens.next()
+				num = tokens.next()
+				self.doFIND(source, target, fact, num)
 			else:
 				#m = re.search('(what \b(?:is|are)\b )?(.*) *?\?', message)
 				m = re.search('(what \b(?:is|are)\b )?(.*) ?\?', message)

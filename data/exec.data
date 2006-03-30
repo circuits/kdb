@@ -35,4 +35,40 @@ aS"b = ['apple', 'banana', 'custard', 'dip']"
 p17
 aS"list.remove(b,'custard')"
 p18
+aS'import time'
+p19
+aS'a=[1, 2, 3]'
+p20
+aS'a.remove(1)'
+p21
+aS'del a[1]'
+p22
+aS'a[0] = 4'
+p23
+aS'a.append(1)'
+p24
+aS'import pymills.utils'
+p25
+aS'81000000000 + 41735563275 + 13763750000 + 4688277000'
+p26
+aS"'this is a test'.rstrip('test')"
+p27
+aS'125,000,000 / 3'
+p28
+aS'125000000 / 3'
+p29
+aS'import time'
+p30
+aS'ONE_DAY=(60*60*24)'
+p31
+aS'import md5'
+p32
+aS'import inspect'
+p33
+aS'import inspect'
+p34
+aS'from pymills.time import hmsToSeconds'
+p35
+aS'from pymills.misc import duration'
+p36
 a.

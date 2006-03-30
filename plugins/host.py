@@ -10,7 +10,7 @@ Host Plugin
 
 __name__ = "Host"
 __desc__ = "Host Plugin"
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import socket
@@ -49,6 +49,8 @@ class Host(ircbot.Plugin):
 			try:
 				(name, aliases, addresses) = socket.gethostbyaddr(host)
 				msg = "%s -> %s" % (host, name)
+			except socket.gaierror, e:
+				msg = "%s -> %s" % (host, e[1])
 			except socket.herror, e:
 				msg = "%s -> %s" % (host, e[1])
 		else:
