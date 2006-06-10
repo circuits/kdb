@@ -34,10 +34,6 @@ def parse_options():
 	return (opts, args)
 
 def run():
-
 	(opts, args) = parse_options()
 	daemon = not opts.nofork
 	main.run(daemon, args)
-
-if __name__ == "libkdb.cli":
-	run()

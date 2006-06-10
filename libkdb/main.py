@@ -1,15 +1,14 @@
-# Filename: Main.py
-# Module:   Main
-# Date:     04th August 2004
-# Author:   James Mills <prologic@shortcircuit.net.au>
+# Filename: main.py
+# Module:	main
+# Date:		04th August 2004
+# Author:	James Mills <prologic@shortcircuit.net.au>
 
-"""Main
+"""Main Module
 
-Main
+...
 """
 
 import os
-import sys
 import signal
 import traceback
 
@@ -30,9 +29,9 @@ def run(daemon, args):
 		rehash()
 	else:
 		print "ERROR: Invalid Command %s" % args[0]
-		sys.exit(1)
+		raise SystemExit, 1
 
-def start(daemon = True):
+def start(daemon=True):
 
 	print "-- Starting kdb...\n"
 
@@ -86,16 +85,23 @@ def start(daemon = True):
 	kdb.__del__()
 
 	print "No. errors: %d" % errors
-	sys.exit(0)
+	raise SystemExit, 0
 
 def stop():
-	try:
-		pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
-		os.kill(int(open(pidfile).read()), signal.SIGTERM)
-		print "-- kdb Stopped"
-	except Exception, e:
-		print "*** ERROR: Could not stop kdb..."
-		print str(e)
+#	try:
+	pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
+	fd = open(pidfile, "r")
+	pid = int(fd.read())
+	fd.close()
+	os.remove(pidfile)
+	print "Killing PID %d" % pid
+	os.kill(pid, signal.SIGTERM)
+	print "-- kdb Stopped"
+#	except Exception, e:
+#		pass
+#		raise
+#		print "*** ERROR: Could not stop kdb..."
+#		print str(e)
 
 def restart():
 	stop()
