@@ -59,10 +59,13 @@ class Facts(db.SQLObject):
 
 		db.SQLObject.__init__(self, conn)
 	
+	def _quote(self, s):
+		return s.replace('"', '\\"')
+
 	def _getFact(self, fact):
 		fields = ["who", "fact", "type", "value"]
 		table = "facts"
-		condition = "fact LIKE \"%s\"" % fact
+		condition = "fact LIKE '%s'" % self._quote(fact)
 		limit = 1
 		return self.select(condition=condition, order=None, 
 				limit=limit, table=table, fields=fields)
@@ -70,7 +73,7 @@ class Facts(db.SQLObject):
 	def _findFact(self, fact):
 		fields = ["id"]
 		table = "facts"
-		condition = "fact LIKE \"%s\"" % fact
+		condition = "fact LIKE '%s'" % fact
 		limit = 1
 		records =  self.select(condition=condition, order=None, 
 				limit=limit, table=table, fields=fields)
@@ -96,7 +99,7 @@ class Facts(db.SQLObject):
 		fields = ["who", "fact", "type", "value"]
 		table = "facts"
 		values = [who, fact, type, value]
-		self.insert(table, fields, values)
+		self.insert(values, table, fields)
 
 	def isFact(self, fact):
 		return not self._findFact(fact) == None

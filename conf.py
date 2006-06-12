@@ -29,24 +29,23 @@ paths["logs"] = "%s/%s" % (paths["base"], "logs")
 
 # Plugins
 
-plugins = [
-	"factoids",
-	"pyint",
-	"irccommands",
-	"stats",
-	"plugins",
-	"host",
-	"spell",
-	"help"]
+plugins = [ \
+#		"factoids",
+		"pyint",
+		"irccommands",
+		"stats",
+		"plugins",
+		"host",
+		"spell",
+		"help"]
 
 # Server Settings
 servers = []
 servers.append(("dede", 6667))
 
 # Channel Settings
-channels = [
-	"#se",
-	"#lab"]
+channels = [ \
+		"#lab"]
 
 # Bot Settings
 me = {}

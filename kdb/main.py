@@ -13,7 +13,7 @@ import signal
 import traceback
 
 from pymills import utils
-from pymills import ircbot
+from pymills.ircbot import IRCBot
 
 import conf
 
@@ -48,7 +48,7 @@ def start(daemon=True):
 	servers = conf.servers
 	channels = conf.channels
 
-	kdb = ircbot.Bot()
+	kdb = IRCBot()
 	kdb.loadPlugins(conf.paths["plugins"], conf.plugins)
 
 	done = False
@@ -58,7 +58,7 @@ def start(daemon=True):
 
 		for server, port in servers:
 
-			kdb.ircSERVER(server, port)
+			kdb.open(server, port)
 			kdb.ircUSER(user, "", server, name)
 			kdb.ircNICK(nick)
 			kdb.joinChannels(channels)
