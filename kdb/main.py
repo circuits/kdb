@@ -1,117 +1,155 @@
 # Filename: main.py
 # Module:	main
-# Date:		04th August 2004
+# Date:		4th August 2004
 # Author:	James Mills <prologic@shortcircuit.net.au>
+# $Id: main.py 221 2006-05-28 08:00:12Z prologic $
 
-"""Main Module
+"""Main
 
-...
+kdb's main module, which runs everything.
 """
 
 import os
 import signal
 import traceback
 
-from pymills import utils
-from pymills.ircbot import IRCBot
+from pymills.utils import getProgName, \
+		writePID, daemonize
 
-import conf
+from core import Core
+from env import Environment
 
 def run(daemon, args):
 
-	if args[0].upper() == "START":
-		start(daemon)
-	elif args[0].upper() == "STOP":
-		stop()
-	elif args[0].upper() == "RESTART":
-		restart()
-	elif args[0].upper() == "REHASH":
-		rehash()
+	envPath = args[0]
+	command = args[1].upper()
+
+	if command == "START":
+		start(envPath, daemon)
+	elif command == "STOP":
+		stop(envPath)
+	elif command == "RESTART":
+		restart(envPath)
+	elif command == "REHASH":
+		rehash(envPath)
+	elif command == "INITENV":
+		initEnv(envPath)
+	elif command == "UPGRADE":
+		upgrade(envPath)
 	else:
 		print "ERROR: Invalid Command %s" % args[0]
 		raise SystemExit, 1
 
-def start(daemon=True):
+def start(envPath, daemon=True):
+
+	if not os.path.exists(envPath):
+		print "ERROR: Path not found '%s'" % envPath
+		raise SystemExit, 1
+
+	env = Environment(envPath)
+	if env.needsUpgrade():
+		print "ERROR: kdb Environment '%s' needs upgrading" % envPath
+		print "Run: %s %s upgrade" % (getProgName, envPath)
+		raise SystemExit, 1
 
 	print "-- Starting kdb...\n"
 
 	if daemon:
-		logfile = conf.paths["logs"] + "/" + utils.getProgName() + '.log'
-		utils.daemonize('/dev/null', logfile, logfile)
+		daemonize(stderr="/dev/stderr")
 
-	pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
-	utils.writePID(pidfile)
+	writePID(env.config.get("kdb", "pidfile") % env.path)
 
-	nick = conf.me["nick"]
-	user = conf.me["user"]
-	name = conf.me["name"]
-	servers = conf.servers
-	channels = conf.channels
+	core = Core(env)
 
-	kdb = IRCBot()
-	kdb.loadPlugins(conf.paths["plugins"], conf.plugins)
+	while True:
 
-	done = False
-	errors = 0
+		try:
+			core.run()
+		except KeyboardInterrupt:
+			core.stop()
+			break
+		except SystemExit, status:
+			break
+		except Exception, e:
+			print "ERROR: " + str(e)
+			print "\nTraceBack follows:\n"
+			traceback.print_exc()
+			raise SystemExit, 1
 
-	while not done:
-
-		for server, port in servers:
-
-			kdb.open(server, port)
-			kdb.ircUSER(user, "", server, name)
-			kdb.ircNICK(nick)
-			kdb.joinChannels(channels)
-
-			try:
-				kdb.run()
-			except KeyboardInterrupt:
-				kdb.stop()
-				done = True
-				break
-			except SystemExit, status:
-				done = True
-				break
-			except Exception, e:
-				errors += 1
-				print "ERROR: " + str(e)
-				print "\nTraceBack follows:\n"
-				traceback.print_exc()
-
-		if errors > 0:
-			print "ERROR: Too many errors! Aborting..."
-			done = True
-	
-	kdb.__del__()
-
-	print "No. errors: %d" % errors
 	raise SystemExit, 0
 
-def stop():
-#	try:
-	pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
-	fd = open(pidfile, "r")
-	pid = int(fd.read())
-	fd.close()
-	os.remove(pidfile)
-	print "Killing PID %d" % pid
-	os.kill(pid, signal.SIGTERM)
-	print "-- kdb Stopped"
-#	except Exception, e:
-#		pass
-#		raise
-#		print "*** ERROR: Could not stop kdb..."
-#		print str(e)
+def stop(envPath):
 
-def restart():
-	stop()
-	start()
+	if not os.path.exists(envPath):
+		print "ERROR: Path not found '%s'" % envPath
+		raise SystemExit, 1
 
-def rehash():
+	env = Environment(envPath)
+
 	try:
-		pidfile = "%s/%s.pid" % (conf.paths["logs"], utils.getProgName())
-		os.kill(int(open(pidfile).read()), signal.SIGHUP)
+		os.kill(int(open(env.config.get(
+			"kdb", "pidfile") % env.path).read()),
+			signal.SIGTERM)
+		print "-- kdb Stopped"
+	except Exception, e:
+		raise
+		print "*** ERROR: Could not stop kdb..."
+		print str(e)
+		raise SystemExit, 1
+
+	raise SystemExit, 0
+
+def restart(envPath):
+	stop(envPath)
+	start(envPath)
+
+def rehash(envPath):
+
+	if not os.path.exists(envPath):
+		print "ERROR: Path not found '%s'" % envPath
+		raise SystemExit, 1
+
+	env = Environment(envPath)
+
+	try:
+		os.kill(int(open(env.config.get(
+			"kdb", "pidfile") % env.path).read()),
+			signal.SIGHUP)
 		print "-- kdb Rehashed"
 	except Exception, e:
+		raise
 		print "*** ERROR: Could not rehash kdb..."
 		print str(e)
+		raise SystemExit, 1
+
+	raise SystemExit, 0
+
+def initEnv(envPath):
+
+	if os.path.exists(envPath):
+		print "ERROR: Path '%s' already exists" % envPath
+		raise SystemExit, 1
+
+	env = Environment(envPath, create=True)
+
+	print "kdb Environment created at %s" % envPath
+	print "You can run kdb now:"
+	print "   kdb %s start" % envPath
+
+	raise SystemExit, 0
+
+def upgrade(envPath):
+
+	if not os.path.exists(envPath):
+		print "ERROR: Path not found '%s'" % envPath
+		raise SystemExit, 1
+
+	env = Environment(envPath)
+	if not env.needsUpgrade():
+		print "ERROR: Upgrade not necessary for kdb Environment %s" % envPath
+		raise SystemExit, 1
+
+	env.upgrade()
+	print "kdb Environment upgraded."
+
+	raise SystemExit, 0
