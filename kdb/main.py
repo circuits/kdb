@@ -59,7 +59,7 @@ def start(envPath, daemon=True):
 
 	writePID(env.config.get("kdb", "pidfile") % env.path)
 
-	core = Core(env)
+	core = Core(env.event, env)
 
 	while True:
 

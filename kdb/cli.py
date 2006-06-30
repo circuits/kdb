@@ -2,7 +2,7 @@
 # Module:	cli
 # Date:		7th Mar 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
+# $Id: cli.py 57 2006-06-17 07:35:37Z prologic $
 
 """Command Line Interface
 

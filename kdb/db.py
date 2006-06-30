@@ -9,10 +9,6 @@
 This module implements the database needs.
 """
 
-import md5
-import time
-import string
-
 class Enum:
 
 	def __init__(self, db):
@@ -52,7 +48,6 @@ class System:
 
 	def __init__(self, db):
 		self._db = db
-	
 	def __contains__(self, name):
 		db = self._db
 

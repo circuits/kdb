@@ -9,113 +9,109 @@
 ...
 """
 
-import os
+from pymills.env import BaseEnvironment
+from pymills.utils import safe__import__
 
-import default_config
+from kdb import default_config
 
 VERSION = 1
 
-class Environment:
+class Environment(BaseEnvironment):
 
 	def __init__(self, path, create=False):
-		self.path = os.path.abspath(os.path.expanduser(path))
+		"initializes x; see x.__class__.__doc__ for signature"
 
-		if create:
-			self.create()
-		else:
-			self.verify()
+		import kdb
+		from kdb import default_db
 
-		self.loadConfig()
-		self.setupLog()
-		self.loadDB()
-
-		from pymills.event import EventManager
-		self.event = EventManager()
-		self.event.addListener(self.log.debug)
+		BaseEnvironment.__init__(self,
+				path,
+				kdb.__name__,
+				VERSION,
+				default_config.CONFIG,
+				(default_db.TABLES, default_db.DATA),
+				kdb.__url__,
+				create)
 
 		from pymills.timers import Timers
+		from pymills.event import EventManager
+
+		self.event = EventManager()
 		self.timers = Timers(self.event)
 
 	def create(self):
+		BaseEnvironment.create(self)
 
-		def createFile(filename, data=None):
-			fd = open(filename, 'w')
-			if data is not None:
-				fd.write(data)
-			fd.close()
-
-		# Create the directory structure
-		os.mkdir(self.path)
-		os.mkdir(os.path.join(self.path, "db"))
-		os.mkdir(os.path.join(self.path, "log"))
-		os.mkdir(os.path.join(self.path, "conf"))
+		import os
 		os.mkdir(os.path.join(self.path, "plugins"))
+	
+	def loadPlugin(self, bot, plugin):
+		"""E.loadPlugin(bot, plugin) -> None
 
-		# Create a few files
-		createFile(os.path.join(self.path, "VERSION"),
-				"kdb Environment Version %d\n" % VERSION)
-		createFile(os.path.join(self.path, "README"),
-				"This directory contains a kdb environment.")
+		Load a single plugin given by plugin.
+		If this plugin is already laoded, it'll be
+		replaced.
+		"""
 
-		# Setup the default configuration
-		createFile(os.path.join(
-			self.path, "conf", "kdb.ini"))
-		default_config.createConfig(os.path.join(
-			self.path, "conf", "kdb.ini"))
-		self.loadConfig()
+		import sys
+		from traceback import format_exc
 
-		# Create the database
-		import default_db
-		default_db.createDB(
-				self.config.get("kdb", "database") % self.path)
+		from kdb.plugin import BasePlugin
 
-	def verify(self):
-		fd = open(os.path.join(self.path, "VERSION"), "r")
 		try:
-			version = fd.readlines()[0]
-		except:
-			version = ""
-		fd.close()
-		assert version.startswith("kdb Environment")
-		self.version = int(
-				version.split(
-					"kdb Environment Version")[1].strip())
+			fqplugin = "kdb.plugins.%s" % plugin
+			if sys.modules.has_key(fqplugin):
+				self.log.debug("Reloading plugin: %s" % plugin)
+				try:
+					reload(sys.modules[fqplugin])
+					self.log.debug("Reloaded plugin: %s" % plugin)
+				except Exception, e:
+					self.log.error("Error loading plugin '%s': %s" % (
+						plugin, e))
+					self.log.error(format_exc())
+					return False
+			m = safe__import__("plugins.%s" % plugin,
+					globals(), locals(), "kdb")
+			if hasattr(m, plugin.capitalize()):
+				c = getattr(m, plugin.capitalize())
+				if issubclass(c, BasePlugin):
+					self.plugins[plugin] = c(
+							self.event, bot, self)
+			self.log.debug("Loaded plugin: %s" % plugin)
+			return True
+		except Exception, e:
+			self.log.error("Error loading plugin '%s': %s" % (
+				plugin, e))
+			self.log.error(format_exc())
+			return False
 
-	def needsUpgrade(self):
-		return VERSION > self.version
+	def unloadPlugin(self, plugin):
+		"""E.unloadPlugin(plugin) -> None
 
-	def loadConfig(self):
-		from pymills.config import Configuration
-		self.config = Configuration(
-				os.path.join(self.path, "conf", "kdb.ini"))
-		for section, name, value in default_config.CONFIG:
-			self.config.setdefault(section, name, value)
-	
-	def setupLog(self):
-		from pymills.log import newLogger
+		Unload the specified plugin if it has been loaded.
+		"""
 
-		logType = self.config.get("logging", "type")
-		logLevel = self.config.get("logging", "level")
-		logFile = self.config.get("logging", "file")
-		if not os.path.isabs(logFile):
-			logFile = os.path.join(self.path, "log", logFile)
-		logID = self.path
+		if self.plugins.has_key(plugin):
+			self.log.debug("Unloaded plugin: %s" % plugin)
+			o = self.plugins[plugin]
+			o.unregister()
+			del o
+			del self.plugins[plugin]
+		
+	def loadPlugins(self, bot):
+		"""E.loadPlugins(bot) -> None
 
-		self.log = newLogger(logType, logFile, logLevel, logID)
-	
-	def loadDB(self):
-		import inspect
-		from pymills.db import Connection
+		Load any available plugins loading the global/default
+		ones first, then loading the ones found in the
+		environment. Plugins found in the environment
+		may override existing plugins already loaded.
+		"""
 
-		from kdb import db
+		self.plugins = {}
+		plugins = default_config.DEFAULT_PLUGINS
+		self.log.debug(
+				"Loading default plugins: %s" % str(plugins))
 
-		dbConn = Connection(
-				self.config.get("kdb", "database") % self.path)
-
-		self.db = dict(
-				[
-					(n.lower(), v(dbConn))
-					for n, v in inspect.getmembers(
-						db, lambda x: inspect.isclass(x))
-					]
-				)
+		for plugin in plugins:
+			self.log.debug("Loading plugin: %s" % plugin)
+			self.loadPlugin(bot, plugin)

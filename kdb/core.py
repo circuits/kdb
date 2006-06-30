@@ -13,11 +13,13 @@ import os
 import signal
 import socket
 
+from pymills.event import Component, listener
+
 from bot import Bot
 
-class Core:
+class Core(Component):
 
-	def __init__(self, env):
+	def __init__(self, event, env):
 		self.env = env
 
 		if os.name in ["posix", "mac"]:
@@ -26,19 +28,23 @@ class Core:
 
 		# Initialize
 
-		self.bot = Bot(self.env)
+		self.bot = Bot(self.env.event, self.env)
+		self.env.loadPlugins(self.bot)
 
 		self.running = True
 
 	# Service Commands
 
+	@listener("term")
 	def term(self, signal=0, stack=0):
 		self.stop()
 		raise SystemExit, 0
 	
+	@listener("stop")
 	def stop(self):
 		self.running = False
 	
+	@listener("rehash")
 	def rehash(self, signal=0, stack=0):
 		self.env.reload()
 	
@@ -70,7 +76,7 @@ class Core:
 				bot.process()
 			else:
 				env.log.info(
-						"%s was disconnected, reconnecting..." % (
+						"%s was disconnected from %s, reconnecting..." % (
 							bot.getNick(), bot.getServer()))
 				bot.open(
 						env.config.get("connect", "host"),
@@ -78,5 +84,5 @@ class Core:
 				bot.connect(auth)
 				bot.joinChannels()
 
-			timers.run()
+			timers.process()
 			event.flush()

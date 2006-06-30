@@ -10,20 +10,17 @@
 """
 
 from pymills.irc import IRC
+from pymills.event import filter, listener
 from pymills.sockets import TCPClient
-from pymills.datatypes import CaselessDict
 
 class Bot(TCPClient, IRC):
 
-	def __init__(self, env):
-		TCPClient.__init__(self, env.event)
-		IRC.__init__(self, env.event)
+	def __init__(self, event, env):
+		TCPClient.__init__(self)
+		IRC.__init__(self)
+
 		self.env = env
-
-#FIXME: One day this should support .eggs and site and local plugins
-#		loadPlugins(env)
-		self._plugins = CaselessDict()
-
+	
 	def connect(self, auth):
 
 		if auth.has_key("pass"):
@@ -38,21 +35,23 @@ class Bot(TCPClient, IRC):
 		self.ircNICK(auth.get("nick", ""))
 
 	def joinChannels(self):
-		self.env.log.debug(
-				"channels(config): %s" % 
-				self.env.config.get("bot", "channels"))
 		channels = [x.strip() for x in 
-				self.env.config.get("bot", "channels").split(",")]
-		self.env.log.debug("channels: %s" % channels)
+				self.env.config.get(
+					"bot", "channels", "").split(",")
+				if not x.strip() == ""]
+		self.env.log.debug("Joining channels: %s" % channels)
 		for channel in channels:
 			self.ircJOIN(channel)
 
 	def ircRAW(self, data):
-		IRC.ircRAW(self, data)
-		self.env.log.debug("O: %s" % data)
+		self.write(data + "\r\n")
 
-	def onREAD(self, event):
-		IRC.onREAD(self, event)
-		self.env.log.debug("I: %s" % event.line)
-		return True, event
-	onREAD.filter = True
+	@filter()
+	def onDEBUG(self, event):
+		#self.env.log.debug(event)
+		return False, event
+
+	@listener("read")
+	def onREAD(self, line):
+		TCPClient.onREAD(self, line)
+		IRC.onREAD(self, line)

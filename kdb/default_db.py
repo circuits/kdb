@@ -40,7 +40,7 @@ systemData = [
 
 TABLES = [enum, system]
 
-DATA = [systemData]
+DATA = systemData
 
 def createDB(uri):
 	db = Connection(uri)
@@ -48,9 +48,8 @@ def createDB(uri):
 	for table in TABLES:
 		db.do(table)
 
-	for data in DATA:
-		for line in data:
-			db.do(line)
+	for line in DATA:
+		db.do(line)
 	
 	db.commit()
 

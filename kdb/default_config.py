@@ -9,12 +9,6 @@
 ...
 """
 
-import sys
-
-from pymills.config import Configuration
-
-__all__ = ["createConfig", "VERSION"]
-
 VERSION = 1
 
 CONFIG = (
@@ -30,15 +24,11 @@ CONFIG = (
 		("bot", "name", "Knowledge Database Bot"),
 		)
 
-def createConfig(filename):
-	config = Configuration(filename)
-	for section, name, value in CONFIG:
-		config.set(section, name, value)
-	config.save()
-
-if __name__ == "__main__":
-	if len(sys.argv) < 2:
-		print "Usage: python default_config.py <filename>"
-		raise SystemExit, 1
-	
-	createConfig(sys.argv[1])
+DEFAULT_PLUGINS = (
+		"plugins",
+		"help",
+		"stats",
+		"irc",
+		"host",
+		"spell",
+		"pyint")
