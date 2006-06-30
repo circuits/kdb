@@ -38,5 +38,4 @@ class Pyint(BasePlugin):
 		except Exception, e:
 			msg = ["ERROR: %s"] + format_exc().split("\n")
 
-		for line in msg:
-			self.bot.ircNOTICE(source, line)
+		return msg

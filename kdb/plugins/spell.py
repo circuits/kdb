@@ -37,4 +37,4 @@ class Spell(BasePlugin):
 			msg = "%s ? Try -> %s" % (
 					word, ", ".join(suggestions))
 
-		self.bot.ircNOTICE(source, msg)
+		return msg

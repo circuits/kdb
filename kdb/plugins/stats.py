@@ -36,7 +36,7 @@ class Stats(BasePlugin):
 		uptime = duration(time.time() - self.stime)
 		cpu = time.clock()
 		msg = "Uptime: %s+%s:%s:%s (CPU: %s)" % (uptime + (cpu,))
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 	
 	def cmdNSTATS(self, source):
 		msg = "Traffic: (I, O, T) = (%s, %s, %s)" % (
@@ -44,7 +44,7 @@ class Stats(BasePlugin):
 				"%0.2f%s" % (bytes(self.tout)),
 				"%0.2f%s" % (bytes(self.tin + self.tout)))
 
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 
 	def cmdVERSION(self, source):
 		msg = "%s [ %s ] v%s by %s - %s - %s" % (
@@ -54,7 +54,7 @@ class Stats(BasePlugin):
 				kdb.__email__,
 				kdb.__copyright__,
 				kdb.__url__)
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 
 	@filter("read")
 	def onREAD(self, event, line):

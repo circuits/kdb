@@ -39,7 +39,31 @@ class BasePlugin(Component):
 				source, target, message)
 
 		if addressed:
-			if self.processCommand(target, message):
+			r = self.processCommand(target, message)
+			if r is not None:
+				if type(r) == list:
+					for line in r:
+						self.bot.ircPRIVMSG(target, line)
+				else:
+					self.bot.ircPRIVMSG(target, r)
+				return True, event
+
+		return False, event
+
+	@filter("notice")
+	def onNOTICE(self, event, source, target, message):
+
+		addressed, target, message = self.isAddressed(
+				source, target, message)
+
+		if addressed:
+			r = self.processCommand(target, message)
+			if r is not None:
+				if type(r) == list:
+					for line in r:
+						self.bot.ircNOTICE(target, line)
+				else:
+					self.bot.ircNOTICE(target, r)
 				return True, event
 
 		return False, event
@@ -67,34 +91,30 @@ class BasePlugin(Component):
 
 			if len(args) == len(tokens):
 				if len(args) == 0:
-					handler(source)
+					return handler(source)
 				else:
-					handler(source, *tokens)
+					return handler(source, *tokens)
 			else:
 				if len(tokens) > len(args):
 					if vargs is None:
 						if len(args) > 0:
 							factor = len(tokens) - len(args) + 1
-							handler(source, *backMerge(tokens, factor))
+							return handler(source, *backMerge(tokens, factor))
 						else:
 							self.syntaxError(
 									source, command, tokens,
 									[x for x in args + [vargs]
 										if x is not None])
 					else:
-						handler(source, *tokens)
+						return handler(source, *tokens)
 				elif default is not None and len(args) == (
 						len(tokens) + len(default)):
-					handler(source, *(tokens + list(default)))
+					return handler(source, *(tokens + list(default)))
 				else:
 					self.syntaxError(
 							source, command, tokens,
 							[x for x in args + [vargs]
 								if x is not None])
-		else:
-			return False
-
-		return True
 
 	def isAddressed(self, source, target, message):
 		addressed = False

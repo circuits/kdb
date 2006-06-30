@@ -44,4 +44,4 @@ class Host(BasePlugin):
 			except socket.gaierror, e:
 				msg = "%s -> %s" % (host, e[1])
 
-		self.bot.ircNOTICE(source, msg)
+		return msg

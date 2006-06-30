@@ -45,5 +45,4 @@ class Help(BasePlugin):
 		if msg is None:
 			msg = ["ERROR: Can't find help for '%s'" % command]
 
-		for line in msg:
-			self.bot.ircNOTICE(source, line.strip())
+		return msg

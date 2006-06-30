@@ -20,14 +20,14 @@ class Plugins(BasePlugin):
 	def cmdLIST(self, source):
 		plugins = self.env.plugins.keys()
 		msg = "Plugins loaded: %s" % ", ".join(plugins)
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 	
 	def cmdLOAD(self, source, plugin):
 		if self.env.loadPlugin(self.bot, plugin):
 			msg = "Plugin '%s' loaded" % plugin
 		else:
 			msg = "Error while loading plugin '%s' (See log)" % plugin
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 
 	def cmdRELOAD(self, source, plugin):
 		if not plugin in self.env.plugins:
@@ -38,7 +38,7 @@ class Plugins(BasePlugin):
 
 		msg = "Plugin '%s' reloaded" % plugin
 
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
 
 	def cmdUNLOAD(self, source, plugin):
 		if plugin in self.env.plugins:
@@ -46,4 +46,4 @@ class Plugins(BasePlugin):
 			msg = "Plugin '%s' unloaded" % plugin
 		else:
 			msg = "ERROR: Plugin '%s' is not loaded" % plugin
-		self.bot.ircPRIVMSG(source, msg)
+		return msg
