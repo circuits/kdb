@@ -31,4 +31,6 @@ DEFAULT_PLUGINS = (
 		"irc",
 		"host",
 		"spell",
-		"pyint")
+		"pyint",
+		"ai",
+		"weather")
