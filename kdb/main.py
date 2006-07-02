@@ -11,7 +11,6 @@ kdb's main module, which runs everything.
 
 import os
 import signal
-import traceback
 
 from pymills.utils import getProgName, \
 		writePID, daemonize
@@ -60,23 +59,7 @@ def start(envPath, daemon=True):
 	writePID(env.config.get("kdb", "pidfile") % env.path)
 
 	core = Core(env.event, env)
-
-	while True:
-
-		try:
-			core.run()
-		except KeyboardInterrupt:
-			core.stop()
-			break
-		except SystemExit, status:
-			break
-		except Exception, e:
-			print "ERROR: " + str(e)
-			print "\nTraceBack follows:\n"
-			traceback.print_exc()
-			raise SystemExit, 1
-
-	raise SystemExit, 0
+	core.run()
 
 def stop(envPath):
 

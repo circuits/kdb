@@ -29,6 +29,10 @@ class Spell(BasePlugin):
 		self.d = d = enchant.request_dict(self.language)
 
 	def cmdSPELL(self, source, word):
+		"""Check the spelling of the given word
+		
+		Syntax: SPELL <word>
+		"""
 
 		if self.d.check(word):
 			msg = "%s is spelled correctly." % word

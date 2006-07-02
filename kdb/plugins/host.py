@@ -21,6 +21,10 @@ class Host(BasePlugin):
 	"Host Tools"
 
 	def cmdHOST(self, source, host):
+		"""Resolve the given hostname/ip
+		
+		Syntax: HOST <hostname/ip>
+		"""
 
 		isIP = True
 		for c in host.replace(".", ""):

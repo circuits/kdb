@@ -12,8 +12,10 @@ This is the core of kdb.
 import os
 import signal
 import socket
+from time import sleep
+from traceback import format_exc
 
-from pymills.event import Component, listener
+from pymills.event import Component, filter, listener
 
 from bot import Bot
 
@@ -37,17 +39,22 @@ class Core(Component):
 
 	@listener("term")
 	def term(self, signal=0, stack=0):
-		self.stop()
 		raise SystemExit, 0
 	
 	@listener("stop")
 	def stop(self):
 		self.running = False
+		self.env.unloadPlugins()
 	
 	@listener("rehash")
 	def rehash(self, signal=0, stack=0):
 		self.env.reload()
 	
+	@filter()
+	def onDEBUG(self, event):
+		#self.env.log.debug(event)
+		return False, event
+
 	def run(self):
 		env = self.env
 		event = env.event
@@ -70,19 +77,29 @@ class Core(Component):
 		bot.connect(auth)
 		bot.joinChannels()
 
+		sleep(1)
+
 		while self.running:
 
-			if bot.connected:
-				bot.process()
-			else:
-				env.log.info(
-						"%s was disconnected from %s, reconnecting..." % (
-							bot.getNick(), bot.getServer()))
-				bot.open(
-						env.config.get("connect", "host"),
-						env.config.getint("connect", "port"))
-				bot.connect(auth)
-				bot.joinChannels()
+			try:
+				if bot.connected:
+					bot.process()
+				else:
+					env.log.info(
+							"%s was disconnected from %s, reconnecting..." % (
+								bot.getNick(), bot.getServer()))
+					bot.open(
+							env.config.get("connect", "host"),
+							env.config.getint("connect", "port"))
+					bot.connect(auth)
+					bot.joinChannels()
 
-			timers.process()
-			event.flush()
+				timers.process()
+				event.flush()
+			except KeyboardInterrupt:
+				self.stop()
+			except SystemExit:
+				self.stop()
+			except Exception, e:
+				self.env.log.error("Error occured: %s" % e)
+				self.env.log.error(format_exc())

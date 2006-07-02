@@ -29,13 +29,23 @@ class Pyint(BasePlugin):
 		self.rexec = RExec()
 
 	def cmdEXEC(self, source, code):
+		"""Execute the given code
+		
+		Syntax: EXEC <code>
+		"""
+
 		self.rexec.r_exec(code)
 	
 	def cmdEVAL(self, source, code):
+		"""Evaluate the given code displaying the result
+		
+		Syntax: EVAL <code>
+		"""
+
 		try:
 			msg = str(
 					self.rexec.r_eval(code)).split("\n")
 		except Exception, e:
-			msg = ["ERROR: %s"] + format_exc().split("\n")
+			msg = ["ERROR: %s" % e] + format_exc().split("\n")
 
 		return msg

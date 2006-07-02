@@ -21,16 +21,17 @@ CONFIG = (
 		("connect", "port", "6667"),
 		("bot", "ident", "kdb"),
 		("bot", "nick", "kdb"),
-		("bot", "name", "Knowledge Database Bot"),
+		("bot", "name", "Knowledge Database Bot")
 		)
 
 DEFAULT_PLUGINS = (
-		"plugins",
+		"core",
 		"help",
 		"stats",
 		"irc",
 		"host",
 		"spell",
 		"pyint",
-		"ai",
-		"weather")
+		"weather",
+		"xmlrpc",
+		"notify")

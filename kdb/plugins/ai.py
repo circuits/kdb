@@ -17,7 +17,7 @@ __author__ = "James Mills <prologic@shortcircuit.net.au>"
 import os
 import aiml
 
-from pymills.event import filter
+from pymills.event import listener
 
 from kdb.plugin import BasePlugin
 
@@ -58,6 +58,10 @@ class Ai(BasePlugin):
 		sessionFile.close()
 
 	def cmdAI(self, source, option):
+		"""Turn ai on or off.
+		
+		Syntax: AI ON|OFF
+		"""
 
 		opt = option.upper()
 		if opt == "ON":
@@ -68,7 +72,7 @@ class Ai(BasePlugin):
 				msg = "Public AIML already on."
 		elif opt == "OFF":
 			if self.enabled:
-				self.enabled = True
+				self.enabled = False
 				msg = "Public AIML turned off."
 			else:
 				msg = "Public AIML not on."
@@ -77,7 +81,7 @@ class Ai(BasePlugin):
 
 		return msg
 	
-	@filter("message")
+	@listener("message")
 	def onMESSAGE(self, event, source, target, message):
 
 		addressed, target, message = self.isAddressed(
@@ -90,11 +94,8 @@ class Ai(BasePlugin):
 			if reply:
 				for sentence in reply.split("\n\n"):
 					self.bot.ircPRIVMSG(target, sentence)
-				return True, event
 
-		return False, event
-
-	@filter("notice")
+	@listener("notice")
 	def onNOTICE(self, event, source, target, message):
 
 		addressed, target, message = self.isAddressed(
@@ -107,6 +108,3 @@ class Ai(BasePlugin):
 			if reply:
 				for sentence in reply.split("\n\n"):
 					self.bot.ircNOTICE(target, sentence)
-				return True, event
-
-		return False, event

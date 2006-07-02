@@ -3,7 +3,19 @@
 # Date:     04th August 2004
 # Author:   James Mills <prologic@shortcircuit.net.au>
 
-"__init__"
+"""Knowledge (IRC) Database Bot
+
+kdb is an irc bot that resides on the ShortCircuit IRC
+Network and is used as a testbed for testing some aspects
+of the PyMills library. kdb offers an extensible
+plugin architecture and is completely event-driven.
+
+For more information, come see kdb at
+irc://irc.shortcircuit.net.au#lab
+
+/server irc.shortcircuit.net.au
+/join #lab
+"""
 
 __name__ = "kdb"
 __desc__ = "Knowledge (IRC) Bot"

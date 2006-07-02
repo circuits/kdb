@@ -33,12 +33,22 @@ class Stats(BasePlugin):
 		self.stime = time.time()
 
 	def cmdUPTIME(self, source):
+		"""Display current uptime and cpu usage
+		
+		Syntax: UPTIME
+		"""
+
 		uptime = duration(time.time() - self.stime)
 		cpu = time.clock()
 		msg = "Uptime: %s+%s:%s:%s (CPU: %s)" % (uptime + (cpu,))
 		return msg
 	
 	def cmdNSTATS(self, source):
+		"""Display current network stats
+		
+		Syntax: NSTATS
+		"""
+
 		msg = "Traffic: (I, O, T) = (%s, %s, %s)" % (
 				"%0.2f%s" % (bytes(self.tin)),
 				"%0.2f%s" % (bytes(self.tout)),
@@ -47,6 +57,11 @@ class Stats(BasePlugin):
 		return msg
 
 	def cmdVERSION(self, source):
+		"""Display version information
+		
+		Syntax: VERSION
+		"""
+
 		msg = "%s [ %s ] v%s by %s - %s - %s" % (
 				kdb.__name__,
 				kdb.__desc__,

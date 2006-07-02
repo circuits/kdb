@@ -21,6 +21,15 @@ class Weather(BasePlugin):
 	"Weather"
 
 	def cmdWEATHER(self, source, station="YBBN"):
+		"""Display weather for the given station
+		
+		This looks up the weather information from http://weather.noaa.gov/
+		by using metar codes. For a list of station codes see
+		http://www.nws.noaa.gov/tg/siteloc.shtml The default
+		station is YBBN, Brisbane airport, Australia.
+		
+		Syntax: WEATHER [<station>]
+		"""
 
 		try:
 			rf = pymetar.ReportFetcher(station)

@@ -54,6 +54,7 @@ class Environment(BaseEnvironment):
 		"""
 
 		import sys
+		import inspect
 		from traceback import format_exc
 
 		from kdb.plugin import BasePlugin
@@ -61,23 +62,25 @@ class Environment(BaseEnvironment):
 		try:
 			fqplugin = "kdb.plugins.%s" % plugin
 			if sys.modules.has_key(fqplugin):
-				self.log.debug("Reloading plugin: %s" % plugin)
 				try:
 					reload(sys.modules[fqplugin])
-					self.log.debug("Reloaded plugin: %s" % plugin)
 				except Exception, e:
 					self.log.error("Error loading plugin '%s': %s" % (
 						plugin, e))
 					self.log.error(format_exc())
 					return False
+
 			m = safe__import__("plugins.%s" % plugin,
 					globals(), locals(), "kdb")
-			if hasattr(m, plugin.capitalize()):
-				c = getattr(m, plugin.capitalize())
-				if issubclass(c, BasePlugin):
-					self.plugins[plugin] = c(
-							self.event, bot, self)
-			self.log.debug("Loaded plugin: %s" % plugin)
+
+			classes = inspect.getmembers(m,
+					lambda x: inspect.isclass(x) and
+					issubclass(x, BasePlugin) and
+					not x == BasePlugin)
+			for name, c in classes:
+				self.plugins[plugin] = c(
+						self.event, bot, self)
+			self.log.info("Loaded plugin: %s" % plugin)
 			return True
 		except Exception, e:
 			self.log.error("Error loading plugin '%s': %s" % (
@@ -91,12 +94,16 @@ class Environment(BaseEnvironment):
 		Unload the specified plugin if it has been loaded.
 		"""
 
+		from kdb.plugin import BasePlugin
+
 		if self.plugins.has_key(plugin):
-			self.log.debug("Unloaded plugin: %s" % plugin)
 			o = self.plugins[plugin]
 			o.unregister()
+			if hasattr(o, "cleanup"):
+				o.cleanup()
 			del o
 			del self.plugins[plugin]
+			self.log.info("Unloaded plugin: %s" % plugin)
 		
 	def loadPlugins(self, bot):
 		"""E.loadPlugins(bot) -> None
@@ -109,9 +116,16 @@ class Environment(BaseEnvironment):
 
 		self.plugins = {}
 		plugins = default_config.DEFAULT_PLUGINS
-		self.log.debug(
-				"Loading default plugins: %s" % str(plugins))
 
 		for plugin in plugins:
-			self.log.debug("Loading plugin: %s" % plugin)
 			self.loadPlugin(bot, plugin)
+
+	def unloadPlugins(self):
+		"""E.unloadPlugins() -> None
+
+		Unload all loaded plugins calling their cleanup
+		methods if they exist.
+		"""
+
+		for plugin in self.plugins.copy():
+			self.unloadPlugin(plugin)
