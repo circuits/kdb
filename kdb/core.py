@@ -2,7 +2,7 @@
 # Module:	core
 # Date:		2nd August 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id: core.py 251 2006-06-07 14:20:26Z prologic $
+# $Id$
 
 """core
 
@@ -75,7 +75,6 @@ class Core(Component):
 				}
 
 		bot.connect(auth)
-		bot.joinChannels()
 
 		sleep(1)
 
@@ -92,7 +91,6 @@ class Core(Component):
 							env.config.get("connect", "host"),
 							env.config.getint("connect", "port"))
 					bot.connect(auth)
-					bot.joinChannels()
 
 				timers.process()
 				event.flush()

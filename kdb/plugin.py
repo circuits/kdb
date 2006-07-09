@@ -2,7 +2,7 @@
 # Module:	plugin
 # Date:		17th June 2006
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id: ircbot.py 150 2006-06-11 17:17:55Z prologic $
+# $Id$
 
 """Plugin
 
@@ -15,9 +15,62 @@ import inspect
 from pymills.misc import backMerge
 from pymills.event import Component, filter
 
+class CommandHandler(object):
+
+	def __init__(self, parent):
+		self.parent = parent
+
+	def syntaxError(self, source, command, message, args):
+		return [
+				"Syntax error (%s): %s" % (command, message),
+				"Expected: %s" % " ".join(args)]
+
+	def __call__(self, command, source, *args, **kwargs):
+
+		handler = "cmd%s" % command.upper()
+		if hasattr(self, handler):
+			f = getattr(self, handler)
+			if callable(f):
+				fargs, fvargs, fkwargs, fdefault = \
+						inspect.getargspec(f)
+				fargs.remove("self")
+				fargs.remove("source")
+
+				if len(fargs) == len(args):
+					if len(fargs) == 0:
+						return f(source)
+					else:
+						return f(source, *args)
+				else:
+					if len(args) > len(fargs):
+						if fvargs is None:
+							if len(fargs) > 0:
+								factor = len(args) - len(fargs) + 1
+								return f(source, *backMerge(args, factor))
+							else:
+								return self.syntaxError(
+										source, command, args,
+										[x for x in fargs + [fvargs]
+											if x is not None])
+						else:
+							return f(source, *args)
+					elif fdefault is not None and len(fargs) == (
+							len(args) + len(fdefault)):
+						return f(source,
+								*(args + list(fdefault)))
+					else:
+						return self.syntaxError(
+								source, command, args,
+								[x for x in fargs + [fvargs]
+									if x is not None])
+
+		return "Unknown command: %s" % command
+
 class BasePlugin(Component):
 
 	def __init__(self, event, bot, env):
+		Component.__init__(self)
+
 		self.bot = bot
 		self.env = env
 
@@ -41,6 +94,8 @@ class BasePlugin(Component):
 		if addressed:
 			r = self.processCommand(target, message)
 			if r is not None:
+				if type(target) == tuple:
+					target = target[0]
 				if type(r) == list:
 					for line in r:
 						self.bot.ircPRIVMSG(target, line)
@@ -59,6 +114,8 @@ class BasePlugin(Component):
 		if addressed:
 			r = self.processCommand(target, message)
 			if r is not None:
+				if type(target) == tuple:
+					target = target[0]
 				if type(r) == list:
 					for line in r:
 						self.bot.ircNOTICE(target, line)

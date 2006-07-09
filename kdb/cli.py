@@ -2,31 +2,37 @@
 # Module:	cli
 # Date:		7th Mar 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id: cli.py 57 2006-06-17 07:35:37Z prologic $
+# $Id$
 
 """Command Line Interface
 
-This module handles the the starting/stopping of kdb and
-the command-line switches.
+This module handles the the starting/stopping of the system
+and any command-line options.
 """
 
 import optparse
 
 import main
-import kdb
+from kdb import __version__ as systemVersion
 
 USAGE = """"%prog [options] <endPath> <command>
 
 commands:
-  start    Start kdb
-  stop     Stop kdb
-  rehash   Rehash (re-load config, help, messages)
-  initenv  Create a new empty environment for kdb.
+  start    Start %prog
+  stop     Stop %prog
+  rehash   Rehash (reload environment)
+  initenv  Create a new empty environment for %prog.
   upgrade  Upgrade an existing environment."""
 
-VERSION = "%prog v" + kdb.__version__
+VERSION = "%prog v" + systemVersion
 
 def parse_options():
+	"""parse_options() -> opts, args
+
+	Parse and command-line options given returning both
+	the parsed options and arguments.
+	"""
+
 	parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
 	parser.add_option("-n", "--no-fork",
@@ -40,6 +46,12 @@ def parse_options():
 	return opts, args
 
 def run():
+	"""run() -> None
+
+	Parse command-line options and call main.run()
+	Treat opts.nofork as a negative option for daemon
+	passed to main..run
+	"""
+
 	opts, args = parse_options()
-	daemon = not opts.nofork
-	main.run(daemon, args)
+	main.run(args, not opts.nofork)

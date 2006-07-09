@@ -2,7 +2,7 @@
 # Module:	db
 # Date:		15th October 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id: db.py 252 2006-06-09 05:36:26Z romster $
+# $Id$
 
 """Database
 

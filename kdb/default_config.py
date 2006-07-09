@@ -29,6 +29,8 @@ DEFAULT_PLUGINS = (
 		"help",
 		"stats",
 		"irc",
+		"channels",
+		"autoid",
 		"host",
 		"spell",
 		"pyint",

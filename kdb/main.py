@@ -2,11 +2,13 @@
 # Module:	main
 # Date:		4th August 2004
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id: main.py 221 2006-05-28 08:00:12Z prologic $
+# $Id$
 
 """Main
 
-kdb's main module, which runs everything.
+This is the main module. Everything starts from here
+after the command-line options have been parsed and
+passed to here by the cli module.
 """
 
 import os
@@ -15,10 +17,21 @@ import signal
 from pymills.utils import getProgName, \
 		writePID, daemonize
 
+from kdb import __name__ as systemName
 from core import Core
 from env import Environment
 
-def run(daemon, args):
+def run(args, daemon=True):
+	"""run(args, daemon=True) -> None
+
+	Parse the given args and determine what command
+	to run. The environment path must be the first
+	argument specified. If no valid command is given
+	as the second argument, an error is printed and
+	the system is terminated with an error code of 1.
+
+	Note: by default this will daemonize.
+	"""
 
 	envPath = args[0]
 	command = args[1].upper()
@@ -40,6 +53,13 @@ def run(daemon, args):
 		raise SystemExit, 1
 
 def start(envPath, daemon=True):
+	"""start(envPath, daemon=True) -> None
+
+	Start the system. Check if the given envPath is
+	valid and doesn't need upgrading. Daemonize if the
+	daemon option (default is True) is given. Write the
+	pid of this process and run the core.
+	"""
 
 	if not os.path.exists(envPath):
 		print "ERROR: Path not found '%s'" % envPath
@@ -47,21 +67,31 @@ def start(envPath, daemon=True):
 
 	env = Environment(envPath)
 	if env.needsUpgrade():
-		print "ERROR: kdb Environment '%s' needs upgrading" % envPath
+		print "ERROR: %s Environment '%s' needs upgrading" % (
+				systemName, envPath)
 		print "Run: %s %s upgrade" % (getProgName, envPath)
 		raise SystemExit, 1
 
-	print "-- Starting kdb...\n"
+	print "-- Starting %s...\n" % systemName
 
 	if daemon:
 		daemonize(stderr="/dev/stderr")
 
-	writePID(env.config.get("kdb", "pidfile") % env.path)
+	writePID(env.config.get(systemName, "pidfile") % env.path)
 
 	core = Core(env.event, env)
 	core.run()
 
 def stop(envPath):
+	"""stop(envPath) -> None
+
+	Stop the system by sending the KILL signal to the
+	pid found in the environment given by envPath.
+	Check if the given environment is valid before
+	attempting this. If an error occurs while trying
+	to do this, the error is printed and exitcode 1
+	is returned.
+	"""
 
 	if not os.path.exists(envPath):
 		print "ERROR: Path not found '%s'" % envPath
@@ -71,22 +101,36 @@ def stop(envPath):
 
 	try:
 		os.kill(int(open(env.config.get(
-			"kdb", "pidfile") % env.path).read()),
+			systemName, "pidfile") % env.path).read()),
 			signal.SIGTERM)
-		print "-- kdb Stopped"
+		print "-- %s Stopped" % systemName
 	except Exception, e:
 		raise
-		print "*** ERROR: Could not stop kdb..."
+		print "*** ERROR: Could not stop systemName..." % \
+				systemName
 		print str(e)
 		raise SystemExit, 1
 
-	raise SystemExit, 0
-
 def restart(envPath):
+	"""restart(envPath) -> None
+
+	Attempt a restart of the system by first stopping the
+	system then starting it again.
+	"""
+
 	stop(envPath)
 	start(envPath)
 
 def rehash(envPath):
+	"""rehash(envPath) -> None
+
+	Rehash the system by sending the SIGUP signal to the
+	pid found in the environment given by envPath.
+	Check if the given environment is valid before
+	attempting this. If an error occurs while trying
+	to do this, the error is printed and exitcode 1
+	is returned.
+	"""
 
 	if not os.path.exists(envPath):
 		print "ERROR: Path not found '%s'" % envPath
@@ -96,18 +140,25 @@ def rehash(envPath):
 
 	try:
 		os.kill(int(open(env.config.get(
-			"kdb", "pidfile") % env.path).read()),
+			systemName, "pidfile") % env.path).read()),
 			signal.SIGHUP)
-		print "-- kdb Rehashed"
+		print "-- %s Rehashed" % systemName
 	except Exception, e:
 		raise
-		print "*** ERROR: Could not rehash kdb..."
+		print "*** ERROR: Could not rehash %s..." % systemName
 		print str(e)
 		raise SystemExit, 1
 
 	raise SystemExit, 0
 
 def initEnv(envPath):
+	"""initEnv(envPath) -> None
+
+	Initialize (create) a new environment using the path
+	specified by envPath. Check that the path doesn't
+	already exist, printing an error and returning an
+	exitcode of 1 if it does.
+	"""
 
 	if os.path.exists(envPath):
 		print "ERROR: Path '%s' already exists" % envPath
@@ -115,13 +166,22 @@ def initEnv(envPath):
 
 	env = Environment(envPath, create=True)
 
-	print "kdb Environment created at %s" % envPath
-	print "You can run kdb now:"
-	print "   kdb %s start" % envPath
+	print "%s Environment created at %s" % (systemName, envPath)
+	print "You can run %s now:" % systemName
+	print "   %s %s start" % (systemName, envPath)
 
 	raise SystemExit, 0
 
 def upgrade(envPath):
+	"""upgrade(envPath) -> None
+
+	Upgrade the environment at the path specified by
+	envPath. Check if the path exists, printing an
+	error fna returning an exitcode of 1 if it doesn't.
+	Check that the environment actually needs upgrading,
+	printing an error if it doesn't and returning an
+	exitcode of 1. Otherwise upgrade the environment.
+	"""
 
 	if not os.path.exists(envPath):
 		print "ERROR: Path not found '%s'" % envPath
@@ -129,10 +189,11 @@ def upgrade(envPath):
 
 	env = Environment(envPath)
 	if not env.needsUpgrade():
-		print "ERROR: Upgrade not necessary for kdb Environment %s" % envPath
+		print "ERROR: Upgrade not necessary for " \
+				"%s Environment %s" % (systemName, envPath)
 		raise SystemExit, 1
 
 	env.upgrade()
-	print "kdb Environment upgraded."
+	print "%s Environment upgraded." % systemName
 
 	raise SystemExit, 0

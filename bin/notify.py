@@ -9,8 +9,12 @@ def main(url="http://localhost:8080", message="Test Message"):
 		server = xmlrpclib.ServerProxy(url)
 		print server.notify(socket.gethostname(), message)
 	except Exception, e:
-		print "ERROR: %s" % e
-		print format_exc()
+		if isinstance(e, socket.error):
+			if e[0] == 111:
+				print "ERROR: %s" % e[1]
+		else:
+			print "ERROR: %s" % e
+			print format_exc()
 
 if __name__ == "__main__":
 	import sys

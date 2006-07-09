@@ -60,9 +60,10 @@ class Core(BasePlugin):
 			msg = "ERROR: Plugin '%s' is not loaded" % plugin
 
 		self.env.unloadPlugin(plugin)
-		self.env.loadPlugin(self.bot, plugin)
-
-		msg = "Plugin '%s' reloaded" % plugin
+		if self.env.loadPlugin(self.bot, plugin):
+			msg = "Plugin '%s' reloaded" % plugin
+		else:
+			msg = "Error while loading plugin '%s' (See log)" % plugin
 
 		return msg
 

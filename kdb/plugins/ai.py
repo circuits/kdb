@@ -82,7 +82,7 @@ class Ai(BasePlugin):
 		return msg
 	
 	@listener("message")
-	def onMESSAGE(self, event, source, target, message):
+	def onMessage(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)
@@ -96,7 +96,7 @@ class Ai(BasePlugin):
 					self.bot.ircPRIVMSG(target, sentence)
 
 	@listener("notice")
-	def onNOTICE(self, event, source, target, message):
+	def onNotice(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)

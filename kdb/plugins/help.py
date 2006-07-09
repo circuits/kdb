@@ -36,11 +36,12 @@ class Help(BasePlugin):
 			if hasattr(plugin, "cmd%s" % cmd):
 				msg = getattr(
 						getattr(plugin, "cmd%s" % cmd),
-						"__doc__")
-				if msg is None:
-					msg = ["No help available for '%s'" % command]
-				else:
-					msg = msg.split("\n")
+						"__doc__") or \
+								"No help available for '%s'" % command
+				msg = msg.strip()
+				msg = msg.replace("\t\t", "\t")
+				msg = msg.replace("\t", "   ")
+				msg = msg.split("\n")
 
 		if msg is None:
 			msg = ["ERROR: Can't find help for '%s'" % command]
