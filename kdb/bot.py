@@ -34,7 +34,7 @@ class Bot(TCPClient, IRC):
 	def __init__(self, event, env):
 		"initializes x; see x.__class__.__doc__ for signature"
 
-		TCPClient.__init__(self)
+		TCPClient.__init__(self, event)
 		IRC.__init__(self)
 
 		self.env = env

@@ -19,7 +19,7 @@ from pymills.event import listener, Event
 
 from kdb.plugin import BasePlugin
 
-class AUdoID(BasePlugin):
+class AutoID(BasePlugin):
 	"Automatic Identification"
 
 	@listener("notice")
@@ -29,6 +29,13 @@ class AUdoID(BasePlugin):
 		The password is stored in the config file.
 		The service nickname is stored in the config file.
 		The login pattern is stored in the config file.
+
+		Example:
+		[autoid]
+		nickserv = pronick
+		pattern = .*registered nick.*login
+		command = LOGIN %s
+		password = semaj2891
 		"""
 
 		if self.env.config.has_section("autoid"):
