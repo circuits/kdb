@@ -31,11 +31,10 @@ class Notify(BasePlugin):
 
 		if channel is not None:
 
-			msg = [
-					"Message from %s:" % source,
-					" %s" % message]
+			self.bot.ircPRIVMSG(channel,
+					"Message from %s:" % source)
 
-			for line in msg:
+			for line in message.split("\n"):
 				self.bot.ircPRIVMSG(channel, line)
 
 		return "Message sent to %s" % channel
