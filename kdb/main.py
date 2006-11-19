@@ -13,31 +13,64 @@ passed to here by the cli module.
 
 import os
 import signal
+import optparse
 
 from pymills.utils import getProgName, \
 		writePID, daemonize
 
-from kdb import __name__ as systemName
 from core import Core
 from env import Environment
+from kdb import __name__ as systemName
+from kdb import __version__ as systemVersion
 
-def run(args, daemon=True):
-	"""run(args, daemon=True) -> None
+USAGE = """"%prog [options] <endPath> <command>
 
-	Parse the given args and determine what command
-	to run. The environment path must be the first
-	argument specified. If no valid command is given
-	as the second argument, an error is printed and
-	the system is terminated with an error code of 1.
+commands:
+  start    Start %prog
+  stop     Stop %prog
+  rehash   Rehash (reload environment)
+  initenv  Create a new empty environment for %prog.
+  upgrade  Upgrade an existing environment."""
 
-	Note: by default this will daemonize.
+VERSION = "%prog v" + systemVersion
+
+def parse_options():
+	"""parse_options() -> opts, args
+
+	Parse and command-line options given returning both
+	the parsed options and arguments.
 	"""
+
+	parser = optparse.OptionParser(usage=USAGE, version=VERSION)
+
+	parser.add_option("-n", "--no-fork",
+			action="store_true", default=False, dest="nofork",
+			help="Don't fork to background")
+
+	(opts, args) = parser.parse_args()
+	if len(args) != 2:
+		parser.print_help()
+		raise SystemExit, 1
+	return opts, args
+
+def run():
+	"""run() -> None
+
+	Parse all command-line arguments and options
+	determine what command to run. The environment
+	path must be the first argument specified.
+	If no valid command is given as the second
+	argument, an error is printed and the system
+	is terminated with an error code of 1.
+	"""
+
+	opts, args = parse_options()
 
 	envPath = args[0]
 	command = args[1].upper()
 
 	if command == "START":
-		start(envPath, daemon)
+		start(envPath, not opts.nofork)
 	elif command == "STOP":
 		stop(envPath)
 	elif command == "RESTART":
