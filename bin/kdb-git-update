@@ -20,7 +20,7 @@ done
 """
 
 __desc__ = "Notify KDB of GIT Updates"
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __author__ = "James Mills"
 __email__ = "%s <prologic@shortcircuit.net.au>" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -85,15 +85,7 @@ def notify(url="http://localhost:8080", message="Test Message"):
 
 def buildMessage(project, commit, branch):
 
-	format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
-
-	dict = {
-			"project": project,
-			"committer": "<committer>",
-			"rev": "<rev>",
-			"path": "<path>",
-			"logmsg": "<logmsg>",
-			"files": "..."}
+	dict = {"project": project}
 
 	stdout, stdin  = popen("git-cat-file commit %s" % commit)
 
@@ -146,7 +138,13 @@ def buildMessage(project, commit, branch):
 	s.strip()
 	dict["files"] = s
 
-	dict["path"] = "/%s" % files[0][5]
+
+	if len(files) >= 1:
+		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
+		dict["path"] = "(%d files)" % len(files)
+	else:
+		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s"
+		dict["path"] = "/%s" % files[0][5]
 
 	return format % dict
 
