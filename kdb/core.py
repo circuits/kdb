@@ -2,7 +2,6 @@
 # Module:	core
 # Date:		2nd August 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
 
 """core
 

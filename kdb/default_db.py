@@ -2,7 +2,6 @@
 # Module:	db_default
 # Date:		9th June 2006
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
 
 """Default Database Schema
 
