@@ -2,7 +2,6 @@
 # Module:	db
 # Date:		15th October 2005
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
 
 """Database
 

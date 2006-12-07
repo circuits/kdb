@@ -2,7 +2,6 @@
 # Module:	env
 # Date:		15 June 2006
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
 
 """Environment Container
 

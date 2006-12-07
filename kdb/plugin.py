@@ -2,7 +2,6 @@
 # Module:	plugin
 # Date:		17th June 2006
 # Author:	James Mills <prologic@shortcircuit.net.au>
-# $Id$
 
 """Plugin
 
