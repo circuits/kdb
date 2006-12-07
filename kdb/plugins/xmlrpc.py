@@ -7,6 +7,9 @@
 
 This plugin provides an XML-RPC interface to kdb
 allowing other plugins to respond to "xmlrpc" events.
+
+[xmlrpc]
+channel = #lab
 """
 
 __ver__ = "0.0.1"
