@@ -35,4 +35,5 @@ DEFAULT_PLUGINS = (
 		"pyint",
 		"weather",
 		"xmlrpc",
-		"notify")
+		"notify",
+		"swatch")
