@@ -10,7 +10,7 @@ can be used to display the current Swatch Time or
 Internet Time or Beat.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills prologic at shortcircuit dot net dot au"
 
 from pymills.misc import beat
@@ -31,7 +31,7 @@ class Swatch(BasePlugin):
 
 		return "@%0.2f" % beat()
 
-	def cmdITIME(self, source, name):
+	def cmdITIME(self, source):
 		"""Synonym, of BEAT
 		
 		See: BEAT
