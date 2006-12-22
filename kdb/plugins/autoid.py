@@ -15,7 +15,7 @@ __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import re
 
-from pymills.event import listener, Event
+from pymills.event import listener
 
 from kdb.plugin import BasePlugin
 
@@ -68,8 +68,3 @@ class AutoID(BasePlugin):
 								self.bot.ircPRIVMSG(
 										nickserv,
 										command % password)
-
-								self.event.push(
-										Event(),
-										self.event.getChannelID("login"),
-										self)

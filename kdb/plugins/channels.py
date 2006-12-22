@@ -79,6 +79,6 @@ class Channels(BasePlugin):
 		return ChannelsCommands(self)(command,
 				source, *args, **kwargs)
 
-	@listener("login")
-	def onLOGIN(self, event):
+	@listener("connected")
+	def onCONNECTED(self, event):
 		self.joinChannels()

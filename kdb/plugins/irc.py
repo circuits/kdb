@@ -12,12 +12,20 @@ IRC specific features of kdb. eg: Changing it's nickname.
 __ver__ = "0.0.1"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
-from pymills.event import Event
+from pymills.event import listener, Event
 
 from kdb.plugin import BasePlugin
 
 class Irc(BasePlugin):
 	"IRC"
+
+	@listener("numeric")
+	def onNUMERIC(self, source, target, numeric, arg, message):
+		if numeric == 1:
+			self.env.event.push(
+					Event(),
+					self.env.event.getChannelID("connected"),
+					self)
 
 	def cmdQUIT(self, source, message="Bye! Bye!"):
 		"""Quit from the current server
