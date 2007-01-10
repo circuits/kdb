@@ -10,7 +10,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills <prologic@shortcircuit.net.au>"
 
 import inspect
@@ -19,6 +19,31 @@ from kdb.plugin import BasePlugin
 
 class Help(BasePlugin):
 	"Help Message"
+
+	def cmdCOMMANDS(self, source, plugin=None):
+		"""Display a list of commands for 'plugin'.
+		
+		Syntax: COMMANDS <plugin>
+		"""
+
+		msg = None
+
+		if plugin == None:
+			plugin = "help"
+
+		if self.env.plugins.has_key(plugin.lower()):
+			o = self.env.plugins[plugin.lower()]
+			commands = [x[0][3:].lower() for x in inspect.getmembers(
+				o, lambda x: inspect.ismethod(x) and
+				callable(x) and x.__name__.startswith("cmd"))]
+
+			msg = "Available commands for %s: %s" % (
+				plugin, " ".join(commands))
+
+		if msg is None:
+			msg = ["ERROR: Plugin mis-match or not loaded."]
+
+		return msg
 
 	def cmdHELP(self, source, command=None):
 		"""Display help for the given command.
