@@ -1,7 +1,7 @@
 # Filename:	db.py
 # Module:	db
 # Date:		15th October 2005
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Database
 

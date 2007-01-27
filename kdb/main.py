@@ -1,7 +1,7 @@
 # Filename: main.py
 # Module:	main
 # Date:		4th August 2004
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Main
 

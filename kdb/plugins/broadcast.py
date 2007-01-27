@@ -1,7 +1,7 @@
 # Filename: broadcast.py
 # Module:	broadcast
 # Date:		22th December 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Broadtcasting Support
 
@@ -11,7 +11,7 @@ and performing some command or event on that.
 """
 
 __ver__ = "0.0.1"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
 from pymills.irc import MessageEvent

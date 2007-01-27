@@ -1,7 +1,7 @@
 # Filename: trac.py
 # Module:	trac
 # Date:		01th July 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Trac
 
@@ -12,7 +12,7 @@ pop open the link in their browser.
 """
 
 __ver__ = "0.0.1"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin
 

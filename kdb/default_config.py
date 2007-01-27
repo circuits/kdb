@@ -1,7 +1,7 @@
 # Filename: default_config.py
 # Module:	default_config
 # Date:		15th June 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Default Configuration
 

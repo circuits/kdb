@@ -1,7 +1,7 @@
 # Filename: pyint.py
 # Module:	pyint
 # Date:		30th June 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Python Interpreter
 
@@ -13,7 +13,7 @@ rexec module.
 """
 
 __ver__ = "0.0.1"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from rexec import RExec
 from traceback import format_exc

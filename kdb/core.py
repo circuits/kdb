@@ -1,7 +1,7 @@
 # Filename: core.py
 # Module:	core
 # Date:		2nd August 2005
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """core
 

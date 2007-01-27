@@ -1,7 +1,7 @@
 # Filename: core.py
 # Module:	core
 # Date:		09th May 2005
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Core and Plugin Management
 
@@ -11,7 +11,7 @@ rehash kdb forcing it to re-load it's environment.
 """
 
 __ver__ = "0.0.2"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin
 

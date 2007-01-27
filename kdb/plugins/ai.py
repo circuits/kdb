@@ -1,7 +1,7 @@
 # Filename: ai.py
 # Module:	ai
 # Date:		30th June 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Artificial Intelligence
 
@@ -11,7 +11,7 @@ respond to users.
 """
 
 __ver__ = "0.0.1"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
 import os

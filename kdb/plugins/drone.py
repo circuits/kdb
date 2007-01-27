@@ -1,7 +1,7 @@
 # Filename: drone.py
 # Module:	drone
 # Date:		22th December 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Drone Mode
 
@@ -10,7 +10,7 @@ just setting the bot's nickname to the system hostname.
 """
 
 __ver__ = "0.0.1"
-__author__ = "James Mills <prologic@shortcircuit.net.au>"
+__author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from socket import gethostname
 

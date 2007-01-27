@@ -1,7 +1,7 @@
 # Filename: plugin.py
 # Module:	plugin
 # Date:		17th June 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Plugin
 

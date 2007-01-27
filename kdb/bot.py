@@ -1,7 +1,7 @@
 # Filename: bot.py
 # Module:	bot
 # Date:		17th June 2006
-# Author:	James Mills <prologic@shortcircuit.net.au>
+# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """The Bot
 
