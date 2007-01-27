@@ -4,6 +4,13 @@ from distutils.core import setup
 
 import kdb
 
+try:
+	from setuptools import setup
+except ImportError:
+	from distutils.core import setup
+
+__version__ = kdb.__version__
+
 setup(name = "kdb",
 		version = kdb.__version__,
 		description = kdb.__desc__,
