@@ -17,6 +17,8 @@ setup(name="kdb",
 		author=kdb.__author__,
 		author_email=kdb.__email__,
 		url=kdb.__url__,
+		license=kdb.__license__,
+		keywords="Knowledge Database (IRC) Bot",
 		packages=["kdb", "kdb/plugins"],
 		scripts=[
 			"bin/kdb",
