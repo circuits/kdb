@@ -16,7 +16,7 @@ from pymills.event import filter, listener
 from pymills.sockets import TCPClient
 
 from kdb import __name__ as systemName
-from kdb import __desc__ as systemDesc
+from kdb import __description__ as systemDesc
 
 class Bot(TCPClient, IRC):
 	"""Bot(event, env) -> new bot object
