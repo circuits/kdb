@@ -9,7 +9,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener, Event
@@ -26,6 +26,11 @@ class Irc(BasePlugin):
 					Event(),
 					self.env.event.getChannelID("connected"),
 					self)
+
+	@listener("nick")
+	def onNIC(self, source, newnick, ctime):
+		if source == self.bot.getNick().lower():
+			self.bot.setNick(newnick)
 
 	def cmdQUIT(self, source, message="Bye! Bye!"):
 		"""Quit from the current server
