@@ -24,4 +24,5 @@ __author__ = "James Mills"
 __email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
 __copyright__ = "CopyRight (C) 2005 by %s" % __author__
+__license__ = "GPL"
 __str__ = "%s-%s" % (__name__, __version__)
