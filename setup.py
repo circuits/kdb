@@ -11,11 +11,15 @@ except ImportError:
 
 __version__ = kdb.__version__
 
-setup(name = "kdb",
-		version = kdb.__version__,
-		description = kdb.__desc__,
-		author = kdb.__author__,
-		author_email = kdb.__email__,
-		url = kdb.__url__,
+setup(name="kdb",
+		version=kdb.__version__,
+		description=kdb.__desc__,
+		author=kdb.__author__,
+		author_email=kdb.__email__,
+		url=kdb.__url__,
 		packages=["kdb", "kdb/plugins"],
-		scripts=["bin/kdb", "bin/kdb-notify", "bin/kdb-git-update"])
+		scripts=[
+			"bin/kdb",
+			"bin/kdb-notify",
+			"bin/kdb-git-update"],
+		install_requires=["pymills"])
