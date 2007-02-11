@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git push
+
+python setup.py sdist bdist bdist_egg register upload
