@@ -12,7 +12,7 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -56,7 +56,7 @@ class Root(Component):
 		if result is not None:
 			body = result
 		else:
-			body = "No handler found for '%s'" % method
+			raise Exception, "No handler found for '%s'" % method
 
 		conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
 		xmlrpc.respond(
