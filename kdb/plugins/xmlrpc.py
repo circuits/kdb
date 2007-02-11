@@ -12,11 +12,12 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
 import cherrypy
+from cherrypy.lib import xmlrpc
 
 from pymills.event import Event, Component, listener
 
@@ -28,6 +29,8 @@ class XMLRPCEvent(Event):
 		Event.__init__(self, *args)
 
 class Root(Component):
+
+	_cp_config = {"tools.xmlrpc.on": True}
 
 	def __init__(self, event, bot, env):
 		self.bot = bot
@@ -42,16 +45,29 @@ class Root(Component):
 		if isinstance(event, XMLRPCEvent):
 			self.env.log.debug(event)
 
-	def default(self, method, *args):
+	def __call__(self, *vpath, **params):
+		args, method = xmlrpc.process_body()
+
 		result = self.event.send(
 				XMLRPCEvent(*args),
 				self.event.getChannelID("xmlrpc:%s" % method),
 				self)
+
 		if result is not None:
-			return result
+			body = result
 		else:
-			return "No handler found for '%s'" % method
-	default.exposed = True
+			body = "No handler found for '%s'" % method
+
+		conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
+		xmlrpc.respond(
+				body,
+				conf.get("encoding", "utf-8"),
+				conf.get("allow_none", 0))
+		return cherrypy.response.body
+	__call__.exposed = True
+
+	index = __call__
+	default = __call__
 	
 class XMLRPC(BasePlugin):
 	"XML-RPC"
@@ -59,17 +75,27 @@ class XMLRPC(BasePlugin):
 	def __init__(self, event, bot, env):
 		BasePlugin.__init__(self, event, bot, env)
 
-		cherrypy.root = Root(event, bot, env)
+		self.root = Root(event, bot, env)
+
 		cherrypy.config.update({
-			"xmlrpc_filter.on": True,
-			"server.log_to_screen": False,
-			"server.log_file": os.path.join(
-				env.path, "log", "xmlrpc.log"),
-			"server.environment": "production",
-			"autoreload.on": False,
-			"server.thread_pool": 0})
-		cherrypy.server.start(init_only=True)
+			"log.screen": False,
+			"log.error.file": "",
+			"environment": "production",
+			"engine.autoreload_on": False})
+
+		cherrypy.tree.mount(
+				self.root,
+				config={
+					"/": {
+						"tools.xmlrpc.on": True,
+						"request.dispatch": cherrypy.dispatch.XMLRPCDispatcher()
+						}
+					})
+
+		cherrypy.server.quickstart()
+		cherrypy.engine.start(blocking=False)
 	
 	def cleanup(self):
 		cherrypy.server.stop()
-		cherrypy.root.unregister()
+		cherrypy.engine.stop()
+		self.root.unregister()

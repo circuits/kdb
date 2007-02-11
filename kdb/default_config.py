@@ -32,7 +32,7 @@ DEFAULT_PLUGINS = (
 		"autoid",
 		"host",
 		"spell",
-		"pyint",
+#		"pyint",
 		"weather",
 		"xmlrpc",
 		"notify",
