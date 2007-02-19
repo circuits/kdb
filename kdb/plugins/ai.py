@@ -15,6 +15,8 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
 import os
+import marshal
+
 import aiml
 
 from pymills.event import listener

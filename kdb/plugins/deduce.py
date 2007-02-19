@@ -15,7 +15,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import os
 import re
 
-from pymills.deduce import *
+from deduce import fact, brain
 
 from pymills.event import listener
 

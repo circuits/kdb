@@ -56,7 +56,7 @@ class Environment(BaseEnvironment):
 		import inspect
 		from traceback import format_exc
 
-		from kdb.plugin import BasePlugin
+		from plugin import BasePlugin
 
 		try:
 			fqplugin = "kdb.plugins.%s" % plugin
@@ -92,8 +92,6 @@ class Environment(BaseEnvironment):
 
 		Unload the specified plugin if it has been loaded.
 		"""
-
-		from kdb.plugin import BasePlugin
 
 		if self.plugins.has_key(plugin):
 			o = self.plugins[plugin]

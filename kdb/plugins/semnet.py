@@ -19,9 +19,10 @@ import types
 import string
 import pickle
 
-from pymills.semnet import *
 from pymills.event import listener
 from pymills.misc import strToBool
+from pymills.semnet import Fact, \
+		Entity, Relation, GetIsA, GetExampleOf
 
 from kdb.plugin import BasePlugin
 

@@ -12,7 +12,7 @@ and pymills.irc.IRC
 """
 
 from pymills.irc import IRC
-from pymills.event import filter, listener
+from pymills.event import listener
 from pymills.sockets import TCPClient
 
 from kdb import __name__ as systemName

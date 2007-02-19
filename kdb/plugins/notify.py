@@ -9,10 +9,8 @@ This plugin listens for xmlrpc:notify events and
 displays them on the default xmlrpc channel.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-import time
 
 from pymills.event import listener
 

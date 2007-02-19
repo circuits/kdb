@@ -113,6 +113,8 @@ def start(envPath, daemon=True):
 
 	core = Core(env.event, env)
 	core.run()
+	pidfile = env.config.get(systemName, "pidfile") % env.path
+	os.remove(pidfile)
 
 def stop(envPath):
 	"""stop(envPath) -> None
