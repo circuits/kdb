@@ -139,9 +139,7 @@ def stop(envPath):
 			systemName, "pidfile") % env.path)
 		print "-- %s Stopped" % systemName
 	except Exception, e:
-		raise
-		print "*** ERROR: Could not stop systemName..." % \
-				systemName
+		print "*** ERROR: Could not stop %s..." % systemName
 		print str(e)
 		raise SystemExit, 1
 
