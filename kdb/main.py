@@ -137,7 +137,6 @@ def stop(envPath):
 		os.kill(int(open(env.config.get(
 			systemName, "pidfile") % env.path).read()),
 			signal.SIGTERM)
-		os.remove(env.config.get(
 			systemName, "pidfile") % env.path)
 		print "-- %s Stopped" % systemName
 	except Exception, e:
