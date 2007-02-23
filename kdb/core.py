@@ -14,6 +14,7 @@ import socket
 from time import sleep
 from traceback import format_exc
 
+from pymills.utils import State
 from pymills.event import Component, filter, listener
 
 from bot import Bot
@@ -33,6 +34,7 @@ class Core(Component):
 		self.env.loadPlugins(self.bot)
 
 		self.running = True
+		self.state = State()
 
 	# Service Commands
 
@@ -54,15 +56,23 @@ class Core(Component):
 		self.env.log.debug(event)
 		return False, event
 
+	@listener("timer:reconnect")
+	def onRECONNECT(self, n, host, port, auth):
+		env = self.env
+		bot = self.bot
+
+		self.state.set("CONNECTING")
+
+		bot.open(host, port)
+
 	def run(self):
 		env = self.env
 		event = env.event
 		timers = env.timers
 		bot = self.bot
 
-		bot.open(
-				env.config.get("connect", "host"),
-				env.config.getint("connect", "port"))
+		host = env.config.get("connect", "host")
+		port = env.config.getint("connect", "port")
 
 		auth = {
 				"password": env.config.get("connect", "password"),
@@ -73,9 +83,10 @@ class Core(Component):
 				"host": socket.gethostname()
 				}
 
-		bot.connect(auth)
+		self.state.set("CONNECTING")
 
-		sleep(1)
+		bot.open(host, port)
+		bot.connect(auth)
 
 		while self.running:
 
@@ -83,13 +94,24 @@ class Core(Component):
 				if bot.connected:
 					bot.process()
 				else:
-					env.log.info(
-							"%s was disconnected from %s, reconnecting..." % (
-								bot.getNick(), bot.getServer()))
-					bot.open(
-							env.config.get("connect", "host"),
-							env.config.getint("connect", "port"))
+					if not self.state == "WAITING":
+						self.state.set("DISCONNECTED")
+
+				if self.state == "CONNECTING":
+					if bot.connected:
+						self.state.set("CONNECTED")
+				elif self.state == "CONNECTED":
+					self.state.set("AUTHENTICATED")
 					bot.connect(auth)
+				elif self.state == "DISCONNECTED":
+					self.state.set("WAITING")
+					env.log.info(
+							"kdb was disconnected, "
+							"Reconnecting in 60s...")
+					self.env.timers.add(
+							60,
+							channel="timer:reconnect",
+							host=host, port=port, auth=auth)
 
 				timers.process()
 				event.flush()
