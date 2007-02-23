@@ -51,7 +51,7 @@ class Core(Component):
 	
 	@filter()
 	def onDEBUG(self, event):
-		#self.env.log.debug(event)
+		self.env.log.debug(event)
 		return False, event
 
 	def run(self):

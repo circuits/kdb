@@ -32,11 +32,15 @@ class Bot(TCPClient, IRC):
 
 	def __init__(self, event, env):
 		"initializes x; see x.__class__.__doc__ for signature"
-
-		TCPClient.__init__(self, event)
-		IRC.__init__(self)
-
 		self.env = env
+
+		if self.env.config.has_option("connect", "ssl"):
+			ssl = self.env.config.getboolean("connect", "ssl")
+		else:
+			ssl = False
+
+		TCPClient.__init__(self, event, ssl)
+		IRC.__init__(self)
 	
 	def connect(self, auth):
 		"""B.connect(auth)
