@@ -25,7 +25,7 @@ class Drone(BasePlugin):
 		BasePlugin.__init__(self, event, bot, env)
 
 		if self.bot.getNick() != gethostname():
-			self.bot.ircNICK(gethostname())
+			self.bot.setNick(gethostname())
 	
 	@listener("connected")
 	def onCONNECTED(self):

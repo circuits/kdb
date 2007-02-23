@@ -86,7 +86,8 @@ class Core(Component):
 		self.state.set("CONNECTING")
 
 		bot.open(host, port)
-		bot.connect(auth)
+		if bot.connected:
+			bot.connect(auth)
 
 		while self.running:
 
