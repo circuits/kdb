@@ -24,13 +24,11 @@ class Irc(BasePlugin):
 		if numeric == 1:
 			self.env.event.push(
 					Event(),
-					self.env.event.getChannelID("connected"),
-					self)
+					self.env.event.getChannelID("connected"))
 		elif numeric == 433:
 			self.env.event.push(
 					Event(),
-					self.env.event.getChannelID("nicksollision"),
-					self)
+					self.env.event.getChannelID("nicksollision"))
 
 	@listener("nick")
 	def onNIC(self, source, newnick, ctime):
@@ -54,8 +52,7 @@ class Irc(BasePlugin):
 		self.cmdQUIT(source, message)
 		self.event.push(
 				Event(),
-				self.event.getChannelID("term"),
-				self)
+				self.event.getChannelID("term"))
 	
 	def cmdJOIN(self, source, channel, key=None):
 		"""Join specified channel.

@@ -44,5 +44,4 @@ class Broadcast(BasePlugin):
 							"%s, %s" % (
 								self.bot.getNick(),
 								message[1:])),
-							self.env.event.getChannelID("message"),
-							self)
+							self.env.event.getChannelID("message"))
