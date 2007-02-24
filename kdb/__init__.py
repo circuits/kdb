@@ -19,7 +19,7 @@ irc://irc.shortcircuit.net.au#lab
 
 __name__ = "kdb"
 __description__ = "Knowledge (IRC) Bot"
-__version__ = "0.3.14-2007022400"
+__version__ = "0.3.16-2007022400"
 __author__ = "James Mills"
 __author_email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __maintainer__ = __author__

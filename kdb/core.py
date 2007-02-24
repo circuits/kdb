@@ -11,10 +11,10 @@ This is the core of kdb.
 import os
 import signal
 import socket
-from time import sleep
 from traceback import format_exc
 
 from pymills.utils import State
+from pymills.irc import QuitEvent
 from pymills.event import Component, filter, listener
 
 from bot import Bot
@@ -40,12 +40,8 @@ class Core(Component):
 
 	@listener("term")
 	def term(self, signal=0, stack=0):
-		raise SystemExit, 0
-	
-	@listener("stop")
-	def stop(self):
-		self.running = False
-		self.env.unloadPlugins()
+		self.bot.ircQUIT("Received SIGTERM, terminating...")
+		self.state.set("TERMINATING")
 	
 	@listener("rehash")
 	def rehash(self, signal=0, stack=0):
@@ -95,7 +91,9 @@ class Core(Component):
 				if bot.connected:
 					bot.process()
 				else:
-					if not self.state == "WAITING":
+					if self.state == "TERMINATING":
+						self.running = False
+					elif not self.state == "WAITING":
 						self.state.set("DISCONNECTED")
 
 				if self.state == "CONNECTING":
@@ -117,9 +115,15 @@ class Core(Component):
 				timers.process()
 				event.flush()
 			except KeyboardInterrupt:
-				self.stop()
-			except SystemExit:
-				self.stop()
+				self.term()
 			except Exception, e:
-				self.env.log.error("Error occured: %s" % e)
-				self.env.log.error(format_exc())
+				if e[0] == 4:
+					self.term()
+				else:
+					self.env.log.error("Error occured: %s" % e)
+					self.env.log.error(format_exc())
+
+		for i in xrange(len(event)):
+			event.flush()
+
+		self.env.unloadPlugins()

@@ -49,8 +49,7 @@ class Root(Component):
 
 		result = self.event.send(
 				XMLRPCEvent(*args),
-				self.event.getChannelID("xmlrpc:%s" % method),
-				self)
+				self.event.getChannelID("xmlrpc:%s" % method))
 
 		if result is not None:
 			body = result
