@@ -14,7 +14,6 @@ import socket
 from traceback import format_exc
 
 from pymills.utils import State
-from pymills.irc import QuitEvent
 from pymills.event import Component, filter, listener
 
 from bot import Bot
