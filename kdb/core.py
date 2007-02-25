@@ -53,13 +53,13 @@ class Core(Component):
 		return False, event
 
 	@listener("timer:reconnect")
-	def onRECONNECT(self, n, host, port, auth):
+	def onRECONNECT(self, n, host, port, ssl, auth):
 		env = self.env
 		bot = self.bot
 
 		self.state.set("CONNECTING")
 
-		bot.open(host, port)
+		bot.open(host, port, ssl)
 
 	def run(self):
 		env = self.env
@@ -81,7 +81,12 @@ class Core(Component):
 
 		self.state.set("CONNECTING")
 
-		bot.open(host, port)
+		if self.env.config.has_option("connect", "ssl"):
+			ssl = self.env.config.getboolean("connect", "ssl")
+		else:
+			ssl = False
+
+		bot.open(host, port, ssl)
 		if bot.connected:
 			bot.connect(auth)
 
@@ -110,7 +115,7 @@ class Core(Component):
 					self.env.timers.add(
 							60,
 							channel="timer:reconnect",
-							host=host, port=port, auth=auth)
+							host=host, port=port, ssl=ssl, auth=auth)
 
 				timers.process()
 				event.flush()
@@ -120,6 +125,7 @@ class Core(Component):
 				if e[0] == 4:
 					self.term()
 				else:
+					self.env.errors += 1
 					self.env.log.error("Error occured: %s" % e)
 					self.env.log.error(format_exc())
 

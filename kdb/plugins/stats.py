@@ -9,7 +9,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
@@ -31,6 +31,18 @@ class Stats(BasePlugin):
 		self.tout = 0
 
 		self.stime = time.time()
+
+	def cmdERRORS(self, source):
+		"""Display numbers of errors that have occured
+		
+		Syntax: ERRORS
+		"""
+
+		if self.env.errors == 0:
+			msg = "No errors"
+		else:
+			msg = "Errors: %d" % self.env.errors
+		return msg
 
 	def cmdUPTIME(self, source):
 		"""Display current uptime and cpu usage

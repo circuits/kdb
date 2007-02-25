@@ -37,6 +37,7 @@ class Environment(BaseEnvironment):
 
 		self.event = EventManager()
 		self.timers = Timers(self.event)
+		self.errors = 0
 
 	def create(self):
 		BaseEnvironment.create(self)
