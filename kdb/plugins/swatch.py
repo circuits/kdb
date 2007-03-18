@@ -10,7 +10,7 @@ can be used to display the current Swatch Time or
 Internet Time or Beat.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills prologic at shortcircuit dot net dot au"
 
 from pymills.misc import beat
@@ -18,7 +18,12 @@ from pymills.misc import beat
 from kdb.plugin import BasePlugin
 
 class Swatch(BasePlugin):
-	"Swatch Time"
+
+	"""Swatch Time plugin
+
+	Provides commands to display Internet Time or Swatch Time.
+	See: commands swatch
+	"""
 
 	def __init__(self, event, bot, env):
 		BasePlugin.__init__(self, event, bot, env)

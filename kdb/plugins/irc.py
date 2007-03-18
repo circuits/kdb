@@ -9,7 +9,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.4"
+__ver__ = "0.0.5"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener, Event
@@ -17,7 +17,13 @@ from pymills.event import listener, Event
 from kdb.plugin import BasePlugin
 
 class Irc(BasePlugin):
-	"IRC"
+
+	"""IRC Support plugin
+
+	Provides various general irc commands and support functions.
+	eg: NICK, QUIT, etc
+	See: commands irc
+	"""
 
 	@listener("numeric")
 	def onNUMERIC(self, source, target, numeric, arg, message):

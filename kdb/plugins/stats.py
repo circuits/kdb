@@ -9,7 +9,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
@@ -22,7 +22,13 @@ import kdb
 from kdb.plugin import BasePlugin
 
 class Stats(BasePlugin):
-	"Statistics"
+
+	"""Statistics plugin
+
+	Provides various statistical functions and information.
+	Namely, network, uptime and error stats.
+	See: commands stats
+	"""
 
 	def __init__(self, event, bot, env):
 		BasePlugin.__init__(self, event, bot, env)

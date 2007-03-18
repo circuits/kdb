@@ -12,7 +12,7 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.4"
+__ver__ = "0.0.5"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import cherrypy
@@ -28,8 +28,6 @@ class XMLRPCEvent(Event):
 		Event.__init__(self, *args)
 
 class Root(Component):
-
-	_cp_config = {"tools.xmlrpc.on": True}
 
 	def __init__(self, event, bot, env):
 		self.bot = bot
@@ -68,7 +66,17 @@ class Root(Component):
 	default = __call__
 	
 class XMLRPC(BasePlugin):
-	"XML-RPC"
+
+	"""XML-RPC plugin
+
+	This plugin provides no user commands. This plugin gives
+	XML-RPC support to the system allowing other systems to
+	interact with the system and other loaded plugins.
+
+	The "notify" plugin is one such plugin that uses this
+	to allow remote machines to send XML-RPC notification
+	messages to a configured channel.
+	"""
 
 	def __init__(self, event, bot, env):
 		BasePlugin.__init__(self, event, bot, env)
@@ -90,8 +98,11 @@ class XMLRPC(BasePlugin):
 						}
 					})
 
-		cherrypy.server.quickstart()
-		cherrypy.engine.start(blocking=False)
+		try:
+			cherrypy.server.quickstart()
+			cherrypy.engine.start(blocking=False)
+		except IOError:
+			pass
 	
 	def cleanup(self):
 		cherrypy.server.stop()

@@ -9,7 +9,7 @@ This plugin provides weather information from metar
 stations around the world to the user.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import pymetar
@@ -18,7 +18,14 @@ from traceback import format_exc
 from kdb.plugin import BasePlugin
 
 class Weather(BasePlugin):
-	"Weather"
+
+	"""Weather plugin
+	
+	Provides weather information retrieved from METAR sources.
+	The METAR codes are available from:
+		http://www.nws.noaa.gov/tg/siteloc.shtml
+	See: help weather
+	"""
 
 	def cmdWEATHER(self, source, station="YBBN"):
 		"""Display weather for the given station

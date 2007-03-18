@@ -10,7 +10,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import inspect
@@ -45,30 +45,36 @@ class Help(BasePlugin):
 
 		return msg
 
-	def cmdHELP(self, source, command=None):
-		"""Display help for the given command.
+	def cmdHELP(self, source, s=None):
+		"""Display help for the given command or plugin.
 		
-		Syntax: HELP <command>
+		Syntax: HELP <s>
 		"""
 
 		msg = None
 
-		if command == None:
-			command = "help"
+		if s == None:
+			s = "help"
 
-		cmd = command.upper()
-		for plugin in self.env.plugins.values():
-			if hasattr(plugin, "cmd%s" % cmd):
-				msg = getattr(
-						getattr(plugin, "cmd%s" % cmd),
-						"__doc__") or \
-								"No help available for '%s'" % command
-				msg = msg.strip()
-				msg = msg.replace("\t\t", "\t")
-				msg = msg.replace("\t", "   ")
-				msg = msg.split("\n")
+		sl = s.lower()
+		su = s.upper()
+
+		if sl in self.env.plugins:
+			msg = self.env.plugins[sl].__doc__
+		else:
+			for plugin in self.env.plugins.values():
+				if hasattr(plugin, "cmd%s" % su):
+					msg = getattr(
+							getattr(plugin, "cmd%s" % su),
+							"__doc__") or \
+									"No help available for '%s'" % s
+
+		msg = msg.strip()
+		msg = msg.replace("\t\t", "\t")
+		msg = msg.replace("\t", "   ")
+		msg = msg.split("\n")
 
 		if msg is None:
-			msg = ["ERROR: Can't find help for '%s'" % command]
+			msg = ["ERROR: Can't find help for '%s'" % s]
 
 		return msg

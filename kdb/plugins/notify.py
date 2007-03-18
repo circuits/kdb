@@ -9,7 +9,7 @@ This plugin listens for xmlrpc:notify events and
 displays them on the default xmlrpc channel.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
@@ -17,7 +17,15 @@ from pymills.event import listener
 from kdb.plugin import BasePlugin
 
 class Notify(BasePlugin):
-	"Notify"
+
+	"""Notification plugin
+
+	This doesn't have any user commands available.
+	This provides notification support via XML-RPC and
+	displays messages on the configured channel.
+
+	Depends on: xmlrpc
+	"""
 
 	@listener("xmlrpc:notify")
 	def onNOTIFY(self, source="unknown", message=""):
