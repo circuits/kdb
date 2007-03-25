@@ -10,15 +10,15 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from time import time
+from time import mktime, time
 
 import feedparser
 
+from pymills.utils import notags
 from pymills.misc import strToBool
-from pymills.timers import TickEvent
 from pymills.event import listener, Event
 
 from kdb.plugin import BasePlugin
@@ -31,7 +31,7 @@ class Feed(object):
 		self.interval = interval
 
 		self.next = time() + (self.interval * 60)
-		self.entries = {}
+		self.entries = []
 		self.title = ""
 		self.link = ""
 	
@@ -43,25 +43,35 @@ class Feed(object):
 			return False
 	
 	def getItems(self):
-		s = []
-
 		d = feedparser.parse(self.url)
 
-		s.append("RSS: %s (%s)" % (
-			d.feed.title, d.feed.link))
+		if self.title == "" and self.link == "":
+			self.title = d.feed.title
+			self.link = d.feed.link
 
-		self.title = d.feed.title
-		self.link = d.feed.link
+		new = []
+		for v in d.entries:
+			e = {
+					"time": mktime(v.updated_parsed),
+					"title": v.title,
+					"summary": notags(v.summary).strip().split("\n")[0],
+					"link": v.links[0].href
+					}
 
-		if not d.entries == self.entries:
-			self.entries = d.entries
-			for i, e in enumerate(d.entries[:3]):
-				s.append(" %d. %s (%s)" % (
-					(i + 1), e.title, e.link))
+			if not e in self.entries:
+				self.entries.append(e)
+				new.append(e)
+
+		if not new == []:
+			s = []
+			s.append("RSS: %s (%s)" % (
+				self.title, self.link))
+			for e in new[:3]:
+				s.append(" * %s: %s <%s>" % (
+					e["title"], e["summary"], e["link"]))
+			return s
 		else:
 			return []
-
-		return s
 	
 class RSS(BasePlugin):
 
@@ -77,12 +87,11 @@ class RSS(BasePlugin):
 		BasePlugin.__init__(self, event, bot, env)
 
 		self.entities = {}
-		self.env.event.push(TickEvent(60), "rsstick")
+		
+		self.env.timers.add(60, "rsstick", forever=True)
 
 	@listener("rsstick")
 	def onRSSTICK(self, n):
-		self.env.event.push(TickEvent(n), "rsstick")
-
 		for entity in self.entities:
 			for f in self.entities[entity]:
 				if f.checkTime():
