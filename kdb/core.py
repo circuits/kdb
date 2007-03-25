@@ -16,8 +16,6 @@ from traceback import format_exc
 from pymills.utils import State
 from pymills.event import Component, filter, listener
 
-from bot import Bot
-
 class Core(Component):
 
 	def __init__(self, event, env):
@@ -29,9 +27,6 @@ class Core(Component):
 
 		# Initialize
 
-		self.bot = Bot(self.env.event, self.env)
-		self.env.loadPlugins(self.bot)
-
 		self.running = True
 		self.state = State()
 
@@ -39,7 +34,8 @@ class Core(Component):
 
 	@listener("term")
 	def term(self, signal=0, stack=0):
-		self.bot.ircQUIT("Received SIGTERM, terminating...")
+		if self.env.bot.connected:
+			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
 		self.state.set("TERMINATING")
 	
 	@listener("rehash")
@@ -48,23 +44,23 @@ class Core(Component):
 	
 	@filter()
 	def onDEBUG(self, event):
-		self.env.log.debug(event)
+		config = self.env.config
+		if config.has_option("debug", "verbose"):
+			if config.getboolean("debug", "verbose"):
+				self.env.log.debug(event)
 		return False, event
 
 	@listener("timer:reconnect")
 	def onRECONNECT(self, n, host, port, ssl, auth):
-		env = self.env
-		bot = self.bot
-
 		self.state.set("CONNECTING")
-
-		bot.open(host, port, ssl)
+		self.env.bot.open(host, port, ssl)
 
 	def run(self):
 		env = self.env
+		state = self.state
 		event = env.event
 		timers = env.timers
-		bot = self.bot
+		bot = env.bot
 
 		host = env.config.get("connect", "host")
 		port = env.config.getint("connect", "port")
@@ -78,10 +74,10 @@ class Core(Component):
 				"host": socket.gethostname()
 				}
 
-		self.state.set("CONNECTING")
+		state.set("CONNECTING")
 
-		if self.env.config.has_option("connect", "ssl"):
-			ssl = self.env.config.getboolean("connect", "ssl")
+		if env.config.has_option("connect", "ssl"):
+			ssl = env.config.getboolean("connect", "ssl")
 		else:
 			ssl = False
 
@@ -95,23 +91,23 @@ class Core(Component):
 				if bot.connected:
 					bot.process()
 				else:
-					if self.state == "TERMINATING":
+					if state == "TERMINATING":
 						self.running = False
-					elif not self.state == "WAITING":
-						self.state.set("DISCONNECTED")
+					elif not state == "WAITING":
+						state.set("DISCONNECTED")
 
-				if self.state == "CONNECTING":
+				if state == "CONNECTING":
 					if bot.connected:
-						self.state.set("CONNECTED")
-				elif self.state == "CONNECTED":
-					self.state.set("AUTHENTICATED")
+						state.set("CONNECTED")
+				elif state == "CONNECTED":
+					state.set("AUTHENTICATED")
 					bot.connect(auth)
-				elif self.state == "DISCONNECTED":
-					self.state.set("WAITING")
+				elif state == "DISCONNECTED":
+					state.set("WAITING")
 					env.log.info(
 							"kdb was disconnected, "
 							"Reconnecting in 60s...")
-					self.env.timers.add(
+					env.timers.add(
 							60,
 							channel="timer:reconnect",
 							host=host, port=port, ssl=ssl, auth=auth)
@@ -119,16 +115,15 @@ class Core(Component):
 				timers.process()
 				event.flush()
 			except KeyboardInterrupt:
-				self.term()
+				if self.env.bot.connected:
+					bot.ircQUIT("Received ^C, terminating...")
+				state.set("TERMINATING")
 			except Exception, e:
-				if e[0] == 4:
-					self.term()
-				else:
-					self.env.errors += 1
-					self.env.log.error("Error occured: %s" % e)
-					self.env.log.error(format_exc())
+				env.errors += 1
+				env.log.error("Error occured: %s" % e)
+				env.log.error(format_exc())
 
 		for i in xrange(len(event)):
 			event.flush()
 
-		self.env.unloadPlugins()
+		env.unloadPlugins()

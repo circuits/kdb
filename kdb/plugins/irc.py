@@ -56,9 +56,7 @@ class Irc(BasePlugin):
 		"""
 
 		self.cmdQUIT(source, message)
-		self.event.push(
-				Event(),
-				self.event.getChannelID("term"))
+		self.event.push(Event(), "term")
 	
 	def cmdJOIN(self, source, channel, key=None):
 		"""Join specified channel.

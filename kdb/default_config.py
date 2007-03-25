@@ -23,17 +23,4 @@ CONFIG = (
 		("bot", "name", "Knowledge Database Bot")
 		)
 
-DEFAULT_PLUGINS = (
-		"core",
-		"help",
-		"stats",
-		"irc",
-		"channels",
-		"autoid",
-		"host",
-		"spell",
-#		"pyint",
-		"weather",
-		"xmlrpc",
-		"notify",
-		"swatch")
+DEFAULT_PLUGINS = ("core",)

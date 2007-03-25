@@ -8,10 +8,21 @@
 ...
 """
 
+import os
+import sys
+import inspect
+from traceback import format_exc
+
+from pymills.timers import Timers
+from pymills.event import EventManager
 from pymills.env import BaseEnvironment
 from pymills.utils import safe__import__
 
+import kdb
+from kdb.bot import Bot
+from kdb import default_db
 from kdb import default_config
+from kdb.plugin import BasePlugin
 
 VERSION = 1
 
@@ -20,8 +31,6 @@ class Environment(BaseEnvironment):
 	def __init__(self, path, create=False):
 		"initializes x; see x.__class__.__doc__ for signature"
 
-		import kdb
-		from kdb import default_db
 
 		BaseEnvironment.__init__(self,
 				path,
@@ -32,32 +41,26 @@ class Environment(BaseEnvironment):
 				kdb.__url__,
 				create)
 
-		from pymills.timers import Timers
-		from pymills.event import EventManager
-
 		self.event = EventManager()
 		self.timers = Timers(self.event)
+
+		self.bot = Bot(self.event, self)
+		self.loadPlugins()
+
 		self.errors = 0
 
 	def create(self):
 		BaseEnvironment.create(self)
 
-		import os
 		os.mkdir(os.path.join(self.path, "plugins"))
 	
-	def loadPlugin(self, bot, plugin):
-		"""E.loadPlugin(bot, plugin) -> None
+	def loadPlugin(self, plugin):
+		"""E.loadPlugin(plugin) -> None
 
 		Load a single plugin given by plugin.
 		If this plugin is already laoded, it'll be
 		replaced.
 		"""
-
-		import sys
-		import inspect
-		from traceback import format_exc
-
-		from plugin import BasePlugin
 
 		try:
 			fqplugin = "kdb.plugins.%s" % plugin
@@ -79,7 +82,7 @@ class Environment(BaseEnvironment):
 					not x == BasePlugin)
 			for name, c in classes:
 				self.plugins[plugin] = c(
-						self.event, bot, self)
+						self.event, self.bot, self)
 			self.log.info("Loaded plugin: %s" % plugin)
 			return True
 		except Exception, e:
@@ -103,8 +106,8 @@ class Environment(BaseEnvironment):
 			del self.plugins[plugin]
 			self.log.info("Unloaded plugin: %s" % plugin)
 		
-	def loadPlugins(self, bot):
-		"""E.loadPlugins(bot) -> None
+	def loadPlugins(self):
+		"""E.loadPlugins() -> None
 
 		Load any available plugins loading the global/default
 		ones first, then loading the ones found in the
@@ -116,8 +119,19 @@ class Environment(BaseEnvironment):
 		plugins = default_config.DEFAULT_PLUGINS
 
 		for plugin in plugins:
-			self.loadPlugin(bot, plugin)
+			self.loadPlugin(plugin)
 
+		plugins = self.config.items("plugins")
+		for plugin, enabled in plugins:
+			name, attr = plugin.split(".")
+			if attr == "enabled" and enabled:
+				try:
+					self.loadPlugin(name)
+				except:
+					self.errors += 1
+					self.log.error("Coult not load plugin: %s" % name)
+					self.log.error(format_exc())
+	
 	def unloadPlugins(self):
 		"""E.unloadPlugins() -> None
 

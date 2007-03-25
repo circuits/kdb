@@ -10,7 +10,7 @@ kdb's core. You can load/unload plugins on the fly and
 rehash kdb forcing it to re-load it's environment.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin
@@ -44,7 +44,7 @@ class Core(BasePlugin):
 		Syntax: LOAD <plugin>
 		"""
 
-		if self.env.loadPlugin(self.bot, plugin):
+		if self.env.loadPlugin(plugin):
 			msg = "Plugin '%s' loaded" % plugin
 		else:
 			msg = "Error while loading plugin '%s' (See log)" % plugin
@@ -60,7 +60,7 @@ class Core(BasePlugin):
 			msg = "ERROR: Plugin '%s' is not loaded" % plugin
 
 		self.env.unloadPlugin(plugin)
-		if self.env.loadPlugin(self.bot, plugin):
+		if self.env.loadPlugin(plugin):
 			msg = "Plugin '%s' reloaded" % plugin
 		else:
 			msg = "Error while loading plugin '%s' (See log)" % plugin
