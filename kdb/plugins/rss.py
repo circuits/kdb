@@ -10,7 +10,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import mktime, time
@@ -67,8 +67,21 @@ class Feed(object):
 			s.append("RSS: %s (%s)" % (
 				self.title, self.link))
 			for e in new[:3]:
-				s.append(" * %s: %s <%s>" % (
-					e["title"], e["summary"], e["link"]))
+				x = sum([
+					len(e["title"]),
+					len(e["summary"]),
+					len(e["link"])])
+				if x > 450:
+					y = sum([
+						len(e["title"]),
+						len(e["link"])])
+					s.append(" * %s: %s ... <%s>" % (
+						e["title"],
+						e["summary"][:(450 - y)],
+						e["link"]))
+				else:
+					s.append(" * %s: %s <%s>" % (
+						e["title"], e["summary"], e["link"]))
 			return s
 		else:
 			return []
