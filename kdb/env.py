@@ -10,6 +10,7 @@
 
 import os
 import sys
+import weakref
 import inspect
 from traceback import format_exc
 
@@ -43,9 +44,9 @@ class Environment(BaseEnvironment):
 
 		self.event = EventManager()
 		self.timers = Timers(self.event)
+		self.plugins = weakref.WeakValueDictionary()
 
 		self.bot = Bot(self.event, self)
-		self.loadPlugins()
 
 		self.errors = 0
 
@@ -102,7 +103,6 @@ class Environment(BaseEnvironment):
 			o.unregister()
 			if hasattr(o, "cleanup"):
 				o.cleanup()
-			del o
 			del self.plugins[plugin]
 			self.log.info("Unloaded plugin: %s" % plugin)
 		
@@ -115,7 +115,6 @@ class Environment(BaseEnvironment):
 		may override existing plugins already loaded.
 		"""
 
-		self.plugins = {}
 		plugins = default_config.DEFAULT_PLUGINS
 
 		for plugin in plugins:

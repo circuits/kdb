@@ -62,6 +62,8 @@ class Core(Component):
 		timers = env.timers
 		bot = env.bot
 
+		env.loadPlugins()
+
 		host = env.config.get("connect", "host")
 		port = env.config.getint("connect", "port")
 

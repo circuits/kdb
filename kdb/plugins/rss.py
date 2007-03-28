@@ -10,9 +10,11 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.3"
+__ver__ = "0.0.4"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+import os
+import cPickle as pickle
 from time import mktime, time
 
 import feedparser
@@ -99,9 +101,27 @@ class RSS(BasePlugin):
 	def __init__(self, event, bot, env):
 		BasePlugin.__init__(self, event, bot, env)
 
-		self.entities = {}
-		
+		filename = os.path.join(self.env.path, "rss.bin")
+		if os.path.exists(filename):
+			fd = open(filename, "rb")
+			try:
+				self.entities = pickle.load(fd)
+			except Exception, e:
+				self.env.log.debug(
+						"ERROR: Could not load rss data from '%s'" \
+								" -> %s" % (filename, str(e)))
+				self.entities = {}
+			fd.close()
+		else:
+			self.entities = {}
+
 		self.env.timers.add(60, "rsstick", forever=True)
+
+	def cleanup(self):
+		filename = os.path.join(self.env.path, "rss.bin")
+		fd = open(filename, "wb")
+		pickle.dump(self.entities, fd)
+		fd.close()
 
 	@listener("rsstick")
 	def onRSSTICK(self, n):
