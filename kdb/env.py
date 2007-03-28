@@ -120,6 +120,9 @@ class Environment(BaseEnvironment):
 		for plugin in plugins:
 			self.loadPlugin(plugin)
 
+		if not self.config.has_section("plugins"):
+			return
+
 		plugins = self.config.items("plugins")
 		for plugin, enabled in plugins:
 			name, attr = plugin.split(".")
