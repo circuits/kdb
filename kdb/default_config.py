@@ -23,4 +23,4 @@ CONFIG = (
 		("bot", "name", "Knowledge Database Bot")
 		)
 
-DEFAULT_PLUGINS = ("core",)
+DEFAULT_PLUGINS = ("core", "help", "irc", "channels",)
