@@ -10,7 +10,7 @@ messages by listening for a certain pattern of message
 and performing some command or event on that.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
@@ -43,5 +43,4 @@ class Broadcast(BasePlugin):
 						MessageEvent(source, target,
 							"%s, %s" % (
 								self.bot.getNick(),
-								message[1:])),
-							self.env.event.getChannelID("message"))
+								message[1:])), "message", self)

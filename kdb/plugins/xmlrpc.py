@@ -12,7 +12,7 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.5"
+__ver__ = "0.0.6"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import cherrypy
@@ -46,8 +46,7 @@ class Root(Component):
 		args, method = xmlrpc.process_body()
 
 		result = self.event.send(
-				XMLRPCEvent(*args),
-				self.event.getChannelID("xmlrpc:%s" % method))
+				XMLRPCEvent(*args), "xmlrpc:%s" % method)
 
 		if result is not None:
 			body = result

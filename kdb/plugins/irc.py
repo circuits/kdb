@@ -9,7 +9,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.5"
+__ver__ = "0.0.6"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener, Event
@@ -28,13 +28,9 @@ class Irc(BasePlugin):
 	@listener("numeric")
 	def onNUMERIC(self, source, target, numeric, arg, message):
 		if numeric == 1:
-			self.env.event.push(
-					Event(),
-					self.env.event.getChannelID("connected"))
+			self.env.event.push(Event(), "connected")
 		elif numeric == 433:
-			self.env.event.push(
-					Event(),
-					self.env.event.getChannelID("nicksollision"))
+			self.env.event.push(Event(), "nicksollision")
 
 	@listener("nick")
 	def onNIC(self, source, newnick, ctime):
