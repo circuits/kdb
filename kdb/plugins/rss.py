@@ -10,7 +10,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.4"
+__ver__ = "0.0.5"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -22,6 +22,7 @@ import feedparser
 from pymills.utils import notags
 from pymills.misc import strToBool
 from pymills.event import listener, Event
+from pymills.web import decodeHTMLEntities
 
 from kdb.plugin import BasePlugin
 
@@ -56,7 +57,8 @@ class Feed(object):
 			e = {
 					"time": mktime(v.updated_parsed),
 					"title": v.title,
-					"summary": notags(v.summary).strip().split("\n")[0],
+					"summary": decodeHTMLEntities(
+						notags(v.summary).strip().split("\n")[0]),
 					"link": v.links[0].href
 					}
 
@@ -183,6 +185,33 @@ class RSS(BasePlugin):
 				msg = "Given feed does not exist."
 		else:
 			msg = "No feeds to delete."
+
+		return msg
+
+	def cmdREAD(self, source, n):
+		"""Read an RSS feed.
+		
+		Syntax: READ <n>
+		"""
+
+		if type(source) == tuple:
+			source = source[0]
+
+		if self.entities.has_key(source):
+
+			try:
+				n = int(n)
+			except Exception, e:
+				return "ERROR: Invalid feed no. given '%s' -> %s" % (
+						n, str(e))
+
+			if n > 0 and n < len(self.entities[source]):
+				f = self.entities[source][(n - 1)]
+				msg = f.getItems()
+			else:
+				msg = "Given feed does not exist."
+		else:
+			msg = "No feeds to read."
 
 		return msg
 
