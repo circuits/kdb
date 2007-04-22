@@ -45,8 +45,8 @@ class Core(Component):
 	@filter()
 	def onDEBUG(self, event):
 		config = self.env.config
-		if config.has_option("debug", "verbose"):
-			if config.getboolean("debug", "verbose"):
+		if config.has_option("logging", "verbose"):
+			if config.getboolean("logging", "verbose"):
 				self.env.log.debug(event)
 		return False, event
 
