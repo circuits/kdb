@@ -10,7 +10,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.5"
+__ver__ = "0.0.6"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -178,7 +178,7 @@ class RSS(BasePlugin):
 				return "ERROR: Invalid feed no. given '%s' -> %s" % (
 						n, str(e))
 
-			if n > 0 and n < len(self.entities[source]):
+			if n > 0 and n <= len(self.entities[source]):
 				del self.entities[source][(n - 1)]
 				msg = "Feed %d deleted." % n
 			else:
@@ -205,7 +205,7 @@ class RSS(BasePlugin):
 				return "ERROR: Invalid feed no. given '%s' -> %s" % (
 						n, str(e))
 
-			if n > 0 and n < len(self.entities[source]):
+			if n > 0 and n <= len(self.entities[source]):
 				f = self.entities[source][(n - 1)]
 				msg = f.getItems()
 			else:
