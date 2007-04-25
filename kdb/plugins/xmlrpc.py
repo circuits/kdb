@@ -12,7 +12,7 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.6"
+__ver__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import cherrypy
@@ -98,6 +98,8 @@ class XMLRPC(BasePlugin):
 					})
 
 		try:
+			cherrypy.engine.SIGHUP = None
+			cherrypy.engine.SIGTERM = None
 			cherrypy.server.quickstart()
 			cherrypy.engine.start(blocking=False)
 		except IOError:
