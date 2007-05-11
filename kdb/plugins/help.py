@@ -10,7 +10,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.3"
+__ver__ = "0.0.4"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import inspect
@@ -18,7 +18,13 @@ import inspect
 from kdb.plugin import BasePlugin
 
 class Help(BasePlugin):
-	"Help Message"
+
+	"""Help plugin
+
+	Provides commands to display helpful infomration about
+	other plugins and their commands.
+	See: commands help
+	"""
 
 	def cmdCOMMANDS(self, source, plugin=None):
 		"""Display a list of commands for 'plugin'.
