@@ -10,7 +10,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.6"
+__ver__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -19,10 +19,10 @@ from time import mktime, time
 
 import feedparser
 
+from pymills.web import escape
 from pymills.utils import notags
 from pymills.misc import strToBool
 from pymills.event import listener, Event
-from pymills.web import decodeHTMLEntities
 
 from kdb.plugin import BasePlugin
 
@@ -57,7 +57,7 @@ class Feed(object):
 			e = {
 					"time": mktime(v.updated_parsed),
 					"title": v.title,
-					"summary": decodeHTMLEntities(
+					"summary": escape(
 						notags(v.summary).strip().split("\n")[0]),
 					"link": v.links[0].href
 					}

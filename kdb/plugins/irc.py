@@ -9,8 +9,10 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.6"
+__ver__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
+
+from time import sleep
 
 from pymills.event import listener, Event
 
@@ -33,9 +35,23 @@ class Irc(BasePlugin):
 			self.env.event.push(Event(), "nicksollision")
 
 	@listener("nick")
-	def onNIC(self, source, newnick, ctime):
+	def onNICK(self, source, newnick, ctime):
 		if source == self.bot.getNick().lower():
 			self.bot.setNick(newnick)
+
+	def cmdJUMP(self, source, server, port=6667, ssl=False):
+		"""Connect to another server.
+		
+		Syntax: JUMP <server> [<port>] [<ssl>]
+		"""
+
+		return "Not implemented."
+
+	#	self.bot.ircQUIT("Reconnecting to %s:%s" % (server, port)))
+	#	bot.open(host, port, ssl)
+	#	sleep(1)
+	#	if bot.connected:
+	#		bot.connect(auth)
 
 	def cmdQUIT(self, source, message="Bye! Bye!"):
 		"""Quit from the current server

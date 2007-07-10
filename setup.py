@@ -28,18 +28,18 @@ setup(
 		keywords=pkg.__keywords__,
 		platform=pkg.__platform__,
 
-		packages=[
+		packages=(
 			"kdb",
 			"kdb/plugins"
-			],
+			),
 
-		scripts=[
+		scripts=(
 			"bin/kdb",
 			"bin/kdb-notify",
 			"bin/kdb-git-update",
-			],
+			),
 
-		install_requires=[
+		install_requires=(
 			"pymills"
-			]
+			)
 		)
