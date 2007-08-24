@@ -11,10 +11,11 @@ This is the core of kdb.
 import os
 import signal
 import socket
+from time import sleep
 from traceback import format_exc
 
 from pymills.utils import State
-from pymills.event import Component, filter, listener
+from pymills.event import filter, listener, Component
 
 class Core(Component):
 
@@ -51,9 +52,12 @@ class Core(Component):
 		return False, event
 
 	@listener("timer:reconnect")
-	def onRECONNECT(self, n, host, port, ssl, auth):
+	def onRECONNECT(self, n, host, port, ssl, bind, auth):
 		self.state.set("CONNECTING")
-		self.env.bot.open(host, port, ssl)
+		if bind is not None:
+			self.env.bot.open(host, port, ssl, bind)
+		else:
+			self.env.bot.open(host, port, ssl)
 
 	def run(self):
 		env = self.env
@@ -83,9 +87,15 @@ class Core(Component):
 		else:
 			ssl = False
 
-		bot.open(host, port, ssl)
-		if bot.connected:
-			bot.connect(auth)
+		if env.config.has_option("connect", "bind"):
+			bind = env.config.get("connect", "bind")
+		else:
+			bind = None
+
+		if bind is not None:
+			bot.open(host, port, ssl, bind)
+		else:
+			bot.open(host, port, ssl)
 
 		while self.running:
 
@@ -112,10 +122,13 @@ class Core(Component):
 					env.timers.add(
 							60,
 							channel="timer:reconnect",
-							host=host, port=port, ssl=ssl, auth=auth)
+							host=host, port=port,
+							ssl=ssl, bind=bind, auth=auth)
 
 				timers.process()
 				event.flush()
+				if not bot.connected:
+					sleep(0.5)
 			except KeyboardInterrupt:
 				if self.env.bot.connected:
 					bot.ircQUIT("Received ^C, terminating...")

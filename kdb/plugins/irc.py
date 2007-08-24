@@ -34,11 +34,6 @@ class Irc(BasePlugin):
 		elif numeric == 433:
 			self.env.event.push(Event(), "nicksollision")
 
-	@listener("nick")
-	def onNICK(self, source, newnick, ctime):
-		if source == self.bot.getNick().lower():
-			self.bot.setNick(newnick)
-
 	def cmdJUMP(self, source, server, port=6667, ssl=False):
 		"""Connect to another server.
 		
@@ -52,6 +47,22 @@ class Irc(BasePlugin):
 	#	sleep(1)
 	#	if bot.connected:
 	#		bot.connect(auth)
+
+	def cmdIRCINFO(self, source):
+		"""Display current IRC information such as server,
+		network, current nick, etc.
+		
+		Syntax: IRCINFO
+		"""
+
+		msg = "I am %s on the %s IRC Network connected to " \
+				"%s running version %s" % ("%s!%s@%s" % (
+					self.bot.getNick(), self.bot.getIdent(),
+					self.bot.getHost()),
+					self.bot.getNetwork(), self.bot.getServer(),
+					self.bot.getServerVersion())
+
+		return msg
 
 	def cmdQUIT(self, source, message="Bye! Bye!"):
 		"""Quit from the current server

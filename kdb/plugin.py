@@ -26,9 +26,9 @@ class CommandHandler(object):
 
 	def __call__(self, command, source, *args, **kwargs):
 
-		handler = "cmd%s" % command.upper()
-		if hasattr(self, handler):
-			f = getattr(self, handler)
+		cmdHandler = "cmd%s" % command.upper()
+		if hasattr(self, cmdHandler):
+			f = getattr(self, cmdHandler)
 			if callable(f):
 				fargs, fvargs, fkwargs, fdefault = \
 						inspect.getargspec(f)
@@ -77,12 +77,12 @@ class BasePlugin(Component):
 		self.__setupCommandHandlers__()
 
 	def __setupCommandHandlers__(self):
-		self._handlers = inspect.getmembers(self,
+		self._cmdHandlers = inspect.getmembers(self,
 				lambda x: inspect.ismethod(x) and \
 						callable(x) and x.__name__[:3] == "cmd")
-		for name, handler in self._handlers:
+		for name, cmdHandler in self._cmdHandlers:
 			command = name[3:].lower()
-			self._hooks[command] = handler
+			self._hooks[command] = cmdHandler
 
 	@filter("message")
 	def onMESSAGE(self, event, source, target, message):
@@ -139,33 +139,33 @@ class BasePlugin(Component):
 		tokens = tokens[1:]
 
 		if command in self._hooks:
-			handler = self._hooks[command]
+			cmdHandler = self._hooks[command]
 			args, vargs, kwargs, default = inspect.getargspec(
-					handler)
+					cmdHandler)
 			args.remove("self")
 			args.remove("source")
 
 			if len(args) == len(tokens):
 				if len(args) == 0:
-					return handler(source)
+					return cmdHandler(source)
 				else:
-					return handler(source, *tokens)
+					return cmdHandler(source, *tokens)
 			else:
 				if len(tokens) > len(args):
 					if vargs is None:
 						if len(args) > 0:
 							factor = len(tokens) - len(args) + 1
-							return handler(source, *backMerge(tokens, factor))
+							return cmdHandler(source, *backMerge(tokens, factor))
 						else:
 							self.syntaxError(
 									source, command, tokens,
 									[x for x in args + [vargs]
 										if x is not None])
 					else:
-						return handler(source, *tokens)
+						return cmdHandler(source, *tokens)
 				elif default is not None and len(args) == (
 						len(tokens) + len(default)):
-					return handler(source, *(tokens + list(default)))
+					return cmdHandler(source, *(tokens + list(default)))
 				else:
 					self.syntaxError(
 							source, command, tokens,
@@ -174,6 +174,9 @@ class BasePlugin(Component):
 
 	def isAddressed(self, source, target, message):
 		addressed = False
+
+		if self.bot.getNick() is None:
+			return False, target, message
 
 		if target.lower() == self.bot.getNick().lower():
 			if len(message) > len(self.bot.getNick()) and \

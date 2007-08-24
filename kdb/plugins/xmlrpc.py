@@ -18,7 +18,8 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import cherrypy
 from cherrypy.lib import xmlrpc
 
-from pymills.event import Event, Component, listener
+from pymills.event import filter, listener, \
+		Event, Component
 
 from kdb.plugin import BasePlugin
 
@@ -37,10 +38,11 @@ class Root(Component):
 		print "Root.__del__"
 		self.unregister()
 	
-	@listener()
+	@filter()
 	def onDEBUG(self, event):
 		if isinstance(event, XMLRPCEvent):
 			self.env.log.debug(event)
+		return False, event
 
 	def __call__(self, *vpath, **params):
 		args, method = xmlrpc.process_body()
@@ -93,7 +95,8 @@ class XMLRPC(BasePlugin):
 				config={
 					"/": {
 						"tools.xmlrpc.on": True,
-						"request.dispatch": cherrypy.dispatch.XMLRPCDispatcher()
+						"request.dispatch": cherrypy.dispatch.XMLRPCDispatcher(),
+						"tools.trailing_slash.on": False
 						}
 					})
 

@@ -10,7 +10,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.7"
+__ver__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -28,7 +28,7 @@ from kdb.plugin import BasePlugin
 
 class Feed(object):
 
-	def __init__(self, url, target, interval=3600):
+	def __init__(self, url, target, interval=60):
 		self.url = url
 		self.target = target
 		self.interval = interval
@@ -150,9 +150,6 @@ class RSS(BasePlugin):
 			return "ERROR: Given interval '%s' is too big. " \
 					"Interval is in minutes." % interval
 
-		if type(source) == tuple:
-			source = source[0]
-
 		f = Feed(url, source, interval)
 		if self.entities.has_key(source):
 			self.entities[source].append(f)
@@ -166,9 +163,6 @@ class RSS(BasePlugin):
 		
 		Syntax: RDEL <n>
 		"""
-
-		if type(source) == tuple:
-			source = source[0]
 
 		if self.entities.has_key(source):
 
@@ -194,9 +188,6 @@ class RSS(BasePlugin):
 		Syntax: READ <n>
 		"""
 
-		if type(source) == tuple:
-			source = source[0]
-
 		if self.entities.has_key(source):
 
 			try:
@@ -221,14 +212,12 @@ class RSS(BasePlugin):
 		Syntax: RLIST
 		"""
 
-		if type(source) == tuple:
-			source = source[0]
-
 		if self.entities.has_key(source):
 			msg = ["RSS Feeds (%s):" % source]
 			for i, f in enumerate(self.entities[source]):
-				msg.append(" %d. %s (%s)" % (
-					(i + 1), f.title, f.link))
+				msg.append(" %d. %s (%s)/%dmins (next: %dmins)" % (
+					(i + 1), f.title, f.link,
+					f.interval, (f.next - time()) / 60))
 		else:
 			msg = "No feeds available."
 

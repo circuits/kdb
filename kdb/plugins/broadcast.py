@@ -33,10 +33,6 @@ class Broadcast(BasePlugin):
 		addressed, target, message = self.isAddressed(
 				source, target, message)
 
-		self.env.log.debug("broadcast onMESSAGE handler")
-		self.env.log.debug("addressed: %s" % addressed)
-		self.env.log.debug("message[0]: %s" % message[0])
-
 		if not addressed and len(message) > 0:
 			if message[0] == self.prefix:
 				self.env.event.push(

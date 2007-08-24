@@ -10,7 +10,7 @@ if it's nick is registered. The configuration is
 provided in the configuration file.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re
@@ -23,7 +23,7 @@ class AutoID(BasePlugin):
 	"Automatic Identification"
 
 	@listener("notice")
-	def doLOGIN(self, event, source, target, message):
+	def onNOTICE(self, event, source, target, message):
 		"""Automatically login to pircsrv
 
 		The password is stored in the config file.
@@ -46,7 +46,7 @@ class AutoID(BasePlugin):
 				nickserv = self.env.config.get(
 						"autoid", "nickserv")
 
-				if source[0].lower() == nickserv.lower():
+				if source.lower() == nickserv.lower():
 
 					if self.env.config.has_option(
 							"autoid", "pattern"):
