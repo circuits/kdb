@@ -9,7 +9,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.7"
+__ver__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep
@@ -80,14 +80,6 @@ class Irc(BasePlugin):
 
 		self.cmdQUIT(source, message)
 		self.push(Event(), "term")
-
-	def cmdJOIN(self, source, channel, key=None):
-		"""Join specified channel.
-
-		Syntax: JOIN <channel> [<key>]
-		"""
-
-		self.bot.ircJOIN(channel, key)
 
 	def cmdNICK(self, source, nick):
 		"""Change current nickname
