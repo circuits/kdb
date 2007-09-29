@@ -9,7 +9,7 @@ This plugin manages channels and what channels the bot
 joins automatically.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
@@ -65,6 +65,8 @@ class Channels(BasePlugin):
 
 		self.bot.ircJOIN(channel)
 
+		return "Joined channel %s" % channel
+
 	def cmdPART(self, source, channel, message="Leaving"):
 		"""Leave the specified channel
 		
@@ -72,6 +74,8 @@ class Channels(BasePlugin):
 		"""
 
 		self.bot.ircPART(channel, message)
+
+		return "Left channel %s" % channel
 
 	def cmdCHANNELS(self, source, command, *args, **kwargs):
 		self.env.log.debug(source)
