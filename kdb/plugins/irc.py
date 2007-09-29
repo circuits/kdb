@@ -9,7 +9,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.8"
+__ver__ = "0.0.9"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep
@@ -72,6 +72,8 @@ class Irc(BasePlugin):
 
 		self.bot.ircQUIT(message)
 
+		return "Left IRC"
+
 	def cmdDIE(self, source, message="Terminating! Bye!"):
 		"""Quit and Terminate
 
@@ -80,6 +82,8 @@ class Irc(BasePlugin):
 
 		self.cmdQUIT(source, message)
 		self.push(Event(), "term")
+
+		return "Terminating"
 
 	def cmdNICK(self, source, nick):
 		"""Change current nickname
