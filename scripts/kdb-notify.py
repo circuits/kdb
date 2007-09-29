@@ -4,7 +4,7 @@ import socket
 import xmlrpclib
 from traceback import format_exc
 
-def main(url="http://localhost:8080", message="Test Message"):
+def main(url="http://localhost:8080/", message="Test Message"):
 	try:
 		server = xmlrpclib.ServerProxy(url)
 		print server.notify(socket.gethostname(), message)

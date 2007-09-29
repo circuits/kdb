@@ -30,7 +30,7 @@ class Spell(BasePlugin):
 
 	def cmdSPELL(self, source, word):
 		"""Check the spelling of the given word
-		
+		
 		Syntax: SPELL <word>
 		"""
 

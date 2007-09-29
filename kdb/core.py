@@ -3,15 +3,19 @@
 # Date:		2nd August 2005
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""core
+"""Core Component
 
-This is the core of kdb.
+Core management component and main loop handler.
+All events are processes by this component and
+also handles system signals to help reload the
+configuration and terminate the system.
 """
 
 import os
 import signal
 import socket
 from time import sleep
+from pprint import pprint
 from traceback import format_exc
 
 from pymills.utils import State
@@ -20,6 +24,8 @@ from pymills.event import filter, listener, Component
 class Core(Component):
 
 	def __init__(self, event, env):
+		Component.__init__(self, event)
+
 		self.env = env
 
 		if os.name in ["posix", "mac"]:
@@ -38,18 +44,17 @@ class Core(Component):
 		if self.env.bot.connected:
 			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
 		self.state.set("TERMINATING")
-	
+
 	@listener("rehash")
 	def rehash(self, signal=0, stack=0):
 		self.env.reload()
-	
+
 	@filter()
 	def onDEBUG(self, event):
 		config = self.env.config
 		if config.has_option("logging", "verbose"):
 			if config.getboolean("logging", "verbose"):
 				self.env.log.debug(event)
-		return False, event
 
 	@listener("timer:reconnect")
 	def onRECONNECT(self, n, host, port, ssl, bind, auth):
@@ -105,6 +110,7 @@ class Core(Component):
 				else:
 					if state == "TERMINATING":
 						self.running = False
+						break
 					elif not state == "WAITING":
 						state.set("DISCONNECTED")
 
@@ -124,6 +130,9 @@ class Core(Component):
 							channel="timer:reconnect",
 							host=host, port=port,
 							ssl=ssl, bind=bind, auth=auth)
+				elif state == "TERMINATING":
+					self.running = False
+					break
 
 				timers.process()
 				event.flush()

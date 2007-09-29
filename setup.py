@@ -39,6 +39,8 @@ def getFiles(paths, tests=[os.path.isfile], pattern=".*", \
 
 	list = []
 	for path in paths:
+		if not os.path.exists(path):
+			continue
 		files = os.listdir(path)
 		for file in files:
 			if testFile(os.path.join(path, file)) and \

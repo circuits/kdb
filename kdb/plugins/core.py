@@ -20,7 +20,7 @@ class Core(BasePlugin):
 
 	def cmdREHASH(self, source):
 		"""Reload environment
-		
+
 		Syntax: RELOAD
 		"""
 
@@ -30,17 +30,17 @@ class Core(BasePlugin):
 
 	def cmdPLUGINS(self, source):
 		"""List loaded plugins
-		
+
 		Syntax: PLUGINS
 		"""
 
 		plugins = self.env.plugins.keys()
 		msg = "Plugins loaded: %s" % ", ".join(plugins)
 		return msg
-	
+
 	def cmdLOAD(self, source, plugin):
 		"""Load a plugin
-		
+
 		Syntax: LOAD <plugin>
 		"""
 
@@ -52,11 +52,11 @@ class Core(BasePlugin):
 
 	def cmdRELOAD(self, source, plugin):
 		"""Reload an already loaded plugin
-		
+
 		Syntax: RELOAD <plugin>
 		"""
 
-		if not plugin in self.env.plugins:
+		if plugin not in self.env.plugins:
 			msg = "ERROR: Plugin '%s' is not loaded" % plugin
 
 		self.env.unloadPlugin(plugin)
@@ -69,9 +69,9 @@ class Core(BasePlugin):
 
 	def cmdUNLOAD(self, source, plugin):
 		"""Unload an already loaded plugin
-		
+
 		Note: You cannot unload the "core" plugin.
-		
+
 		Syntax: UNLOAD <plugin>
 		"""
 

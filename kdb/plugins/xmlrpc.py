@@ -19,7 +19,7 @@ import cherrypy
 from cherrypy.lib import xmlrpc
 
 from pymills.event import filter, listener, \
-		Event, Component
+		Event, UnhandledEvent
 
 from kdb.plugin import BasePlugin
 
@@ -28,44 +28,46 @@ class XMLRPCEvent(Event):
 	def __init__(self, *args):
 		Event.__init__(self, *args)
 
-class Root(Component):
+class Root(BasePlugin):
 
 	def __init__(self, event, bot, env):
+		BasePlugin.__init__(self, event, bot, env)
+
 		self.bot = bot
 		self.env = env
-	
+
 	def __del__(self):
 		print "Root.__del__"
 		self.unregister()
-	
+
 	@filter()
 	def onDEBUG(self, event):
 		if isinstance(event, XMLRPCEvent):
 			self.env.log.debug(event)
-		return False, event
 
 	def __call__(self, *vpath, **params):
 		args, method = xmlrpc.process_body()
 
-		result = self.event.send(
-				XMLRPCEvent(*args), "xmlrpc:%s" % method)
-
-		if result is not None:
-			body = result
-		else:
+		try:
+			r = self.send(
+					XMLRPCEvent(*args), "xmlrpc:%s" % method)
+		except UnhandledEvent:
 			raise Exception, "No handler found for '%s'" % method
+
+		r = [x for x in r if x is not None]
+		body = "\n".join(r)
 
 		conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
 		xmlrpc.respond(
 				body,
 				conf.get("encoding", "utf-8"),
-				conf.get("allow_none", 0))
+				conf.get("allow_none", True))
 		return cherrypy.response.body
 	__call__.exposed = True
 
 	index = __call__
 	default = __call__
-	
+
 class XMLRPC(BasePlugin):
 
 	"""XML-RPC plugin
@@ -107,7 +109,7 @@ class XMLRPC(BasePlugin):
 			cherrypy.engine.start(blocking=False)
 		except IOError:
 			pass
-	
+
 	def cleanup(self):
 		cherrypy.server.stop()
 		cherrypy.engine.stop()

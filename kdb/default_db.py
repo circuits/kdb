@@ -49,12 +49,12 @@ def createDB(uri):
 
 	for line in DATA:
 		db.do(line)
-	
+
 	db.commit()
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
 		print "Usage: python db_default.py <uri>"
 		raise SystemExit, 1
-	
+
 	createDB(sys.argv[1])

@@ -14,18 +14,16 @@ export PATH=$(shell echo "$$HOME/bin:$$PATH")
 
 export PYTHONPATH=$(shell echo "$$PYTHONPATH"):$(shell python -c 'import os; print ":".join(os.path.abspath(line.strip()) for line in file("PYTHONPATH"))' 2>/dev/null)
 
-.PHONY: all apidocs check clean clean-pyc codetags docs \
-	epydoc pyflakes test test-coverage
+.PHONY: all apidocs clean clean-pyc codetags docs \
+	epydoc pyflakes test
 
-all: clean-pyc check test
+all: clean-pyc pyflakes test
 
 apidocs: epydoc
 
-check:
-	@check_sources.py -i apidocs
-
 clean: clean-pyc
 	rm -rf apidocs
+	rm -rf build dist kdb.egg-info
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -44,7 +42,7 @@ docs/build: docs/src/*.txt
 epydoc:
 	@rm -rf apidocs
 	@$(PYTHON) -Wi:default_transform `which epydoc` \
-		-o apidocs --css docs/epydoc.css \
+		-o apidocs  \
 		--url http://trac.shortcircuit.net.au/kdb \
 		--no-frames --docformat restructuredtext \
 		-v kdb
@@ -61,7 +59,4 @@ pyflakes:
 	@find . -name "*.py" -exec pyflakes {} +
 
 test:
-	@$(PYTHON) tests/run.py $(TESTS)
-
-test-coverage:
-	@$(PYTHON) tests/run.py -C $(TESTS)
+	@$(PYTHON) kdb/tests/run.py $(TESTS)

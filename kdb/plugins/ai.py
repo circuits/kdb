@@ -68,7 +68,7 @@ class Ai(BasePlugin):
 
 	def cmdPUBAI(self, source, option):
 		"""Turn public AI on or off.
-		
+		
 		Syntax: PUBAI ON|OFF
 		"""
 
@@ -89,7 +89,7 @@ class Ai(BasePlugin):
 			msg = "Unknown options: %s" % option
 
 		return msg
-	
+
 	@listener("message")
 	def onMESSAGE(self, source, target, message):
 
@@ -108,6 +108,7 @@ class Ai(BasePlugin):
 			if reply:
 				for sentence in reply.split("\n\n"):
 					self.bot.ircPRIVMSG(target, sentence)
+				return reply
 
 	@listener("notice")
 	def onNOTICE(self, source, target, message):
@@ -125,3 +126,4 @@ class Ai(BasePlugin):
 			if reply:
 				for sentence in reply.split("\n\n"):
 					self.bot.ircNOTICE(target, sentence)
+				return reply

@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-# Filename:	kdb-git-update
-# Module:	kdb-git-update
-# Date:		20th November 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """kdb-git-update
 
@@ -124,7 +120,9 @@ def buildMessage(project, commit, branch):
 		files.append(
 				filter(
 					lambda x: x != "",
-					re.split("(\d+) (\d+) ([a-z\d]+) ([a-z\d]+) ([A-Z])\t(.*)",line.lstrip(":").strip())))
+					re.split("""
+(\d+) (\d+) ([a-z\d]+) ([a-z\d]+) \
+([A-Z])\t(.*)""", line.lstrip(":").strip())))
 	stdout.close()
 	stdin.close()
 

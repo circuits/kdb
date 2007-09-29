@@ -12,7 +12,6 @@ command to query the information collected and stored.
 __ver__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import os
 import marshal
 from time import time
 
@@ -56,7 +55,7 @@ class Seen(BasePlugin):
 	def cmdSEEN(self, source, nick):
 		"""Query and display last seen information for the
 		given nick.
-		
+		
 		Syntax: SEEN <nick>
 		"""
 

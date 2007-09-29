@@ -15,7 +15,7 @@ import inspect
 from traceback import format_exc
 
 from pymills.timers import Timers
-from pymills.event import EventManager
+from pymills.event import Manager
 from pymills.env import BaseEnvironment
 from pymills.utils import safe__import__
 
@@ -42,7 +42,7 @@ class Environment(BaseEnvironment):
 				kdb.__url__,
 				create)
 
-		self.event = EventManager()
+		self.event = Manager()
 		self.timers = Timers(self.event)
 		self.plugins = weakref.WeakValueDictionary()
 
@@ -54,7 +54,7 @@ class Environment(BaseEnvironment):
 		BaseEnvironment.create(self)
 
 		os.mkdir(os.path.join(self.path, "plugins"))
-	
+
 	def loadPlugin(self, plugin):
 		"""E.loadPlugin(plugin) -> None
 
@@ -62,6 +62,10 @@ class Environment(BaseEnvironment):
 		If this plugin is already laoded, it'll be
 		replaced.
 		"""
+
+		if plugin in self.plugins:
+			self.log.warn("Not loading plugin '%s' - Already loaded!" % plugin)
+			return False
 
 		try:
 			fqplugin = "kdb.plugins.%s" % plugin
@@ -105,7 +109,7 @@ class Environment(BaseEnvironment):
 				o.cleanup()
 			del self.plugins[plugin]
 			self.log.info("Unloaded plugin: %s" % plugin)
-		
+
 	def loadPlugins(self):
 		"""E.loadPlugins() -> None
 
@@ -115,25 +119,23 @@ class Environment(BaseEnvironment):
 		may override existing plugins already loaded.
 		"""
 
-		plugins = default_config.DEFAULT_PLUGINS
+		plugins = list(default_config.DEFAULT_PLUGINS)
+
+		if self.config.has_section("plugins"):
+			for name, value in self.config.items("plugins"):
+				plugin, attr = name.split(".")
+				if attr.lower() == "enabled":
+					if plugin not in plugins:
+						plugins.append(plugin)
 
 		for plugin in plugins:
-			self.loadPlugin(plugin)
+			try:
+				self.loadPlugin(plugin)
+			except:
+				self.errors += 1
+				self.log.error("Coult not load plugin: %s" % name)
+				self.log.error(format_exc())
 
-		if not self.config.has_section("plugins"):
-			return
-
-		plugins = self.config.items("plugins")
-		for plugin, enabled in plugins:
-			name, attr = plugin.split(".")
-			if attr == "enabled" and enabled:
-				try:
-					self.loadPlugin(name)
-				except:
-					self.errors += 1
-					self.log.error("Coult not load plugin: %s" % name)
-					self.log.error(format_exc())
-	
 	def unloadPlugins(self):
 		"""E.unloadPlugins() -> None
 

@@ -19,10 +19,9 @@ from time import mktime, time
 
 import feedparser
 
-from pymills.web import escape
-from pymills.utils import notags
 from pymills.misc import strToBool
 from pymills.event import listener, Event
+from pymills.utils import notags, decodeHTML
 
 from kdb.plugin import BasePlugin
 
@@ -37,14 +36,14 @@ class Feed(object):
 		self.entries = []
 		self.title = ""
 		self.link = ""
-	
+
 	def checkTime(self):
 		if time() > self.next:
 			self.next = time() + (self.interval * 60)
 			return True
 		else:
 			return False
-	
+
 	def getItems(self):
 		d = feedparser.parse(self.url)
 
@@ -57,12 +56,12 @@ class Feed(object):
 			e = {
 					"time": mktime(v.updated_parsed),
 					"title": v.title,
-					"summary": escape(
+					"summary": decodeHTML(
 						notags(v.summary).strip().split("\n")[0]),
 					"link": v.links[0].href
 					}
 
-			if not e in self.entries:
+			if e not in self.entries:
 				self.entries.append(e)
 				new.append(e)
 
@@ -89,7 +88,7 @@ class Feed(object):
 			return s
 		else:
 			return []
-	
+
 class RSS(BasePlugin):
 
 	"""RSS Aggregator plugin
@@ -132,11 +131,11 @@ class RSS(BasePlugin):
 				if f.checkTime():
 					for line in f.getItems():
 						self.bot.ircPRIVMSG(f.target, line)
-	
+
 	def cmdRADD(self, source, url, interval="60"):
 		"""Add a new RSS feed to be checked at the given interval.
 		Intervan is in minutes.
-		
+		
 		Syntax: RADD <url> [<interval>]
 		"""
 
@@ -155,12 +154,12 @@ class RSS(BasePlugin):
 			self.entities[source].append(f)
 		else:
 			self.entities[source] = [f]
-		
+
 		return f.getItems()
 
 	def cmdRDEL(self, source, n):
 		"""Delete an RSS feed.
-		
+		
 		Syntax: RDEL <n>
 		"""
 
@@ -184,7 +183,7 @@ class RSS(BasePlugin):
 
 	def cmdREAD(self, source, n):
 		"""Read an RSS feed.
-		
+		
 		Syntax: READ <n>
 		"""
 
@@ -208,7 +207,7 @@ class RSS(BasePlugin):
 
 	def cmdRLIST(self, source):
 		"""List all active RSS feeds.
-		
+		
 		Syntax: RLIST
 		"""
 

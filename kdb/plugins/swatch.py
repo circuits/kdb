@@ -30,7 +30,7 @@ class Swatch(BasePlugin):
 
 	def cmdBEAT(self, source):
 		"""Display the current Swatch Time (Internet Time)
-		
+		
 		Syntax: BEAT
 		"""
 
@@ -38,7 +38,7 @@ class Swatch(BasePlugin):
 
 	def cmdITIME(self, source):
 		"""Synonym, of BEAT
-		
+		
 		See: BEAT
 		"""
 

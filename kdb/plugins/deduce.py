@@ -15,9 +15,8 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import os
 import re
 
-from deduce import fact, brain
-
 from pymills.event import listener
+from pymills.ai.deduce import fact, brain
 
 from kdb.plugin import BasePlugin
 
@@ -84,7 +83,7 @@ class Deduce(BasePlugin):
 						self.bot.ircPRIVMSG(target, line)
 				else:
 						self.bot.ircPRIVMSG(target, msg)
-				return
+				return msg
 
 			message = message.strip()
 
@@ -102,3 +101,5 @@ class Deduce(BasePlugin):
 				self.env.log.debug(msg)
 
 			self.bot.ircPRIVMSG(target, msg)
+
+			return msg

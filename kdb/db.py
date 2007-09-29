@@ -12,7 +12,7 @@ class Enum:
 
 	def __init__(self, db):
 		self._db = db
-	
+
 	def __contains__(self, (type, name)):
 		db = self._db
 
@@ -29,7 +29,7 @@ class Enum:
 		rows = db.do(
 				"DELETE FROM enum "
 				"WHERE type=? AND name=?", type, name)
-	
+
 	def __getitem__(self, (type, name)):
 		db = self._db
 
@@ -63,7 +63,7 @@ class System:
 		rows = db.do(
 				"DELETE FROM enum "
 				"WHERE name=?", name)
-	
+
 	def __getitem__(self, name):
 		db = self._db
 

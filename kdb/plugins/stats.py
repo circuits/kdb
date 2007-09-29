@@ -40,7 +40,7 @@ class Stats(BasePlugin):
 
 	def cmdERRORS(self, source):
 		"""Display numbers of errors that have occured
-		
+		
 		Syntax: ERRORS
 		"""
 
@@ -52,7 +52,7 @@ class Stats(BasePlugin):
 
 	def cmdUPTIME(self, source):
 		"""Display current uptime and cpu usage
-		
+		
 		Syntax: UPTIME
 		"""
 
@@ -60,10 +60,10 @@ class Stats(BasePlugin):
 		cpu = time.clock()
 		msg = "Uptime: %s+%s:%s:%s (CPU: %s)" % (uptime + (cpu,))
 		return msg
-	
+
 	def cmdNSTATS(self, source):
 		"""Display current network stats
-		
+		
 		Syntax: NSTATS
 		"""
 
@@ -76,7 +76,7 @@ class Stats(BasePlugin):
 
 	def cmdVERSION(self, source):
 		"""Display version information
-		
+		
 		Syntax: VERSION
 		"""
 

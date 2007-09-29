@@ -36,7 +36,7 @@ class Irc(BasePlugin):
 
 	def cmdJUMP(self, source, server, port=6667, ssl=False):
 		"""Connect to another server.
-		
+
 		Syntax: JUMP <server> [<port>] [<ssl>]
 		"""
 
@@ -51,7 +51,7 @@ class Irc(BasePlugin):
 	def cmdIRCINFO(self, source):
 		"""Display current IRC information such as server,
 		network, current nick, etc.
-		
+
 		Syntax: IRCINFO
 		"""
 
@@ -66,24 +66,24 @@ class Irc(BasePlugin):
 
 	def cmdQUIT(self, source, message="Bye! Bye!"):
 		"""Quit from the current server
-		
+
 		Syntax: QUIT [<message>]
 		"""
 
 		self.bot.ircQUIT(message)
-	
+
 	def cmdDIE(self, source, message="Terminating! Bye!"):
 		"""Quit and Terminate
-		
+
 		Syntax: DIE [<message>]
 		"""
 
 		self.cmdQUIT(source, message)
-		self.event.push(Event(), "term")
-	
+		self.push(Event(), "term")
+
 	def cmdJOIN(self, source, channel, key=None):
 		"""Join specified channel.
-		
+
 		Syntax: JOIN <channel> [<key>]
 		"""
 
@@ -91,8 +91,10 @@ class Irc(BasePlugin):
 
 	def cmdNICK(self, source, nick):
 		"""Change current nickname
-		
+
 		Syntax: NICK <newnick>
 		"""
 
 		self.bot.ircNICK(nick)
+
+		return "Nickname changed to %s" % nick

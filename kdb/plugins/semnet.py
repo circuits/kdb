@@ -21,7 +21,7 @@ import pickle
 
 from pymills.event import listener
 from pymills.misc import strToBool
-from pymills.semnet import Fact, \
+from pymills.ai.semnet import Fact, \
 		Entity, Relation, GetIsA, GetExampleOf
 
 from kdb.plugin import BasePlugin
@@ -71,7 +71,7 @@ class Semnet(BasePlugin):
 
 	def cmdSEMNET(self, source):
 		"""Display the current Semantic Network
-		
+		
 		Syntax: SEMNET
 		"""
 
@@ -83,7 +83,7 @@ class Semnet(BasePlugin):
 
 	def cmdE(self, source, name):
 		"""Synonym, of ENTITY
-		
+		
 		See: ENTITY
 		"""
 
@@ -91,7 +91,7 @@ class Semnet(BasePlugin):
 
 	def cmdENTITY(self, source, name):
 		"""Create a new entity
-		
+		
 		Syntax: ENTITY <name>
 		"""
 
@@ -105,7 +105,7 @@ class Semnet(BasePlugin):
 
 	def cmdD(self, source, name):
 		"""Synonym, of DELETE
-		
+		
 		See: DELETE
 		"""
 
@@ -113,7 +113,7 @@ class Semnet(BasePlugin):
 
 	def cmdDELETE(self, source, name):
 		"""Delete an existing entity
-		
+		
 		Syntax: DELETE <name>
 		"""
 
@@ -126,7 +126,7 @@ class Semnet(BasePlugin):
 	def cmdR(self, source, name, transitive="yes",
 			opposite=None):
 		"""Synonym, of RELATION
-		
+		
 		See: RELATION
 		"""
 
@@ -136,7 +136,7 @@ class Semnet(BasePlugin):
 	def cmdRELATION(self, source, name, transitive="yes",
 			opposite=None):
 		"""Create a new relationship
-		
+		
 		Syntax: RELATION <name> [<transitive>] [<opposite>]
 		"""
 
@@ -178,7 +178,7 @@ class Semnet(BasePlugin):
 						tostr(agent.objects(relation)))
 				else:
 					self.bot.ircPRIVMSG(
-						target, 
+						target,
 						"I don't understand.")
 					if not self.entities.has_key(d["agent"]):
 						self.bot.ircPRIVMSG(
@@ -211,7 +211,7 @@ class Semnet(BasePlugin):
 						self.bot.ircPRIVMSG(target, "no")
 				else:
 					self.bot.ircPRIVMSG(
-						target, 
+						target,
 						"I don't understand.")
 					if not self.entities.has_key(d["agent"]):
 						self.bot.ircPRIVMSG(
@@ -251,7 +251,7 @@ class Semnet(BasePlugin):
 						self.bot.ircPRIVMSG(target, "Okay")
 				else:
 					self.bot.ircPRIVMSG(
-						target, 
+						target,
 						"I don't understand.")
 					if not self.entities.has_key(d["agent"]):
 						self.bot.ircPRIVMSG(

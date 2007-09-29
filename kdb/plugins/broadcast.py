@@ -14,7 +14,7 @@ __ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
-from pymills.irc import MessageEvent
+from pymills.net.irc import MessageEvent
 
 from kdb.plugin import BasePlugin
 

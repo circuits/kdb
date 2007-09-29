@@ -30,7 +30,7 @@ class Timers(BasePlugin):
 
 	def cmdTIMER(self, source, length, message="Hello World"):
 		"""Create a new time with the given length and message
-		
+		
 		Syntax: TIMER <length> [<message>]
 		"""
 

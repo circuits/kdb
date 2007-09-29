@@ -20,21 +20,21 @@ from kdb.plugin import BasePlugin
 class Weather(BasePlugin):
 
 	"""Weather plugin
-	
+
 	Provides weather information retrieved from METAR sources.
 	The METAR codes are available from:
-		http://www.nws.noaa.gov/tg/siteloc.shtml
+	 - http://www.nws.noaa.gov/tg/siteloc.shtml
 	See: help weather
 	"""
 
 	def cmdWEATHER(self, source, station="YBBN"):
 		"""Display weather for the given station
-		
+		
 		This looks up the weather information from http://weather.noaa.gov/
 		by using metar codes. For a list of station codes see
 		http://www.nws.noaa.gov/tg/siteloc.shtml The default
 		station is YBBN, Brisbane airport, Australia.
-		
+		
 		Syntax: WEATHER [<station>]
 		"""
 
@@ -68,7 +68,7 @@ class Weather(BasePlugin):
 				pr.getWindCompass()))
 		else:
 			msg.append("Wind: None")
-	
+
 		if pr.getPressure() is not None:
 			msg.append("Pressure: %s hPa" % (int(pr.getPressure())))
 		else:

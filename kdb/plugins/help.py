@@ -28,13 +28,13 @@ class Help(BasePlugin):
 
 	def cmdCOMMANDS(self, source, plugin=None):
 		"""Display a list of commands for 'plugin'.
-		
+		
 		Syntax: COMMANDS <plugin>
 		"""
 
 		msg = None
 
-		if plugin == None:
+		if plugin is None:
 			plugin = "help"
 
 		if self.env.plugins.has_key(plugin.lower()):
@@ -53,13 +53,13 @@ class Help(BasePlugin):
 
 	def cmdHELP(self, source, s=None):
 		"""Display help for the given command or plugin.
-		
+		
 		Syntax: HELP <s>
 		"""
 
 		msg = None
 
-		if s == None:
+		if s is None:
 			s = "help"
 
 		sl = s.lower()

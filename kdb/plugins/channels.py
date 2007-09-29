@@ -19,7 +19,7 @@ from kdb.plugin import BasePlugin, CommandHandler
 class ChannelsCommands(CommandHandler):
 
 	def cmdADD(self, source, channel):
-		if not channel in self.parent.channels:
+		if channel not in self.parent.channels:
 			self.parent.channels.append(channel)
 			return "Okay, added %s to startup " \
 					"join list" % channel
@@ -28,7 +28,7 @@ class ChannelsCommands(CommandHandler):
 					"join list" % channel
 
 	def cmdDEL(self, source, channel):
-		if not channel in self.parent.channels:
+		if channel not in self.parent.channels:
 			return "%s isn't in my startup join list" % channel
 		else:
 			self.parent.channels.remove(channel)
@@ -46,7 +46,7 @@ class Channels(BasePlugin):
 		BasePlugin.__init__(self, event, bot, env)
 
 		if self.env.config.has_option("bot", "channels"):
-			self.channels = [x.strip() for x in 
+			self.channels = [x.strip() for x in
 					self.env.config.get(
 						"bot", "channels").split(",")
 					if not x.strip() == ""]
@@ -59,20 +59,20 @@ class Channels(BasePlugin):
 
 	def cmdJOIN(self, source, channel):
 		"""Join the specified channel
-		
+		
 		Syntax: JOIN <channel>
 		"""
 
 		self.bot.ircJOIN(channel)
-	
+
 	def cmdPART(self, source, channel, message="Leaving"):
 		"""Leave the specified channel
-		
+		
 		Syntax: PART <channel> [<message>]
 		"""
 
 		self.bot.ircPART(channel, message)
-	
+
 	def cmdCHANNELS(self, source, command, *args, **kwargs):
 		self.env.log.debug(source)
 		self.env.log.debug(command)

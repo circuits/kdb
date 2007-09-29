@@ -22,13 +22,13 @@ class Host(BasePlugin):
 
 	def cmdHOST(self, source, host):
 		"""Resolve the given hostname/ip
-		
+		
 		Syntax: HOST <hostname/ip>
 		"""
 
 		isIP = True
 		for c in host.replace(".", ""):
-			if not c in string.digits:
+			if c not in string.digits:
 				isIP = False
 				break
 

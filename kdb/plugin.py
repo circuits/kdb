@@ -12,7 +12,7 @@ plugins. Plugins should sub-class BasePlugin.
 import inspect
 
 from pymills.misc import backMerge
-from pymills.event import Component, filter
+from pymills.event import Component, filter, FilterEvent
 
 class CommandHandler(object):
 
@@ -68,7 +68,7 @@ class CommandHandler(object):
 class BasePlugin(Component):
 
 	def __init__(self, event, bot, env):
-		Component.__init__(self)
+		Component.__init__(self, event)
 
 		self.bot = bot
 		self.env = env
@@ -100,9 +100,11 @@ class BasePlugin(Component):
 						self.bot.ircPRIVMSG(target, line)
 				else:
 					self.bot.ircPRIVMSG(target, r)
-				return True, event
 
-		return False, event
+				try:
+					raise FilterEvent
+				finally:
+					return r
 
 	@filter("notice")
 	def onNOTICE(self, event, source, target, message):
@@ -120,9 +122,11 @@ class BasePlugin(Component):
 						self.bot.ircNOTICE(target, line)
 				else:
 					self.bot.ircNOTICE(target, r)
-				return True, event
 
-		return False, event
+				try:
+					raise FilterEvent
+				finally:
+					return r
 
 	def unknownCommand(self, source, command):
 		self.bot.ircNOTICE(source, "Unknown command: %s" % command)
@@ -132,7 +136,7 @@ class BasePlugin(Component):
 			command, message))
 		self.bot.ircNOTICE(source, "Expected: %s" %
 				" ".join(args))
-	
+
 	def processCommand(self, source, message):
 		tokens = message.split(" ")
 		command = tokens[0].lower()

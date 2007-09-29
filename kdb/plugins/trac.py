@@ -14,6 +14,8 @@ pop open the link in their browser.
 __ver__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+from pymills.event import filter
+
 from kdb.plugin import BasePlugin
 
 class Trac(BasePlugin):

@@ -19,16 +19,18 @@ irc://irc.shortcircuit.net.au#lab
 
 __name__ = "kdb"
 __description__ = "Knowledge (IRC) Bot"
-__version__ = "0.6.0-git2"
+__version__ = "0.7"
 __author__ = "James Mills"
 __author_email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __maintainer__ = __author__
 __maintainer_email__ = __author_email__
 __url__ = "http://shortcircuit.net.au/~prologic/"
-__download_url__ = "http://shortcircuit.net.au/~prologic/downloads/software/%s-%s.tar.gz" % (__name__, __version__)
-__copyright__ = "CopyRight (C) 2005-2007 by %s" % __author__
+__download_url__ = """\
+http://shortcircuit.net.au/~prologic/downloads/software/\
+%s-%s.tar.gz""" % (__name__, __version__)
+__copyright__ = "CopyRight (C) 2004-2007 by %s" % __author__
 __license__ = "GPL"
-__platform__ = ""
+__platforms__ = "POSIX"
 __keywords__ = "Knowledge Database IRC Bot Framework"
 __classifiers__ = [
 		"Development Status :: 5 - Production/Stable",
@@ -43,3 +45,20 @@ __classifiers__ = [
 		"Topic :: Scientific/Engineering :: Artificial Intelligence"
 		]
 __str__ = "%s-%s" % (__name__, __version__)
+
+__package_data__ = {
+		}
+
+__install_requires__ = [
+		]
+
+__setup_requires__ = [
+		]
+
+__extras_require__ = {
+		}
+
+__entry_points__ = """
+[console_scripts]
+kdb = kdb.main:run
+"""
