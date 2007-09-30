@@ -42,16 +42,11 @@ class GTalk(BasePlugin, Worker):
 		BasePlugin.__init__(self, event, bot, env)
 		Worker.__init__(self, event)
 
-		username = "kdbbot"
-		password = "semaj2891"
+		self._username = "kdbbot"
+		self._password = "semaj2891"
+		self._name = "kdb"
 
 		self._client = cnx = xmpp.Client("gmail.com", debug=[])
-		self._client.connect(server=("gmail.com", 5223))
-		self._client.auth(username, password, "kdb")
-
-		self._client.RegisterHandler(
-				"message", self.messageHandler)
-		self._client.sendInitPresence()
 
 	def cleanup(self):
 		self._client.disconnect()
@@ -69,6 +64,18 @@ class GTalk(BasePlugin, Worker):
 				else:
 					sleep(1)
 			else:
+				try:
+					self._client.connect(server=("gmail.com", 5223))
+				except:
+					sleep(60)
+				self._client.auth(
+						self._username,
+						self._password,
+						self._name)
+
+				self._client.RegisterHandler(
+						"message", self.messageHandler)
+				self._client.sendInitPresence()
 				sleep(1)
 	
 	def messageHandler(self, cnx, msg):
