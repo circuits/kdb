@@ -89,13 +89,16 @@ class XMLRPC(BasePlugin):
 		cherrypy.config.update({
 			"log.screen": False,
 			"log.error.file": "",
-			"environment": "production",
-			"engine.autoreload_on": False})
+			"engine.autoreload_on": False,
+			"server.socket_port":  8080,
+			"server.thread_pool":  1,
+			})
 
 		cherrypy.tree.mount(
 				self.root,
 				config={
 					"/": {
+						"tools.gzip.on": True,
 						"tools.xmlrpc.on": True,
 						"request.dispatch": cherrypy.dispatch.XMLRPCDispatcher(),
 						"tools.trailing_slash.on": False
