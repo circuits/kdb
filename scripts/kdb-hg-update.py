@@ -92,8 +92,14 @@ def buildMessage(project, node, src):
 	for path in f[2]:
 		files.append("[R] %s" % path)
 
-	s = "\n".join(files)
-	dict["files"] = s
+	s = ""
+	for i, file in enumerate(files):
+		if i < 3:
+			s += " %s\n" % file
+		else:
+			s += " %d more files... (not displayed)\n" % (len(files) - i)
+			break
+	dict["files"] = s.strip()
 
 	if len(files) > 1:
 		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
