@@ -60,7 +60,6 @@ def parse_options():
 
 def notify(url="http://localhost:8080/", message="Test Message"):
 	try:
-		print message
 		server = xmlrpclib.ServerProxy(url)
 		server.notify(socket.gethostname(), message)
 	except Exception, e:
