@@ -107,7 +107,7 @@ def buildMessage(project, node, src):
 def main():
 	opts, args = parse_options()
 
-	project = os.path.absename(os.getcwd())
+	project = os.path.basename(os.getcwd())
 	node = os.getenv("HG_NODE")
 	src = os.getenv("HG_URL")
 
