@@ -99,7 +99,7 @@ def buildMessage(project, node, src):
 		else:
 			s += " %d more files... (not displayed)\n" % (len(files) - i)
 			break
-	dict["files"] = s.strip()
+	dict["files"] = s.rstrip()
 
 	if len(files) > 1:
 		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
