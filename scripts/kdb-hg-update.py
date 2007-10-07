@@ -18,14 +18,11 @@ __url__ = "http://shortcircuit.net.au/~prologic/"
 __copyright__ = "CopyRight (C) 2007 by %s" % __author__
 __license__ = "GPL"
 
-import re
 import os
-import sys
 import socket
 import optparse
 import xmlrpclib
 from traceback import format_exc
-from popen2 import popen4 as popen
 
 from mercurial import hg, ui
 from mercurial.node import bin, short
