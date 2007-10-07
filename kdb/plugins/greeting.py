@@ -9,7 +9,7 @@ Users that have been greeted before will not get further
 greetings, unless they haven't been seen for over 3 days.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -18,7 +18,16 @@ from time import time
 
 from pymills.event import listener, Event
 
-from kdb.plugin import BasePlugin
+from kdb.plugin import BasePlugin, CommandHandler
+
+class GreetingsCommands(CommandHandler):
+
+	def cmdADD(self, source, greeting):
+		if not self.parent.hasGreeting(greeting):
+			self.parent.addGreeting(greeting)
+			return "Okay, added greeting '%s'" % greeting
+		else:
+			return "'%s' is already one of my greetings!" % greeting
 
 class Irc(BasePlugin):
 
@@ -43,6 +52,8 @@ class Irc(BasePlugin):
 			self._history = marshal.load(fd)
 			fd.close()
 
+		self._greetings = []
+
 	def cleanup(self):
 		historyFile = os.path.join(
 			self.env.path, "ghist.bin")
@@ -50,6 +61,12 @@ class Irc(BasePlugin):
 		marshal.dump(self._history, fd)
 		fd.close()
 
+	def hasGreeting(self, greeting):
+		return greeting in self._greetings
+
+	def addGreeting(self, greeting):
+		self._greetings.append(greeting)
+	
 	@listener("join")
 	def onJOIN(self, nick, channel):
 		nick = nick.lower()
@@ -66,3 +83,7 @@ class Irc(BasePlugin):
 			self.bot.ircPRIVMSG(channel, msg)
 
 		self._history[nick] = time()
+
+	def cmdGREETINGS(self, source, command, *args, **kwargs):
+		return GreetingsCommands(self)(command,
+				source, *args, **kwargs)
