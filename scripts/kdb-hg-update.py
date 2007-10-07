@@ -11,7 +11,7 @@ changegroup.kdb = kdb-hg-update
 """
 
 __desc__ = "Notify kdb of hg Updates"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "James Mills"
 __email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -107,7 +107,7 @@ def buildMessage(project, node, src):
 def main():
 	opts, args = parse_options()
 
-	project = os.getcwd()
+	project = os.path.absename(os.getcwd())
 	node = os.getenv("HG_NODE")
 	src = os.getenv("HG_URL")
 
