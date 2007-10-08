@@ -1,0 +1,22 @@
+@import url(/css/ext/ext-all.css);
+@import url(/css/ext/xtheme-aero.css);
+
+* {
+	font-family: "Bitstream Vera Sans", "Verdana", sans-serif;
+	font-size: 12pt;
+}
+
+#window {
+	position: relative;
+	width: 600px;
+	top: 5px;
+	margin: 0 auto;
+}
+
+#message {
+	position: relative;
+}
+
+#reply {
+	top: 5px;
+}
