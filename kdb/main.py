@@ -36,7 +36,7 @@ VERSION = "%prog v" + systemVersion
 def parse_options():
 	"""parse_options() -> opts, args
 
-	Parse and command-line options given returning both
+	Parse any command-line options given returning both
 	the parsed options and arguments.
 	"""
 

@@ -43,7 +43,7 @@ class Bot(TCPClient, IRC):
 		Connect to a given IRC Server using the options
 		found in the auth dict.
 
-		At minimum the auth dict must contains:
+		At minimum the auth dict must contain:
 		 * ident
 		 * host
 		 * server
