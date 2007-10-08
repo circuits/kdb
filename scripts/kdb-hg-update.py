@@ -106,7 +106,10 @@ def buildMessage(project, node, src):
 		dict["path"] = "(%d files)" % len(files)
 	else:
 		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s"
-		dict["path"] = "%s" % files[0]
+		if len(files) > 0:
+			dict["path"] = "%s" % files[0]
+		else:
+			dict["path"] = ""
 
 	return format % dict
 
