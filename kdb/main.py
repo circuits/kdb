@@ -209,7 +209,8 @@ def upgrade(envPath):
 
 	Upgrade the environment at the path specified by
 	envPath. Check if the path exists, printing an
-	error then returning an exitcode of 1 if it doesn't.
+	error and returning an exitcode of 1 if it doesn't
+	exit..
 	Check that the environment actually needs upgrading,
 	printing an error if it doesn't and returning an
 	exitcode of 1. Otherwise upgrade the environment.
