@@ -93,7 +93,14 @@ def buildMessage(project, node, src):
 	for path in f[2]:
 		files.append("[R] %s" % path)
 
-	s = "\n".join(files)
+	s = ""
+	for i, file in enumerate(files):
+		if i < 3:
+			s += " \n" % file
+		else:
+			s += " %d more files... (not displayed)\n" % (len(files) - i)
+			break
+	s.strip()
 	dict["files"] = s
 
 	if len(files) > 1:
