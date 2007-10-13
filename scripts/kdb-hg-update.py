@@ -65,6 +65,7 @@ def notify(url="http://localhost:8080/", message="Test Message"):
 	except Exception, e:
 		print "ERROR: %s" % e
 		print format_exc()
+		raise
 
 def buildMessage(project, node, src):
 
@@ -92,24 +93,15 @@ def buildMessage(project, node, src):
 	for path in f[2]:
 		files.append("[R] %s" % path)
 
-	s = ""
-	for i, file in enumerate(files):
-		if i < 3:
-			s += " %s\n" % file
-		else:
-			s += " %d more files... (not displayed)\n" % (len(files) - i)
-			break
-	dict["files"] = s.rstrip()
+	s = "\n".join(files)
+	dict["files"] = s
 
 	if len(files) > 1:
 		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
 		dict["path"] = "(%d files)" % len(files)
 	else:
 		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s"
-		if len(files) > 0:
-			dict["path"] = "%s" % files[0]
-		else:
-			dict["path"] = ""
+		dict["path"] = "%s" % files[0]
 
 	return format % dict
 
@@ -120,8 +112,13 @@ def main():
 	node = os.getenv("HG_NODE")
 	src = os.getenv("HG_URL")
 
-	message = buildMessage(project, node, src)
-	notify(opts.url, message)
+	try:
+		message = buildMessage(project, node, src)
+		notify(opts.url, message)
+	except Exception, e:
+		print "ERROR: %s" % e
+		print format_exc()
+		raise SystemExit, 1
 
 if __name__ == "__main__":
 	main()
