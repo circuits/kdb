@@ -96,7 +96,7 @@ def buildMessage(project, node, src):
 	s = ""
 	for i, file in enumerate(files):
 		if i < 3:
-			s += " \n" % file
+			s += " %s\n" % file
 		else:
 			s += " %d more files... (not displayed)\n" % (len(files) - i)
 			break
