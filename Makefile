@@ -14,8 +14,7 @@ export PATH=$(shell echo "$$HOME/bin:$$PATH")
 
 export PYTHONPATH=$(shell echo "$$PYTHONPATH"):$(shell python -c 'import os; print ":".join(os.path.abspath(line.strip()) for line in file("PYTHONPATH"))' 2>/dev/null)
 
-.PHONY: all apidocs clean clean-pyc codetags docs \
-	epydoc pyflakes test
+.PHONY: all apidocs clean clean-pyc epydoc pyflakes test
 
 all: clean-pyc pyflakes test
 
@@ -29,15 +28,6 @@ clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
-
-codetags:
-	@find_codetags.py
-
-docs: docs/build
-
-docs/build: docs/src/*.txt
-	$(PYTHON) docs/generate.py html docs/build $?
-	touch docs/build
 
 epydoc:
 	@rm -rf apidocs
