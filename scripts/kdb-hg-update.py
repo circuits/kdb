@@ -11,7 +11,7 @@ changegroup.kdb = kdb-hg-update
 """
 
 __desc__ = "Notify kdb of hg Updates"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __author__ = "James Mills"
 __email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -19,6 +19,7 @@ __copyright__ = "CopyRight (C) 2007 by %s" % __author__
 __license__ = "GPL"
 
 import os
+import sys
 import socket
 import optparse
 import xmlrpclib
@@ -63,8 +64,8 @@ def notify(url="http://localhost:8080/", message="Test Message"):
 		server = xmlrpclib.ServerProxy(url)
 		server.notify(socket.gethostname(), message)
 	except Exception, e:
-		print "ERROR: %s" % e
-		print format_exc()
+		print >> sys.stderr, "ERROR: %s" % e
+		print >> sys.stderr, format_exc()
 		raise
 
 def buildMessage(project, node, src):
@@ -123,8 +124,8 @@ def main():
 		message = buildMessage(project, node, src)
 		notify(opts.url, message)
 	except Exception, e:
-		print "ERROR: %s" % e
-		print format_exc()
+		print >> sys.stderr, "ERROR: %s" % e
+		print >> sys.stderr, format_exc()
 		raise SystemExit, 1
 
 if __name__ == "__main__":
