@@ -11,7 +11,7 @@ changegroup.kdb = kdb-hg-update
 """
 
 __desc__ = "Notify kdb of hg Updates"
-__version__ = "0.1"
+__version__ = "0.1.1"
 __author__ = "James Mills"
 __email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -81,7 +81,7 @@ def getData(project, node):
 
 	data["rev"] = "%d:%s" % (ctx.rev(), short(node))
 	data["committer"] = ctx.user()
-	data["logmsg"] = logmsg.split("\n")[8]
+	data["logmsg"] = logmsg.split("\n")[0]
 
 	files = []
 	n = ctx.node()
