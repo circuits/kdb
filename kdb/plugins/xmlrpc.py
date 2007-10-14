@@ -37,7 +37,6 @@ class Root(BasePlugin):
 		self.env = env
 
 	def __del__(self):
-		print "Root.__del__"
 		self.unregister()
 
 	@filter()
@@ -49,8 +48,7 @@ class Root(BasePlugin):
 		args, method = xmlrpc.process_body()
 
 		try:
-			r = self.send(
-					XMLRPCEvent(*args), "xmlrpc:%s" % method)
+			r = self.send(XMLRPCEvent(*args), "xmlrpc:%s" % method)
 		except UnhandledEvent:
 			raise Exception, "No handler found for '%s'" % method
 

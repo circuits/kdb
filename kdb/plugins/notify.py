@@ -1,16 +1,17 @@
-# Filename: notify.py
 # Module:	notify
 # Date:		30th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
 """Notify
 
-This plugin listens for xmlrpc:notify events and
-displays them on the default xmlrpc channel.
+This plugin listens for xmlrpc:notify and xmlrpc:update events
+and displays them on the default xmlrpc channel.
 """
 
-__ver__ = "0.0.3"
+__ver__ = "0.0.4"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
+
+from cPickle import loads
 
 from pymills.event import listener
 
@@ -26,6 +27,34 @@ class Notify(BasePlugin):
 
 	Depends on: xmlrpc
 	"""
+
+	@listener("xmlrpc:scmupdate")
+	def onSCMUPDATE(self, data):
+
+		if self.env.config.has_option("xmlrpc", "channel"):
+			channel = self.env.config.get("xmlrpc", "channel")
+		else:
+			channel = None
+
+		if channel is not None:
+
+			d = loads(data)
+			files = d["files"]
+
+			if len(files) > 3:
+				d["files"] = "%s ... %d more files" % (
+						" ".join(files[:3]),
+						len(files) - 3)
+			else:
+				d["files"] = " ".join(files)
+
+			msg = """\
+%(project)s: 8%(committer)s 12%(rev)s \
+%(logmsg)s (%(files)s)"""
+
+			self.bot.ircPRIVMSG(channel, msg % d)
+
+		return "Message sent to %s" % channel
 
 	@listener("xmlrpc:notify")
 	def onNOTIFY(self, source="unknown", message=""):
