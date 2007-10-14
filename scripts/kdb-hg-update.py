@@ -11,7 +11,7 @@ changegroup.kdb = kdb-hg-update
 """
 
 __desc__ = "Notify kdb of hg Updates"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __author__ = "James Mills"
 __email__ = "%s, prologic at shortcircuit dot net dot au" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -20,9 +20,9 @@ __license__ = "GPL"
 
 import os
 import sys
-import socket
 import optparse
 import xmlrpclib
+from cPickle import dumps
 from traceback import format_exc
 
 from mercurial import hg, ui
@@ -59,18 +59,18 @@ def parse_options():
 
 	return opts, args
 
-def notify(url="http://localhost:8080/", message="Test Message"):
+def sendUpdate(url, data):
 	try:
 		server = xmlrpclib.ServerProxy(url)
-		server.notify(socket.gethostname(), message)
+		print >> sys.stderr, server.scmupdate(dumps(data))
 	except Exception, e:
 		print >> sys.stderr, "ERROR: %s" % e
 		print >> sys.stderr, format_exc()
 		raise
 
-def buildMessage(project, node, src):
+def getData(project, node):
 
-	dict = {"project": project}
+	data = {"project": project}
 
 	rev = bin(node)
 
@@ -79,10 +79,9 @@ def buildMessage(project, node, src):
 
 	logmsg = ctx.description()
 
-	dict["rev"] = "%d:%s" % (ctx.rev(), short(node))
-	dict["committer"] = ctx.user()
-	dict["logmsg"] = logmsg
-	dict["url"] = src
+	data["rev"] = "%d:%s" % (ctx.rev(), short(node))
+	data["committer"] = ctx.user()
+	data["logmsg"] = logmsg
 
 	files = []
 	n = ctx.node()
@@ -94,35 +93,18 @@ def buildMessage(project, node, src):
 	for path in f[2]:
 		files.append("[R] %s" % path)
 
-	s = ""
-	for i, file in enumerate(files):
-		if i < 3:
-			s += " %s\n" % file
-		else:
-			s += " %d more files... (not displayed)\n" % (len(files) - i)
-			break
-	s.strip()
-	dict["files"] = s
+	data["files"] = files
 
-	if len(files) > 1:
-		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s\nFiles:\n%(files)s"
-		dict["path"] = "(%d files)" % len(files)
-	else:
-		format = "%(project)s %(committer)s * %(rev)s %(path)s: %(logmsg)s"
-		dict["path"] = "%s" % files[0]
-
-	return format % dict
+	return data
 
 def main():
 	opts, args = parse_options()
 
 	project = os.path.basename(os.getcwd())
 	node = os.getenv("HG_NODE")
-	src = os.getenv("HG_URL")
 
 	try:
-		message = buildMessage(project, node, src)
-		notify(opts.url, message)
+		sendUpdate(opts.url, getData(project, node))
 	except Exception, e:
 		print >> sys.stderr, "ERROR: %s" % e
 		print >> sys.stderr, format_exc()
