@@ -46,7 +46,7 @@ def parse_options():
 			action="store_true", default=False, dest="nofork",
 			help="Don't fork to background")
 
-	(opts, args) = parser.parse_args()
+	opts, args = parser.parse_args()
 	if len(args) != 2:
 		parser.print_help()
 		raise SystemExit, 1
