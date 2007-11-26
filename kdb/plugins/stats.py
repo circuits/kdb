@@ -9,7 +9,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.4"
+__ver__ = "0.0.5"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
@@ -56,9 +56,12 @@ class Stats(BasePlugin):
 		Syntax: UPTIME
 		"""
 
-		uptime = duration(time.time() - self.stime)
+		tTime = time.time() - self.stime
+		uptime = duration(tTime)
 		cpu = time.clock()
-		msg = "Uptime: %s+%s:%s:%s (CPU: %s)" % (uptime + (cpu,))
+		rate = (cpu / tTime) * 100.0
+		msg = "Uptime: %s+%s:%s:%s (CPU: %0.2f %0.2f%%)" % (
+				uptime + (cpu, rate))
 		return msg
 
 	def cmdNSTATS(self, source):
