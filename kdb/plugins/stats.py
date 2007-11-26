@@ -9,7 +9,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.5"
+__ver__ = "0.0.6"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
@@ -60,7 +60,7 @@ class Stats(BasePlugin):
 		uptime = duration(tTime)
 		cpu = time.clock()
 		rate = (cpu / tTime) * 100.0
-		msg = "Uptime: %s+%s:%s:%s (CPU: %0.2f %0.2f%%)" % (
+		msg = "Uptime: %s+%s:%s:%s (CPU: %0.2fs %0.2f%%)" % (
 				uptime + (cpu, rate))
 		return msg
 
