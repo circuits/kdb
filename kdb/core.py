@@ -136,6 +136,7 @@ class Core(Component):
 
 				timers.process()
 				event.flush()
+				sleep(0.1)
 				if not bot.connected:
 					sleep(0.5)
 			except KeyboardInterrupt:
