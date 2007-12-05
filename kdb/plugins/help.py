@@ -76,7 +76,7 @@ class Help(BasePlugin):
 									"No help available for '%s'" % s
 
 		if msg is None:
-			msg = "No help available for '%s'%" % s
+			msg = "No help available for '%s'" % s
 
 		msg = msg.strip()
 		msg = msg.replace("\t\t", "\t")
