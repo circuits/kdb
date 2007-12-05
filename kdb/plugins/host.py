@@ -9,7 +9,7 @@ This plugin provides various tools to work with
 hostnames and ip addresses.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import string
@@ -18,7 +18,6 @@ import socket
 from kdb.plugin import BasePlugin
 
 class Host(BasePlugin):
-	"Host Tools"
 
 	def cmdHOST(self, source, host):
 		"""Resolve the given hostname/ip
