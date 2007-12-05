@@ -18,7 +18,6 @@ from pymills.misc import beat
 from kdb.plugin import BasePlugin
 
 class Swatch(BasePlugin):
-
 	"""Swatch Time plugin
 
 	Provides commands to display Internet Time or Swatch Time.

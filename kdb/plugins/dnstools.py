@@ -8,7 +8,7 @@ This plugin provides various tools to work with
 hostnames and ip addresses.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import string
@@ -17,6 +17,11 @@ import socket
 from kdb.plugin import BasePlugin
 
 class DNSTools(BasePlugin):
+	"""DNS Tools Plugin
+
+	Provides commands for working with DNS (Domain Name Servers).
+	See: commands dnstools
+	"""
 
 	def cmdHOST(self, source, host):
 		"""Resolve the given hostname/ip
