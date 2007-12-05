@@ -1,9 +1,8 @@
-# Filename: host.py
-# Module:	host
+# Module:	dnstools
 # Date:		30th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""Host Tools
+"""DNS Tools
 
 This plugin provides various tools to work with
 hostnames and ip addresses.
@@ -17,7 +16,7 @@ import socket
 
 from kdb.plugin import BasePlugin
 
-class Host(BasePlugin):
+class DNSTools(BasePlugin):
 
 	def cmdHOST(self, source, host):
 		"""Resolve the given hostname/ip
