@@ -10,7 +10,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.6"
+__ver__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import inspect
@@ -73,10 +73,11 @@ class Help(BasePlugin):
 					msg = getattr(
 							getattr(plugin, "cmd%s" % su),
 							"__doc__") or \
-									"No help available for '%s'" % s
+									"No help available for '%s'. To get a list of commands, type: commands %s" % (s, plugin.__name__.lower())
+					break
 
 		if msg is None:
-			msg = "No help available for '%s'" % s
+			msg = "No help available for '%s'. To get a list of plugins, type: plugins" % s
 
 		msg = msg.strip()
 		msg = msg.replace("\t\t", "\t")
