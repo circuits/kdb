@@ -10,7 +10,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.5"
+__ver__ = "0.0.6"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import inspect
@@ -67,8 +67,6 @@ class Help(BasePlugin):
 
 		if sl in self.env.plugins:
 			msg = self.env.plugins[sl].__doc__
-			if msg is None:
-				msg = "No help available for '%s'%" % s
 		else:
 			for plugin in self.env.plugins.values():
 				if hasattr(plugin, "cmd%s" % su):
@@ -76,6 +74,9 @@ class Help(BasePlugin):
 							getattr(plugin, "cmd%s" % su),
 							"__doc__") or \
 									"No help available for '%s'" % s
+
+		if msg is None:
+			msg = "No help available for '%s'%" % s
 
 		msg = msg.strip()
 		msg = msg.replace("\t\t", "\t")
