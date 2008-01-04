@@ -9,7 +9,7 @@ This plugin enables drone-mode. For now this means
 just setting the bot's nickname to the system hostname.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from socket import gethostname
@@ -25,7 +25,7 @@ class Drone(BasePlugin):
 		BasePlugin.__init__(self, event, bot, env)
 
 		if self.bot.getNick() != gethostname():
-			self.bot.setNick(gethostname())
+			self.bot.ircNICK(gethostname())
 
 	@listener("connected")
 	def onCONNECTED(self):
