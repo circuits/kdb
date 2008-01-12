@@ -15,7 +15,6 @@ import os
 import signal
 import socket
 from time import sleep
-from pprint import pprint
 from traceback import format_exc
 
 from pymills.utils import State
