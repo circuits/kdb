@@ -8,7 +8,7 @@ This plugin provides various tools to work with
 hostnames and ip addresses.
 """
 
-__ver__ = "0.0.3"
+__ver__ = "0.0.4"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import string
@@ -22,6 +22,14 @@ class DNSTools(BasePlugin):
 	Provides commands for working with DNS (Domain Name Servers).
 	See: commands dnstools
 	"""
+
+	def cmdRESOLVE(self, source, host):
+		"""Synonym, of HOST
+		
+		See: HOST
+		"""
+
+		return self.cmdHOST(source, host)
 
 	def cmdHOST(self, source, host):
 		"""Resolve the given hostname/ip
