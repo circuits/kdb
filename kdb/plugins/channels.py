@@ -52,6 +52,10 @@ class Channels(BasePlugin):
 		else:
 			self.channels = []
 
+	def cleanup(self):
+		self.env.config.set("bot", "channels", ",".join(self.channels))
+		self.env.config.write()
+
 	def joinChannels(self):
 		for channel in self.channels:
 			self.bot.ircJOIN(channel)
