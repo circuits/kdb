@@ -9,11 +9,11 @@ sends a MessageEvent into the system and returning
 any replies generated.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from pymills.types import Stack
 from pymills.event import listener
+from pymills.datatypes import Stack
 from pymills.net.irc import MessageEvent
 
 from kdb.plugin import BasePlugin
