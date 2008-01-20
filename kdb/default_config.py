@@ -11,8 +11,8 @@
 VERSION = 1
 
 CONFIG = (
-		("kdb", "database", "sqlite://%s/db/kdb.db"),
-		("kdb", "pidfile", "%s/log/kdb.pid"),
+		("kdb", "database", "sqlite://db/kdb.db"),
+		("kdb", "pidfile", "log/kdb.pid"),
 		("logging", "type", "file"),
 		("logging", "file", "kdb.log"),
 		("logging", "level", "DEBUG"),
