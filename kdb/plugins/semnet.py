@@ -1,4 +1,3 @@
-# Filename: semnet.py
 # Module:	semnet
 # Date:		03th July 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
@@ -10,7 +9,7 @@ that allows the user to create relationships between things
 and ask questions.
 """
 
-__ver__ = "0.0.1"
+__ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
