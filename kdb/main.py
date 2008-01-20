@@ -109,11 +109,11 @@ def start(envPath, daemon=True):
 	if daemon:
 		daemonize()
 
-	writePID(env.config.get(systemName, "pidfile") % env.path)
+	writePID(env.config.get(systemName, "pidfile"))
 
 	core = Core(env.event, env)
 	core.run()
-	pidfile = env.config.get(systemName, "pidfile") % env.path
+	pidfile = env.config.get(systemName, "pidfile")
 	os.remove(pidfile)
 
 def stop(envPath):
@@ -135,7 +135,7 @@ def stop(envPath):
 
 	try:
 		os.kill(int(open(env.config.get(
-			systemName, "pidfile") % env.path).read()),
+			systemName, "pidfile")).read()),
 			signal.SIGTERM)
 		print "-- %s Stopped" % systemName
 	except Exception, e:
@@ -172,7 +172,7 @@ def rehash(envPath):
 
 	try:
 		os.kill(int(open(env.config.get(
-			systemName, "pidfile") % env.path).read()),
+			systemName, "pidfile")).read()),
 			signal.SIGHUP)
 		print "-- %s Rehashed" % systemName
 	except Exception, e:
