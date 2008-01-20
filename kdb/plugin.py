@@ -14,6 +14,57 @@ import inspect
 from pymills.misc import backMerge
 from pymills.event import Component, filter, FilterEvent
 
+class CommandHandler(object):
+
+	def __init__(self, parent):
+		self.parent = parent
+
+	def syntaxError(self, source, command, message, args):
+		return [
+				"Syntax error (%s): %s" % (command, message),
+				"Expected: %s" % " ".join(args)]
+
+	def __call__(self, command, source, *args, **kwargs):
+
+		cmdHandler = "cmd%s" % command.upper()
+		if hasattr(self, cmdHandler):
+			f = getattr(self, cmdHandler)
+			if callable(f):
+				fargs, fvargs, fkwargs, fdefault = \
+						inspect.getargspec(f)
+				fargs.remove("self")
+				fargs.remove("source")
+
+				if len(fargs) == len(args):
+					if len(fargs) == 0:
+						return f(source)
+					else:
+						return f(source, *args)
+				else:
+					if len(args) > len(fargs):
+						if fvargs is None:
+							if len(fargs) > 0:
+								factor = len(args) - len(fargs) + 1
+								return f(source, *backMerge(args, factor))
+							else:
+								return self.syntaxError(
+										source, command, args,
+										[x for x in fargs + [fvargs]
+											if x is not None])
+						else:
+							return f(source, *args)
+					elif fdefault is not None and len(fargs) == (
+							len(args) + len(fdefault)):
+						return f(source,
+								*(args + list(fdefault)))
+					else:
+						return self.syntaxError(
+								source, command, args,
+								[x for x in fargs + [fvargs]
+									if x is not None])
+
+		return "Unknown command: %s" % command
+
 class BasePlugin(Component):
 
 	def __init__(self, event, bot, env):
