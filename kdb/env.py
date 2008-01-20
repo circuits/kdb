@@ -42,7 +42,8 @@ class Environment(BaseEnvironment):
 				kdb.__url__,
 				create)
 
-		self.event = Manager()
+		self.event = Manager(log=self.log,
+				debug=self.config.getboolean("logging", "verbose"))
 		self.timers = Timers(self.event)
 		self.plugins = weakref.WeakValueDictionary()
 
