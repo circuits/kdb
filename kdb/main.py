@@ -107,7 +107,7 @@ def start(envPath, daemon=True):
 	print "-- Starting %s...\n" % systemName
 
 	if daemon:
-		daemonize(envPath)
+		daemonize(path=envPath)
 
 	writePID(env.config.get(systemName, "pidfile"))
 
