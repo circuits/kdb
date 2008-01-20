@@ -1,4 +1,3 @@
-# Filename: channels.py
 # Module:	channels
 # Date:		03th July 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
@@ -9,7 +8,7 @@ This plugin manages channels and what channels the bot
 joins automatically.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
@@ -37,7 +36,7 @@ class ChannelsCommands(CommandHandler):
 
 	def cmdLIST(self, source):
 		return "I'm configured to join %s " \
-				"st startup" % ", ".join(self.parent.channels)
+				"at startup" % ", ".join(self.parent.channels)
 
 class Channels(BasePlugin):
 	"Channel Management"
