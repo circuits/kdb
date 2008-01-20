@@ -54,7 +54,9 @@ class Channels(BasePlugin):
 
 	def cleanup(self):
 		self.env.config.set("bot", "channels", ",".join(self.channels))
-		self.env.config.write()
+		fp = open(self.env.config.path, "w")
+		self.env.config.write(fp)
+		fp.close()
 
 	def joinChannels(self):
 		for channel in self.channels:
