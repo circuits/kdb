@@ -28,8 +28,8 @@ class Core(Component):
 		self.env = env
 
 		if os.name in ["posix", "mac"]:
-			signal.signal(signal.SIGHUP, self.rehash)
-			signal.signal(signal.SIGTERM, self.term)
+			signal.signal(signal.SIGHUP, self.onREHASH)
+			signal.signal(signal.SIGTERM, self.onTERM)
 
 		# Initialize
 
@@ -39,13 +39,13 @@ class Core(Component):
 	# Service Commands
 
 	@listener("term")
-	def term(self, signal=0, stack=0):
+	def onTERM(self, signal=0, stack=0):
 		if self.env.bot.connected:
 			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
 		self.state.set("TERMINATING")
 
 	@listener("rehash")
-	def rehash(self, signal=0, stack=0):
+	def onREHASH(self, signal=0, stack=0):
 		self.env.reload()
 
 	@filter()
