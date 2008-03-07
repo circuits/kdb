@@ -1,4 +1,3 @@
-# Filename: stats.py
 # Module:	stats
 # Date:		30th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
@@ -9,14 +8,14 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.6"
+__ver__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
 
 from pymills.misc import bytes
 from pymills.event import filter
-from pymills.misc import duration
+from pymills.misc import duration, buildAverage
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -35,6 +34,7 @@ class Stats(BasePlugin):
 
 		self.tin = 0
 		self.tout = 0
+		self.commands = {}
 
 		self.stime = time.time()
 
@@ -64,6 +64,25 @@ class Stats(BasePlugin):
 				uptime + (cpu, rate))
 		return msg
 
+	def cmdCSTATS(self, source):
+		"""Display command usage stats
+
+		Syntax: CSTATS
+		"""
+
+		totalCommands = sum(self.commands.values())
+
+		l = list(self.commands.iteritems())[:5]
+		l.sort(lambda x, y: x[1] - y[1])
+		x = [cmd[0] for cmd in l]
+
+		msg = "Command Stats: %s Total: %d Top 5: %s" % (
+				buildAverage(self.stime, totalCommands),
+				" ".join(x))
+
+		return msg
+
+
 	def cmdNSTATS(self, source):
 		"""Display current network stats
 		
@@ -92,12 +111,16 @@ class Stats(BasePlugin):
 				kdb.__url__)
 		return msg
 
+	@filter("PostCommand")
+	def onPOSTCOMMAND(self, command, tokens):
+		if not self.commands.has_key(command):
+			self.commands[command] = 0
+		self.commands[command] += 1
+
 	@filter("read")
 	def onREAD(self, event, line):
 		self.tin += len(line) + 2
-		return False, event
 
 	@filter("write")
 	def onWRITE(self, event, data):
 		self.tout += len(data)
-		return False, event
