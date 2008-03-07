@@ -12,7 +12,12 @@ plugins. Plugins should sub-class BasePlugin.
 import inspect
 
 from pymills.misc import backMerge
-from pymills.event import Component, filter, FilterEvent
+from pymills.event import Component, filter, FilterEvent, Event
+
+class CommandEvent(Event):
+
+	def __init__(self, command, tokens):
+		super(CommandEvent, self).__init__(command, tokens)
 
 class CommandHandler(object):
 
@@ -142,6 +147,8 @@ class BasePlugin(Component):
 		command = tokens[0].lower()
 		tokens = tokens[1:]
 
+		r = None
+
 		if command in self._hooks:
 			cmdHandler = self._hooks[command]
 			args, vargs, kwargs, default = inspect.getargspec(
@@ -151,30 +158,35 @@ class BasePlugin(Component):
 
 			if len(args) == len(tokens):
 				if len(args) == 0:
-					return cmdHandler(source)
+					r =  cmdHandler(source)
 				else:
-					return cmdHandler(source, *tokens)
+					r =  cmdHandler(source, *tokens)
 			else:
 				if len(tokens) > len(args):
 					if vargs is None:
 						if len(args) > 0:
 							factor = len(tokens) - len(args) + 1
-							return cmdHandler(source, *backMerge(tokens, factor))
+							r =  cmdHandler(source, *backMerge(tokens, factor))
 						else:
 							self.syntaxError(
 									source, command, tokens,
 									[x for x in args + [vargs]
 										if x is not None])
 					else:
-						return cmdHandler(source, *tokens)
+						r =  cmdHandler(source, *tokens)
 				elif default is not None and len(args) == (
 						len(tokens) + len(default)):
-					return cmdHandler(source, *(tokens + list(default)))
+					r =  cmdHandler(source, *(tokens + list(default)))
 				else:
 					self.syntaxError(
 							source, command, tokens,
 							[x for x in args + [vargs]
 								if x is not None])
+
+		if r:
+			self.push(CommandEvent(command, tokens), "PostCommand")
+
+		return r
 
 	def isAddressed(self, source, target, message):
 		addressed = False
