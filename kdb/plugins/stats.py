@@ -77,8 +77,7 @@ class Stats(BasePlugin):
 		x = [cmd[0] for cmd in l]
 
 		msg = "Command Stats: %s Total: %d Top 5: %s" % (
-				buildAverage(self.stime, totalCommands),
-				" ".join(x))
+				buildAverage(self.stime, totalCommands) + (" ".join(x),))
 
 		return msg
 
