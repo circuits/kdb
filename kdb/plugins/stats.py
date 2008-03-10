@@ -8,7 +8,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.7"
+__ver__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
@@ -75,6 +75,7 @@ class Stats(BasePlugin):
 		l = list(self.commands.iteritems())[:5]
 		l.sort(lambda x, y: x[1] - y[1])
 		x = [cmd[0] for cmd in l]
+		x.reverse()
 
 		msg = "Command Stats: %s Total: %d Top 5: %s" % (
 				buildAverage(self.stime, totalCommands) + (" ".join(x),))
