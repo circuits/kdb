@@ -135,6 +135,7 @@ class Core(Component):
 
 				timers.process()
 				event.flush()
+				event.process()
 				sleep(0.1)
 				if not bot.connected:
 					sleep(0.5)

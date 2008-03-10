@@ -15,7 +15,7 @@ import inspect
 from traceback import format_exc
 
 from pymills.timers import Timers
-from pymills.event import Manager
+from pymills.event import Remote
 from pymills.env import BaseEnvironment
 from pymills.utils import safe__import__
 
@@ -42,7 +42,7 @@ class Environment(BaseEnvironment):
 				kdb.__url__,
 				create)
 
-		self.event = Manager(log=self.log,
+		self.event = Remote(log=self.log,
 				debug=self.config.getboolean("logging", "verbose"))
 		self.timers = Timers(self.event)
 		self.plugins = weakref.WeakValueDictionary()
