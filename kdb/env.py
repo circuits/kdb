@@ -5,13 +5,14 @@
 
 """Environment Container
 
-...
+System environment that acts as a container of objets in the system for easier access by other parts of the system including plugins. Every plugin is passed an instnace of this environment.
 """
 
 import os
 import sys
 import weakref
 import inspect
+from time import time
 from traceback import format_exc
 
 from pymills.timers import Timers
@@ -21,9 +22,9 @@ from pymills.utils import safe__import__
 
 import kdb
 from kdb.bot import Bot
-from kdb import default_db
-from kdb import default_config
 from kdb.plugin import BasePlugin
+from kdb import __name__ as systemName
+from kdb.defaults import CONFIG, PLUGINS
 
 VERSION = 1
 
@@ -32,29 +33,28 @@ class Environment(BaseEnvironment):
 	def __init__(self, path, create=False):
 		"initializes x; see x.__class__.__doc__ for signature"
 
+		super(Environment, self).__init__(
+			path, systemName, VERSION, CONFIG, create)
 
-		BaseEnvironment.__init__(self,
-				path,
-				kdb.__name__,
-				VERSION,
-				default_config.CONFIG,
-				(default_db.TABLES, default_db.DATA),
-				kdb.__url__,
-				create)
+		self.debug = self.config.getboolean("main", "debug", False)
+		self.verbose = self.config.getboolean("logging", "verbose", False)
 
-		self.event = Remote(log=self.log,
-				debug=self.config.getboolean("logging", "verbose"))
+		self.event = Remote(self.log, self.verbose)
 		self.timers = Timers(self.event)
 		self.plugins = weakref.WeakValueDictionary()
-
 		self.bot = Bot(self.event, self)
 
 		self.errors = 0
+		self.events = 0
+		self.sTime = time()
 
-	def create(self):
-		BaseEnvironment.create(self)
+	def cleanup(self):
+		"""E.cleanup() -> None
 
-		os.mkdir(os.path.join(self.path, "plugins"))
+		Perform any cleanup routines on the Environment.
+		"""
+
+		self.saveConfig()
 
 	def loadPlugin(self, plugin):
 		"""E.loadPlugin(plugin) -> None
@@ -120,7 +120,7 @@ class Environment(BaseEnvironment):
 		may override existing plugins already loaded.
 		"""
 
-		plugins = list(default_config.DEFAULT_PLUGINS)
+		plugins = list(PLUGINS)
 
 		if self.config.has_section("plugins"):
 			for name, value in self.config.items("plugins"):

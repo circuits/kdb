@@ -109,11 +109,15 @@ def start(envPath, daemon=True):
 	if daemon:
 		daemonize(path=envPath)
 
-	writePID(env.config.get(systemName, "pidfile"))
+	pidfile = env.config.get("main", "pidfile")
+	if not os.path.isabs(pidfile):
+		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
+
+	writePID(pidfile)
 
 	core = Core(env.event, env)
 	core.run()
-	pidfile = env.config.get(systemName, "pidfile")
+
 	os.remove(pidfile)
 
 def stop(envPath):
@@ -133,10 +137,12 @@ def stop(envPath):
 
 	env = Environment(envPath)
 
+	pidfile = env.config.get("main", "pidfile")
+	if not os.path.isabs(pidfile):
+		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
+
 	try:
-		os.kill(int(open(env.config.get(
-			systemName, "pidfile")).read()),
-			signal.SIGTERM)
+		os.kill(int(open(pidfile).read()), signal.SIGTERM)
 		print "-- %s Stopped" % systemName
 	except Exception, e:
 		print "*** ERROR: Could not stop %s..." % systemName
@@ -170,10 +176,12 @@ def rehash(envPath):
 
 	env = Environment(envPath)
 
+	pidfile = env.config.get("main", "pidfile")
+	if not os.path.isabs(pidfile):
+		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
+
 	try:
-		os.kill(int(open(env.config.get(
-			systemName, "pidfile")).read()),
-			signal.SIGHUP)
+		os.kill(int(open(pidfile).read()), signal.SIGHUP)
 		print "-- %s Rehashed" % systemName
 	except Exception, e:
 		raise
