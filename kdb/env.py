@@ -16,7 +16,7 @@ from time import time
 from traceback import format_exc
 
 from pymills.timers import Timers
-from pymills.event import Remote
+from pymills.event.core import Manager
 from pymills.env import BaseEnvironment
 from pymills.utils import safe__import__
 
@@ -39,7 +39,7 @@ class Environment(BaseEnvironment):
 		self.debug = self.config.getboolean("main", "debug", False)
 		self.verbose = self.config.getboolean("logging", "verbose", False)
 
-		self.event = Remote(self.log, self.verbose)
+		self.event = Manager()
 		self.timers = Timers(self.event)
 		self.plugins = weakref.WeakValueDictionary()
 		self.bot = Bot(self.event, self)

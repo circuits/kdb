@@ -17,13 +17,13 @@ import socket
 from time import sleep
 from traceback import format_exc
 
+from pymills.event import *
 from pymills.utils import State
-from pymills.event import filter, listener, Component
 
 class Core(Component):
 
-	def __init__(self, event, env):
-		Component.__init__(self, event)
+	def __init__(self, manager, env):
+		super(Core, self).__init__(manager)
 
 		self.env = env
 
@@ -48,15 +48,8 @@ class Core(Component):
 	def onREHASH(self, signal=0, stack=0):
 		self.env.reload()
 
-	@filter()
-	def onDEBUG(self, event):
-		config = self.env.config
-		if config.has_option("logging", "verbose"):
-			if config.getboolean("logging", "verbose"):
-				self.env.log.debug(event)
-
 	@listener("timer:reconnect")
-	def onRECONNECT(self, n, host, port, ssl, bind, auth):
+	def onRECONNECT(self, host, port, ssl, bind, auth):
 		self.state.set("CONNECTING")
 		if bind is not None:
 			self.env.bot.open(host, port, ssl, bind)
@@ -70,7 +63,7 @@ class Core(Component):
 		timers = env.timers
 		bot = env.bot
 
-		env.loadPlugins()
+#		env.loadPlugins()
 
 		host = env.config.get("connect", "host")
 		port = env.config.getint("connect", "port")
@@ -104,12 +97,15 @@ class Core(Component):
 		while self.running:
 
 			try:
+				event.flush()
+				timers.poll()
 				if bot.connected:
-					bot.process()
+					bot.poll(0.1)
 				else:
+					sleep(1)
+
 					if state == "TERMINATING":
 						self.running = False
-						break
 					elif not state == "WAITING":
 						state.set("DISCONNECTED")
 
@@ -121,34 +117,23 @@ class Core(Component):
 					bot.connect(auth)
 				elif state == "DISCONNECTED":
 					state.set("WAITING")
-					env.log.info(
-							"kdb was disconnected, "
-							"Reconnecting in 60s...")
+					env.log.info("Disconnected, reconnecting in 60s...")
 					env.timers.add(
 							60,
-							channel="timer:reconnect",
-							host=host, port=port,
-							ssl=ssl, bind=bind, auth=auth)
+							Reconnect(host, port, ssl, bind, auth),
+							"timer:reconnect")
 				elif state == "TERMINATING":
 					self.running = False
 					break
-
-				timers.process()
-				event.flush()
-				event.process()
-				sleep(0.1)
-				if not bot.connected:
-					sleep(0.5)
+			except UnhandledEvent, evt:
+				env.log.warn("Unhandled Event: %s" % evt)
 			except KeyboardInterrupt:
 				if self.env.bot.connected:
 					bot.ircQUIT("Received ^C, terminating...")
 				state.set("TERMINATING")
-			except Exception, e:
+			except Exception, error:
 				env.errors += 1
-				env.log.error("Error occured: %s" % e)
+				env.log.error("Error occured: %s" % error)
 				env.log.error(format_exc())
-
-		for i in xrange(len(event)):
-			event.flush()
 
 		env.unloadPlugins()

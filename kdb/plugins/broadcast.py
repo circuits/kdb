@@ -14,7 +14,7 @@ __ver__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from pymills.event import listener
-from pymills.net.irc import MessageEvent
+from pymills.net.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -36,7 +36,7 @@ class Broadcast(BasePlugin):
 		if not addressed and len(message) > 0:
 			if message[0] == self.prefix:
 				self.env.event.push(
-						MessageEvent(source, target,
+						Message(source, target,
 							"%s, %s" % (
 								self.bot.getNick(),
 								message[1:])), "message", self)
