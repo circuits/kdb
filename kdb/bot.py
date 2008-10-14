@@ -29,25 +29,23 @@ class Bot(TCPClient, IRC):
 	bot to connect to an IRC Server.
 	"""
 
-	def __init__(self, event, env):
+	def __init__(self, env, port=6667, address="127.0.0.1",
+			ssl=False, bind=None, auth=):
 		"initializes x; see x.__class__.__doc__ for signature"
 
-		super(Bot, self).__init__(event)
+		super(Bot, self).__init__()
 
 		self.env = env
+		self.port = port
+		self.address = address
+		self.ssl = ssl
+		self.bind = bind
+		self.auth = auth
 
-	def connect(self, auth):
-		"""B.connect(auth)
+	def connect(self)
+		"""B.connect()
 
-		Connect to a given IRC Server using the options
-		found in the auth dict.
-
-		At minimum the auth dict must contain:
-		 * ident
-		 * host
-		 * server
-		 * name
-		 * nick
+		...
 		"""
 
 		if auth.has_key("pass"):
