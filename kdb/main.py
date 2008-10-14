@@ -1,37 +1,47 @@
-# Filename: main.py
 # Module:	main
-# Date:		4th August 2004
+# Date:		1st October 2007
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""Main
+"""TimeSheet - Main
 
 This is the main module. Everything starts from here
 after the command-line options have been parsed and
 passed to here by the cli module.
 """
 
+from __future__ import with_statement
+
 import os
+import sys
 import signal
 import optparse
+from time import sleep
+from traceback import format_exc
 
-from pymills.utils import getProgName, \
-		writePID, daemonize
+from pymills import env
+from pymills import event
+from pymills.event import *
+from pymills.utils import getProgName, writePID, daemonize
 
-from core import Core
-from env import Environment
-from kdb import __name__ as systemName
-from kdb import __version__ as systemVersion
+from core import Core, Start
+from env import SystemEnvironment
+from __init__ import __name__ as systemName
+from __init__ import __version__ as systemVersion
 
-USAGE = """"%prog [options] <endPath> <command>
+USAGE = """"%prog [options] <path> <command>
 
-commands:
+Commands:
   start    Start %prog
   stop     Stop %prog
   rehash   Rehash (reload environment)
-  initenv  Create a new empty environment for %prog.
+  init     Create a new empty environment for %prog.
   upgrade  Upgrade an existing environment."""
 
 VERSION = "%prog v" + systemVersion
+
+###
+### Functions
+###
 
 def parse_options():
 	"""parse_options() -> opts, args
@@ -42,18 +52,185 @@ def parse_options():
 
 	parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
-	parser.add_option("-n", "--no-fork",
-			action="store_true", default=False, dest="nofork",
-			help="Don't fork to background")
+	parser.add_option("-d", "--daemon",
+			action="store_true", default=False, dest="daemon",
+			help="Enable daemon mode")
 
 	opts, args = parser.parse_args()
-	if len(args) != 2:
+
+	if len(args) < 2:
 		parser.print_help()
 		raise SystemExit, 1
+
 	return opts, args
 
-def run():
-	"""run() -> None
+###
+### Errors
+###
+
+class Error(Exception): pass
+
+###
+### Events
+###
+
+class Command(Event):
+	"""Command(Event) -> Command Event
+
+	args: command
+	"""
+
+###
+### Components
+###
+
+class Startup(Component):
+
+	channel = "startup"
+
+	def __init__(self, path, opts, command):
+		super(Startup, self).__init__()
+
+		self.path = path
+		self.opts = opts
+		self.command = command
+
+		self.env = SystemEnvironment(path, systemName)
+
+	@listener("registered")
+	def onREGISTERED(self):
+		self.manager += self.env
+
+		if not self.command == "init":
+			if not os.path.exists(self.env.path):
+				raise Error("Environment path %s does not exist!" % self.env)
+			self.send(env.Load(), "load", self.env.channel)
+
+		self.send(Command(), self.command, self.channel)
+
+	@listener("start")
+	def onSTART(self):
+		"""onSTART(self) -> None
+
+		Start the system. Daemonize if self.opts.daemon == True
+		or if daemon = True is found in the configuration file
+		under the [general] section.
+		Write the PID of this process to the environment path
+		and start the core.
+		"""
+
+		print "-- Starting %s...\n" % systemName
+
+		if self.opts.daemon:
+			daemonize(path=self.env.path)
+
+		pidfile = self.env.config.get("general", "pidfile")
+		if not os.path.isabs(pidfile):
+			pidfile = os.path.join(self.env.path, pidfile)
+		writePID(pidfile)
+
+		core = Core(self.env)
+		self.manager += core
+		self.send(Start(), "start", core.channel)
+
+	@listener("stop")
+	def onSTOP(self):
+		"""onSTOP(self) -> None
+
+		Stop the system by sending the KILL signal to the
+		pid found in the environment. If an error occurs
+		while trying to do this, the error is printed and
+		exitcode 1 is returned.
+		"""
+
+		try:
+			pidfile = self.env.config.get("general", "pidfile")
+			if not os.path.isabs(pidfile):
+				pidfile = os.path.join(self.env.path, pidfile)
+			with open(pidfile, "r") as f:
+				pid = int(f.read().strip())
+				os.kill(pid, signal.SIGTERM)
+			print "-- %s Stopped" % systemName
+		except Exception, err:
+			print format_exc()
+			raise Error("Cannot stop %s" % systemName)
+
+	@listener("restart")
+	def onRESTART(self):
+		"""onRESTART(self) -> None
+
+		Attempt a restart of the system by first stopping the
+		system then starting it again.
+		"""
+
+		self.send(Command(), "stop", self.channel)
+		sleep(1)
+		self.send(Command(), "start", self.channel)
+
+	@listener("rehash")
+	def onREHASH(self):
+		"""onREHASH(self) -> None
+
+		Rehash the system by sending the SIGUP signal to the
+		pid found in the environment. If an error occurs while
+		trying to do this, the error is printed and exitcode 1
+		is returned.
+		"""
+
+		try:
+			pidfile = self.env.config.get("general", "pidfile")
+			if not os.path.isabs(pidfile):
+				pidfile = os.path.join(self.env.path, pidfile)
+			with open(pidfile, "r") as f:
+				pid = int(f.read())
+				os.kill(pid, signal.SIGHUP)
+			print "-- %s Rehashed" % systemName
+		except Exception, err:
+			raise err
+			raise Error("Cannot rehash %s" % systemName)
+
+		raise SystemExit, 0
+
+	@listener("init")
+	def onINIT(self):
+		"""onINIT(self) -> None
+
+		Initialize (create) a new environment. Check that
+		the path doesn't already exist, printing an error
+		and returning an exitcode of 1 if it does.
+		"""
+
+		if os.path.exists(self.env.path):
+			raise Error("Environment path %s already exists!" % self.env.path)
+
+		self.send(env.Create(), "create", self.env.channel)
+
+		print "%s Environment created at %s" % (systemName, self.env.path)
+		print "Edit %s/conf/%s.ini" % (self.env.path, systemName)
+		print "Start %s:" % systemName
+		print " %s %s start" % (getProgName(), self.env.path)
+
+	@listener("upgrade")
+	def onUPGRADE(self):
+		"""onUPGRADE() -> None
+
+		Upgrade the environment. Check if the path exists,
+		printing an error and returning an exitcode of 1 if
+		it doesn't exist.
+		"""
+
+		if not os.path.exists(self.env.path):
+			raise Error("Environment path %s does not exist!" % self.env.path)
+
+		self.send(env.Upgrade(), "upgrade", self.env.channel)
+		print "%s Environment upgraded." % systemName
+
+###
+### Main
+###
+
+def main():
+	"""main() -> None
 
 	Parse all command-line arguments and options
 	determine what command to run. The environment
@@ -65,176 +242,15 @@ def run():
 
 	opts, args = parse_options()
 
-	envPath = args[0]
-	command = args[1].upper()
+	path = args[0]
+	command = args[1].lower()
 
-	if command == "START":
-		start(envPath, not opts.nofork)
-	elif command == "STOP":
-		stop(envPath)
-	elif command == "RESTART":
-		restart(envPath)
-	elif command == "REHASH":
-		rehash(envPath)
-	elif command == "INITENV":
-		initEnv(envPath)
-	elif command == "UPGRADE":
-		upgrade(envPath)
-	else:
-		print "ERROR: Invalid Command %s" % args[0]
-		raise SystemExit, 1
+	event.manager += Startup(path, opts, command)
+	event.manager.flush()
 
-def start(envPath, daemon=True):
-	"""start(envPath, daemon=True) -> None
+###
+### Entry Point
+###
 
-	Start the system. Check if the given envPath is
-	valid and doesn't need upgrading. Daemonize if the
-	daemon option (default is True) is given. Write the
-	pid of this process and run the core.
-	"""
-
-	if not os.path.exists(envPath):
-		print "ERROR: Path not found '%s'" % envPath
-		raise SystemExit, 1
-
-	env = Environment(envPath)
-	if env.needsUpgrade():
-		print "ERROR: %s Environment '%s' needs upgrading" % (
-				systemName, envPath)
-		print "Run: %s %s upgrade" % (getProgName, envPath)
-		raise SystemExit, 1
-
-	print "-- Starting %s...\n" % systemName
-
-	if daemon:
-		daemonize(path=envPath)
-
-	pidfile = env.config.get("main", "pidfile")
-	if not os.path.isabs(pidfile):
-		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
-
-	writePID(pidfile)
-
-	core = Core(env.event, env)
-	core.run()
-
-	os.remove(pidfile)
-
-def stop(envPath):
-	"""stop(envPath) -> None
-
-	Stop the system by sending the KILL signal to the
-	pid found in the environment given by envPath.
-	Check if the given environment is valid before
-	attempting this. If an error occurs while trying
-	to do this, the error is printed and exitcode 1
-	is returned.
-	"""
-
-	if not os.path.exists(envPath):
-		print "ERROR: Path not found '%s'" % envPath
-		raise SystemExit, 1
-
-	env = Environment(envPath)
-
-	pidfile = env.config.get("main", "pidfile")
-	if not os.path.isabs(pidfile):
-		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
-
-	try:
-		os.kill(int(open(pidfile).read()), signal.SIGTERM)
-		print "-- %s Stopped" % systemName
-	except Exception, e:
-		print "*** ERROR: Could not stop %s..." % systemName
-		print str(e)
-		raise SystemExit, 1
-
-def restart(envPath):
-	"""restart(envPath) -> None
-
-	Attempt a restart of the system by first stopping the
-	system then starting it again.
-	"""
-
-	stop(envPath)
-	start(envPath)
-
-def rehash(envPath):
-	"""rehash(envPath) -> None
-
-	Rehash the system by sending the SIGUP signal to the
-	pid found in the environment given by envPath.
-	Check if the given environment is valid before
-	attempting this. If an error occurs while trying
-	to do this, the error is printed and exitcode 1
-	is returned.
-	"""
-
-	if not os.path.exists(envPath):
-		print "ERROR: Path not found '%s'" % envPath
-		raise SystemExit, 1
-
-	env = Environment(envPath)
-
-	pidfile = env.config.get("main", "pidfile")
-	if not os.path.isabs(pidfile):
-		pidfile = os.path.abspath(os.path.join(env.path, pidfile))
-
-	try:
-		os.kill(int(open(pidfile).read()), signal.SIGHUP)
-		print "-- %s Rehashed" % systemName
-	except Exception, e:
-		raise
-		print "*** ERROR: Could not rehash %s..." % systemName
-		print str(e)
-		raise SystemExit, 1
-
-	raise SystemExit, 0
-
-def initEnv(envPath):
-	"""initEnv(envPath) -> None
-
-	Initialize (create) a new environment using the path
-	specified by envPath. Check that the path doesn't
-	already exist, printing an error and returning an
-	exitcode of 1 if it does.
-	"""
-
-	if os.path.exists(envPath):
-		print "ERROR: Path '%s' already exists" % envPath
-		raise SystemExit, 1
-
-	env = Environment(envPath, create=True)
-
-	print "%s Environment created at %s" % (systemName, envPath)
-	print "You can run %s now:" % systemName
-	print "   %s %s start" % (systemName, envPath)
-
-	raise SystemExit, 0
-
-def upgrade(envPath):
-	"""upgrade(envPath) -> None
-
-	Upgrade the environment at the path specified by
-	envPath. Check if the path exists, printing an
-	error and returning an exitcode of 1 if it doesn't
-	exit..
-	Check that the environment actually needs upgrading,
-	printing an error if it doesn't and returning an
-	exitcode of 1. Otherwise upgrade the environment.
-	"""
-
-	if not os.path.exists(envPath):
-		print "ERROR: Path not found '%s'" % envPath
-		raise SystemExit, 1
-
-	env = Environment(envPath)
-	if not env.needsUpgrade():
-		print "ERROR: Upgrade not necessary for " \
-				"%s Environment %s" % (systemName, envPath)
-		raise SystemExit, 1
-
-	env.upgrade()
-	print "%s Environment upgraded." % systemName
-
-	raise SystemExit, 0
+if __name__ == "__main__":
+	main()
