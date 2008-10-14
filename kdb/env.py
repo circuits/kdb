@@ -15,46 +15,47 @@ import inspect
 from time import time
 from traceback import format_exc
 
-from pymills.timers import Timers
-from pymills.event.core import Manager
-from pymills.env import BaseEnvironment
+from pymills import config
+from pymills.env import Environment
 from pymills.utils import safe__import__
+from pymills.event.core import listener
 
-import kdb
-from kdb.bot import Bot
-from kdb.plugin import BasePlugin
-from kdb import __name__ as systemName
-from kdb.defaults import CONFIG, PLUGINS
+import defaults
+from bot import Bot
+from plugin import BasePlugin
+from __init__ import __name__ as systemName
 
 VERSION = 1
 
-class Environment(BaseEnvironment):
+class SystemEnvironment(Environment):
 
-	def __init__(self, path, create=False):
-		"initializes x; see x.__class__.__doc__ for signature"
+	version = 1
+	name = systemName
 
-		super(Environment, self).__init__(
-			path, systemName, VERSION, CONFIG, create)
-
-		self.debug = self.config.getboolean("main", "debug", False)
-		self.verbose = self.config.getboolean("logging", "verbose", False)
-
-		self.event = Manager()
-		self.timers = Timers(self.event)
-		self.plugins = weakref.WeakValueDictionary()
-		self.bot = Bot(self.event, self)
-
+	@listener("created")
+	def onCREATED(self):
 		self.errors = 0
 		self.events = 0
 		self.sTime = time()
 
-	def cleanup(self):
-		"""E.cleanup() -> None
+		for section in defaults.CONFIG:
+			if not self.config.has_section(section):
+				self.config.add_section(section)
+			for option, value in defaults.CONFIG[section].iteritems():
+				if type(value) == str:
+					value = value % {"name": self.name}
+				self.config.set(section, option, value)
+		self.send(config.Save(), "save", "config")
 
-		Perform any cleanup routines on the Environment.
-		"""
+		self.bot = Bot(self)
+		self.plugins = weakref.WeakValueDictionary()
 
-		self.saveConfig()
+	@listener("loaded")
+	def onLOADED(self):
+		self.debug = self.config.getboolean("main", "debug", False)
+		self.verbose = self.config.getboolean("logging", "verbose", False)
+
+		self.loadPlugins()
 
 	def loadPlugin(self, plugin):
 		"""E.loadPlugin(plugin) -> None
@@ -120,7 +121,7 @@ class Environment(BaseEnvironment):
 		may override existing plugins already loaded.
 		"""
 
-		plugins = list(PLUGINS)
+		plugins = list(defaults.PLUGINS)
 
 		if self.config.has_section("plugins"):
 			for name, value in self.config.items("plugins"):
