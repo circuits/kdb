@@ -17,123 +17,79 @@ import socket
 from time import sleep
 from traceback import format_exc
 
+from pymills import log
 from pymills.event import *
 from pymills.utils import State
 
+from bot import Bot
+
+###
+### Events
+###
+
+class Start(Event):
+	"""Start(Event) -> Start Event"""
+
+class Run(Event):
+	"""Run(Event) -> Run Event"""
+
+
 class Core(Component):
 
-	def __init__(self, manager, env):
-		super(Core, self).__init__(manager)
+	channel = "core"
+
+	running = False
+
+	def __init__(self, env):
+		super(Core, self).__init__()
+
+		signal.signal(signal.SIGHUP, self.onREHASH)
+		signal.signal(signal.SIGTERM, self.onSTOP)
 
 		self.env = env
 
-		if os.name in ["posix", "mac"]:
-			signal.signal(signal.SIGHUP, self.onREHASH)
-			signal.signal(signal.SIGTERM, self.onTERM)
+		self.port = self.env.config.getint("server", "port", 80)
+		self.address = self.env.config.get("server", "address", "0.0.0.0")
+		self.ssl = self.env.config.getboolean("server", "ssl", False)
+		self.bind = self.env.config.get("server", "bind", None)
 
-		# Initialize
+		self.bot = Bot(self.env, self.port, self.address, self.ssl, self.bind)
 
-		self.running = True
-		self.state = State()
+	@listener("start")
+	def onSTART(self):
+		self.manager += self.bot
+		self.send(Run(), "run", self.channel)
 
-	# Service Commands
-
-	@listener("term")
-	def onTERM(self, signal=0, stack=0):
-		if self.env.bot.connected:
-			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
-		self.state.set("TERMINATING")
+	@listener("stop")
+	def onSTOP(self, signal=0, stack=0):
+		if self.bot.connected:
+			self.bot.ircQUIT("Received SIGTERM, terminating...")
+		self.running = False
 
 	@listener("rehash")
 	def onREHASH(self, signal=0, stack=0):
 		self.env.reload()
 
-	@listener("timer:reconnect")
-	def onRECONNECT(self, host, port, ssl, bind, auth):
-		self.state.set("CONNECTING")
-		if bind is not None:
-			self.env.bot.open(host, port, ssl, bind)
-		else:
-			self.env.bot.open(host, port, ssl)
+	@listener("run")
+	def onRUN(self):
+		self.running = True
 
-	def run(self):
-		env = self.env
-		state = self.state
-		event = env.event
-		timers = env.timers
-		bot = env.bot
-
-#		env.loadPlugins()
-
-		host = env.config.get("connect", "host")
-		port = env.config.getint("connect", "port")
-
-		auth = {
-				"password": env.config.get("connect", "password"),
-				"ident": env.config.get("bot", "ident"),
-				"nick": env.config.get("bot", "nick"),
-				"name": env.config.get("bot", "name"),
-				"server": env.config.get("connect", "host"),
-				"host": socket.gethostname()
-				}
-
-		state.set("CONNECTING")
-
-		if env.config.has_option("connect", "ssl"):
-			ssl = env.config.getboolean("connect", "ssl")
-		else:
-			ssl = False
-
-		if env.config.has_option("connect", "bind"):
-			bind = env.config.get("connect", "bind")
-		else:
-			bind = None
-
-		if bind is not None:
-			bot.open(host, port, ssl, bind)
-		else:
-			bot.open(host, port, ssl)
+		self.bot.connect()
 
 		while self.running:
-
 			try:
-				event.flush()
-				timers.poll()
+				self.manager.flush()
 				if bot.connected:
-					bot.poll(0.1)
+					bot.poll()
 				else:
 					sleep(1)
-
-					if state == "TERMINATING":
-						self.running = False
-					elif not state == "WAITING":
-						state.set("DISCONNECTED")
-
-				if state == "CONNECTING":
-					if bot.connected:
-						state.set("CONNECTED")
-				elif state == "CONNECTED":
-					state.set("AUTHENTICATED")
-					bot.connect(auth)
-				elif state == "DISCONNECTED":
-					state.set("WAITING")
-					env.log.info("Disconnected, reconnecting in 60s...")
-					env.timers.add(
-							60,
-							Reconnect(host, port, ssl, bind, auth),
-							"timer:reconnect")
-				elif state == "TERMINATING":
-					self.running = False
-					break
-			except UnhandledEvent, evt:
-				env.log.warn("Unhandled Event: %s" % evt)
 			except KeyboardInterrupt:
-				if self.env.bot.connected:
+				if self.bot.connected:
 					bot.ircQUIT("Received ^C, terminating...")
-				state.set("TERMINATING")
+				self.running = False
 			except Exception, error:
 				env.errors += 1
-				env.log.error("Error occured: %s" % error)
-				env.log.error(format_exc())
+				self.push(log.Exception("ERROR: %s" % error), "exception", "log")
+				self.push(log.Debug(format_exc()), "debug", "log")
 
-		env.unloadPlugins()
+		self.env.unloadPlugins()
