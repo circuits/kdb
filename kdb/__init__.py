@@ -60,5 +60,5 @@ __extras_require__ = {
 
 __entry_points__ = """
 [console_scripts]
-kdb = kdb.main:run
+kdb = kdb.main:main
 """
