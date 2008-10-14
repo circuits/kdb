@@ -42,11 +42,14 @@ class Bot(TCPClient, IRC):
 		self.bind = bind
 		self.auth = auth
 
-	def connect(self)
+	def connect(self):
 		"""B.connect()
 
-		...
+		Connect to the irc network by sending an optional apssword
+		if required and sending our user details and nickname.
 		"""
+
+		auth = self.auth
 
 		if auth.has_key("pass"):
 			self.ircPASS(auth["password"])
