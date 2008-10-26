@@ -1,78 +1,110 @@
-# Filename:	db.py
 # Module:	db
-# Date:		15th October 2005
+# Date:		11th September 2008
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""Database
+"""db - Database Module
 
-This module implements the database needs.
+...
 """
 
-class Enum:
+import os
+import datetime
+from copy import copy
+from inspect import getmodule, getmembers
 
-	def __init__(self, db):
-		self._db = db
+from buzhug import Base
 
-	def __contains__(self, (type, name)):
-		db = self._db
+from circuits import listener, Event, Component
 
-		rows = db.do(
-				"SELECT value "
-				"FROM enum "
-				"WHERE type=? AND name=?", type, name)
+###
+### Base Database
+###
 
-		return (not len(rows) == 0) and (rows[0].value >= 0)
+class Database(Base):
 
-	def __delitem__(self, (type, name)):
-		db = self._db
+	def __init__(self, path="db"):
+		basename = self.__class__.__name__
+		super(Database, self).__init__(basename, path)
+		self.set_string_format(unicode, "utf-8")
 
-		rows = db.do(
-				"DELETE FROM enum "
-				"WHERE type=? AND name=?", type, name)
+	def create(self, **kwargs):
+		return Base.create(self, *self.fields, **kwargs)
 
-	def __getitem__(self, (type, name)):
-		db = self._db
+###
+### Databases
+###
 
-		rows = db.do(
-				"SELECT value "
-				"FROM enum "
-				"WHERE type=? AND name=?", type, name)
+class Enum(Database):
+	fields = (
+			("type", str),
+			("name", str),
+			("value", str))
 
-		if not len(rows) == 0:
-			return rows[0].value
-		else:
-			return None
+class Users(Database):
+	fields = (
+			("username", str),
+			("password", str))
 
-class System:
+DEFAULTS = [
+	("users", [
+		("admin", "admin")
+	])
+]
 
-	def __init__(self, db):
-		self._db = db
-	def __contains__(self, name):
-		db = self._db
+###
+### Events
+###
 
-		rows = db.do(
-				"SELECT value "
-				"FROM enum "
-				"WHERE name=?", name)
+class Create(Event):
+	"""Create(Event) -> Create Event"""
 
-		return not len(rows) == 0
+class Load(Event):
+	"""Load(Event) -> Load Event"""
 
-	def __delitem__(self, name):
-		db = self._db
+class Save(Event):
+	"""Save(Event) -> Save Event"""
 
-		rows = db.do(
-				"DELETE FROM enum "
-				"WHERE name=?", name)
+###
+### Components
+###
 
-	def __getitem__(self, name):
-		db = self._db
+class Databases(Component):
 
-		rows = db.do(
-				"SELECT value "
-				"FROM enum "
-				"WHERE name=?", name)
+	channel = "db"
 
-		if not len(rows) == 0:
-			return rows[0].value
-		else:
-			return None
+	def __init__(self, env):
+		super(Databases, self).__init__()
+
+		self.env = env
+
+		self.enum = Enum(os.path.join(self.env.path, "db"))
+		self.users = Users(os.path.join(self.env.path, "db"))
+
+		self.dbs = [x for x in getmembers(self) if isinstance(x[1], Database)]
+
+	@listener("create")
+	def onCREATE(self):
+		for db in (db[1] for db in self.dbs):
+			db.create()
+
+		for name, data in DEFAULTS:
+			db = getattr(self, name)
+			for values in data:
+				x = []
+				for v in values:
+					if type(v) == tuple:
+						x.append(getattr(self, v[0])[v[1]])
+					else:
+						x.append(v)
+				db.insert(*x)
+			db.commit()
+
+	@listener("load")
+	def onLOAD(self):
+		for db in (db[1] for db in self.dbs):
+			db.open()
+
+	@listener("save")
+	def onSAVE(self):
+		for db in (db[1] for db in self.dbs):
+			db.commit()
