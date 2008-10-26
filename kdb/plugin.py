@@ -1,9 +1,8 @@
-# Filename: plugin.py
 # Module:	plugin
 # Date:		17th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""Plugin
+"""plugin - Base Plugin
 
 This module provides the basic infastructure for kdb
 plugins. Plugins should sub-class BasePlugin.
@@ -11,7 +10,8 @@ plugins. Plugins should sub-class BasePlugin.
 
 import inspect
 
-from pymills.event import *
+from circuits import listener, Event, Component
+
 from pymills.misc import backMerge
 
 class CommandEvent(Event):

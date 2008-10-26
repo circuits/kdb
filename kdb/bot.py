@@ -3,30 +3,32 @@
 # Date:		17th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""IRC Bot Component
+"""bot - Bot Module
 
-This module defines the Bot class which connects to an IRC
-Network and reacts to IRC Events. The Bot class is just
-a thin layer which sub-classes pymills.sockets.TCPClient
-and pymills.irc.IRC
+This module defines the Bot Component which connects to an IRC
+Network and reacts to IRC Events. The Bot Component consists
+of the TCPClient and IRC Components.
 """
 
-from pymills.net.irc import IRC
-from pymills.net.sockets import TCPClient
+from circuits.lib.irc import IRC
+from circuits.lib.sockets import TCPClient
 
 from kdb import __name__ as systemName
 from kdb import __description__ as systemDesc
 
 class Bot(TCPClient, IRC):
-	"""Bot(event, env) -> new bot object
+	"""Bot(env, port=6667, address="127.0.0.1") -> Bot Component
 
-	Create a new bot object. This implements a
-	TCP Socket and the IRC protocol and is a
-	sub-class of pymills.sockets.TCPClient and
-	pymills.irc.IRC
+	Arguments:
+	   env     - System Environment
+	   port    - irc port to connect to
+	   address - irc server to connect to
+	   ssl     - If True, enable SSL Encryption
+	   bind    - (address, port) to bind to
+	   auth    - Authentication Dictionary
 
-	A method is defined to allow the newly created
-	bot to connect to an IRC Server.
+	Call connect() to connect to the given irc server given by
+	port and address.
 	"""
 
 	def __init__(self, env, port=6667, address="127.0.0.1",
@@ -51,7 +53,7 @@ class Bot(TCPClient, IRC):
 
 		auth = self.auth
 
-		if auth.has_key("pass"):
+		if auth.has_key("password"):
 			self.ircPASS(auth["password"])
 
 		self.ircUSER(
@@ -67,8 +69,7 @@ class Bot(TCPClient, IRC):
 
 		Send a raw message.
 
-		THis will send the given data along with a \\r\\n to
-		the connected TCP Client (pymills.sockets.TCPClient)
+		THis will send the given data along with a \\r\\n
 		"""
 
 		self.write(data + "\r\n")

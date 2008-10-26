@@ -1,4 +1,3 @@
-# Filename: __init__.py
 # Module:   __init__
 # Date:     04th August 2004
 # Author:   James Mills, prologic at shortcircuit dot net dot au

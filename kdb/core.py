@@ -1,9 +1,8 @@
-# Filename: core.py
 # Module:	core
 # Date:		2nd August 2005
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""Core Component
+"""core - Core Component
 
 Core management component and main loop handler.
 All events are processes by this component and
@@ -17,9 +16,17 @@ import socket
 from time import sleep
 from traceback import format_exc
 
-from pymills import log
-from pymills.event import *
+from circuits import listener, Event, Component
+from circuits.lib.log import (
+		Debug as LogDebug,
+		Exception as LogException)
+
 from pymills.utils import State
+
+from __init__ import (
+		__name__ as systemName,
+		__description__ as systemDesc,
+		__version__ as systemVersion)
 
 from bot import Bot
 
@@ -53,7 +60,20 @@ class Core(Component):
 		self.ssl = self.env.config.getboolean("server", "ssl", False)
 		self.bind = self.env.config.get("server", "bind", None)
 
-		self.bot = Bot(self.env, self.port, self.address, self.ssl, self.bind)
+		self.auth = {
+				"host": socket.gethostname(),
+				"server": self.address,
+				"nick": self.env.config.get("bot", "nick", systemName),
+				"ident": self.env.config.get("bot", "ident", systemName),
+				"name": self.env.config.get("bot", "name", systemDesc)
+		}
+		if self.env.config.has_option("server", "password"):
+			self.auth["password"] = self.env.config.get("server", "password")
+
+		self.bot = Bot(
+				self.env,
+				self.port, self.address, self.ssl, self.bind,
+				self.auth)
 
 	@listener("start")
 	def onSTART(self):
@@ -79,17 +99,17 @@ class Core(Component):
 		while self.running:
 			try:
 				self.manager.flush()
-				if bot.connected:
-					bot.poll()
+				if self.bot.connected:
+					self.bot.poll()
 				else:
 					sleep(1)
 			except KeyboardInterrupt:
 				if self.bot.connected:
-					bot.ircQUIT("Received ^C, terminating...")
+					self.bot.ircQUIT("Received ^C, terminating...")
 				self.running = False
 			except Exception, error:
-				env.errors += 1
-				self.push(log.Exception("ERROR: %s" % error), "exception", "log")
-				self.push(log.Debug(format_exc()), "debug", "log")
+				self.env.errors += 1
+				self.push(LogException("ERROR: %s" % error), "exception", "log")
+				self.push(LogDebug(format_exc()), "debug", "log")
 
 		self.env.unloadPlugins()

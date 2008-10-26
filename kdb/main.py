@@ -1,8 +1,8 @@
 # Module:	main
-# Date:		1st October 2007
+# Date:		11th September 2008
 # Author:	James Mills, prologic at shortcircuit dot net dot au
 
-"""TimeSheet - Main
+"""main - Main Module
 
 This is the main module. Everything starts from here
 after the command-line options have been parsed and
@@ -18,9 +18,13 @@ import optparse
 from time import sleep
 from traceback import format_exc
 
-from pymills import env
-from pymills import event
-from pymills.event import *
+from circuits import listener, Event, Component, Manager
+
+from circuits.lib.env import (
+		Load as LoadEnvironment,
+		Create as CreateEnvironment,
+		Upgrade as UpgradeEnvironment)
+
 from pymills.utils import getProgName, writePID, daemonize
 
 from core import Core, Start
@@ -104,7 +108,7 @@ class Startup(Component):
 		if not self.command == "init":
 			if not os.path.exists(self.env.path):
 				raise Error("Environment path %s does not exist!" % self.env)
-			self.send(env.Load(), "load", self.env.channel)
+			self.send(LoadEnvironment(), "load", self.env.channel)
 
 		self.send(Command(), self.command, self.channel)
 
@@ -118,8 +122,6 @@ class Startup(Component):
 		Write the PID of this process to the environment path
 		and start the core.
 		"""
-
-		print "-- Starting %s...\n" % systemName
 
 		if self.opts.daemon:
 			daemonize(path=self.env.path)
@@ -143,17 +145,13 @@ class Startup(Component):
 		exitcode 1 is returned.
 		"""
 
-		try:
-			pidfile = self.env.config.get("general", "pidfile")
-			if not os.path.isabs(pidfile):
-				pidfile = os.path.join(self.env.path, pidfile)
-			with open(pidfile, "r") as f:
-				pid = int(f.read().strip())
-				os.kill(pid, signal.SIGTERM)
-			print "-- %s Stopped" % systemName
-		except Exception, err:
-			print format_exc()
-			raise Error("Cannot stop %s" % systemName)
+		pidfile = self.env.config.get("general", "pidfile")
+		if not os.path.isabs(pidfile):
+			pidfile = os.path.join(self.env.path, pidfile)
+
+		with open(pidfile, "r") as f:
+			pid = int(f.read().strip())
+			os.kill(pid, signal.SIGTERM)
 
 	@listener("restart")
 	def onRESTART(self):
@@ -177,19 +175,13 @@ class Startup(Component):
 		is returned.
 		"""
 
-		try:
-			pidfile = self.env.config.get("general", "pidfile")
-			if not os.path.isabs(pidfile):
-				pidfile = os.path.join(self.env.path, pidfile)
-			with open(pidfile, "r") as f:
-				pid = int(f.read())
-				os.kill(pid, signal.SIGHUP)
-			print "-- %s Rehashed" % systemName
-		except Exception, err:
-			raise err
-			raise Error("Cannot rehash %s" % systemName)
+		pidfile = self.env.config.get("general", "pidfile")
+		if not os.path.isabs(pidfile):
+			pidfile = os.path.join(self.env.path, pidfile)
 
-		raise SystemExit, 0
+		with open(pidfile, "r") as f:
+			pid = int(f.read())
+			os.kill(pid, signal.SIGHUP)
 
 	@listener("init")
 	def onINIT(self):
@@ -203,12 +195,7 @@ class Startup(Component):
 		if os.path.exists(self.env.path):
 			raise Error("Environment path %s already exists!" % self.env.path)
 
-		self.send(env.Create(), "create", self.env.channel)
-
-		print "%s Environment created at %s" % (systemName, self.env.path)
-		print "Edit %s/conf/%s.ini" % (self.env.path, systemName)
-		print "Start %s:" % systemName
-		print " %s %s start" % (getProgName(), self.env.path)
+		self.send(CreateEnvironment(), "create", self.env.channel)
 
 	@listener("upgrade")
 	def onUPGRADE(self):
@@ -222,8 +209,7 @@ class Startup(Component):
 		if not os.path.exists(self.env.path):
 			raise Error("Environment path %s does not exist!" % self.env.path)
 
-		self.send(env.Upgrade(), "upgrade", self.env.channel)
-		print "%s Environment upgraded." % systemName
+		self.send(UpgradeEnvironment(), "upgrade", self.env.channel)
 
 ###
 ### Main
@@ -245,8 +231,8 @@ def main():
 	path = args[0]
 	command = args[1].lower()
 
-	event.manager += Startup(path, opts, command)
-	event.manager.flush()
+	manager = Manager()
+	manager += Startup(path, opts, command)
 
 ###
 ### Entry Point
