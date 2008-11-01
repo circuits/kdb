@@ -12,9 +12,9 @@ any replies generated.
 __ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from pymills.event import listener
+from circuits import listener
 from pymills.datatypes import Stack
-from pymills.net.irc import MessageEvent
+from circuit.lib.irc import MessageEvent
 
 from kdb.plugin import BasePlugin
 
@@ -30,8 +30,8 @@ class RMessage(BasePlugin):
 	Depends on: xmlrpc
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self._rlog = Stack(5)
 

@@ -16,7 +16,7 @@ import os
 import marshal
 from time import time
 
-from pymills.event import listener, Event
+from circuits import listener, Event
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -40,8 +40,8 @@ class Irc(BasePlugin):
 	There are no commands for this plugin.
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self._history = {}
 

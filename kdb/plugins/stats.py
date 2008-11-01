@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import time
 
 from pymills.misc import bytes
-from pymills.event import filter
+from circuits import listener
 from pymills.misc import duration, buildAverage
 
 import kdb
@@ -29,8 +29,8 @@ class Stats(BasePlugin):
 	See: commands stats
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self.tin = 0
 		self.tout = 0
@@ -111,16 +111,16 @@ class Stats(BasePlugin):
 				kdb.__url__)
 		return msg
 
-	@filter("PostCommand")
+	@listener("PostCommand", type="filter")
 	def onPOSTCOMMAND(self, command, tokens):
 		if not self.commands.has_key(command):
 			self.commands[command] = 0
 		self.commands[command] += 1
 
-	@filter("read")
-	def onREAD(self, event, line):
+	@listener("read", type="filter")
+	def onREAD(self, line):
 		self.tin += len(line) + 2
 
-	@filter("write")
-	def onWRITE(self, event, data):
+	@listener("write", type="filter")
+	def onWRITE(self, data):
 		self.tout += len(data)

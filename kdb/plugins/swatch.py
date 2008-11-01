@@ -24,8 +24,8 @@ class Swatch(BasePlugin):
 	See: commands swatch
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 	def cmdBEAT(self, source):
 		"""Display the current Swatch Time (Internet Time)

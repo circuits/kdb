@@ -20,7 +20,7 @@ from time import mktime, time
 import feedparser
 
 from pymills.misc import strToBool
-from pymills.event import listener, Event
+from circuits import listener, Event, Timer
 from pymills.utils import notags, decodeHTML
 
 from kdb.plugin import BasePlugin
@@ -101,8 +101,8 @@ class RSS(BasePlugin):
 	See: commands rss
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		filename = os.path.join(self.env.path, "rss.bin")
 		if os.path.exists(filename):
@@ -118,7 +118,7 @@ class RSS(BasePlugin):
 		else:
 			self.entities = {}
 
-		self.env.timers.add(60, RSSTick(), "rsstick", persist=True)
+		self.env.timers.append(Timer(60, RSSTick(), "rsstick", persist=True))
 
 	def cleanup(self):
 		filename = os.path.join(self.env.path, "rss.bin")

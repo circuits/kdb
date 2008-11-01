@@ -18,10 +18,9 @@ import types
 import string
 import pickle
 
-from pymills.event import listener
+from circuits import listener
 from pymills.misc import strToBool
-from pymills.ai.semnet import Fact, \
-		Entity, Relation, GetIsA, GetExampleOf
+from pymills.ai.semnet import Fact, Entity, Relation, GetIsA, GetExampleOf
 
 from kdb.plugin import BasePlugin
 
@@ -43,8 +42,8 @@ def tostr(x):
 class Semnet(BasePlugin):
 	"Semantic Network"
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self.isa = GetIsA()
 		self.exampleof = GetExampleOf()

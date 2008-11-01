@@ -75,6 +75,9 @@ class Core(Component):
 					self.env.bot.poll()
 				else:
 					sleep(1)
+				for timer in self.env.timers:
+					timer.poll()
+				sleep(0.01)
 			except KeyboardInterrupt:
 				if self.env.bot.connected:
 					self.env.bot.ircQUIT("Received ^C, terminating...")

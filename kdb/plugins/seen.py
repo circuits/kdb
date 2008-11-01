@@ -15,7 +15,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import marshal
 from time import time
 
-from pymills.event import listener, Event
+from circuits import listener, Event
 
 from kdb.plugin import BasePlugin
 
@@ -29,8 +29,8 @@ class Seen(BasePlugin):
 	See: commands seen
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 	@listener("nick")
 	def onNICK(self, nick, newnick, ctime):

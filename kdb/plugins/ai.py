@@ -19,15 +19,15 @@ import marshal
 
 import aiml
 
-from pymills.event import listener
+from circuits import listener
 
 from kdb.plugin import BasePlugin
 
 class Ai(BasePlugin):
 	"Artificial Intelligence"
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self.k = aiml.Kernel()
 

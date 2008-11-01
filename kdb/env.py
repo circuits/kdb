@@ -73,6 +73,7 @@ class SystemEnvironment(Environment):
 		self.debug = self.config.getboolean("main", "debug", False)
 		self.verbose = self.config.getboolean("logging", "verbose", False)
 
+		self.timers = []
 		self.plugins = weakref.WeakValueDictionary()
 
 		self.errors = 0
@@ -170,12 +171,12 @@ class SystemEnvironment(Environment):
 		may override existing plugins already loaded.
 		"""
 
-		plugins = defaults.PLUGINS
+		plugins = list(defaults.PLUGINS)
 
 		if self.config.has_section("plugins"):
 			for name, value in self.config.items("plugins"):
-				plugin, attr = name.split(".")
-				if attr.lower() == "enabled":
+				plugin, comp = name.split(".")
+				if value.lower() == "enabled":
 					if plugin not in plugins:
 						plugins.append(plugin)
 
