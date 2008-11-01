@@ -29,9 +29,6 @@ class Seen(BasePlugin):
 	See: commands seen
 	"""
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
-
 	@listener("nick")
 	def onNICK(self, nick, newnick, ctime):
 		pass

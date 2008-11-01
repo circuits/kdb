@@ -21,8 +21,8 @@ from kdb.plugin import BasePlugin
 class Broadcast(BasePlugin):
 	"Broadcasting Support"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Ai, self).__init__(*args, **kwargs)
 
 		self.prefix = self.env.config.get(
 				"broadcast", "prefix") or "@"

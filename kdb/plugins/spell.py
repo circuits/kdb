@@ -22,8 +22,8 @@ DEFAULT_LANGUAGE = "en_US"
 class Spell(BasePlugin):
 	"Spell Checker"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Spell, self).__init__(*args, **kwargs)
 
 		self.language = DEFAULT_LANGUAGE
 		self.d = d = enchant.request_dict(self.language)

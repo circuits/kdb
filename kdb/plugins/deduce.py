@@ -23,8 +23,8 @@ from kdb.plugin import BasePlugin
 class Deduce(BasePlugin):
 	"Deductive Logic"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Ai, self).__init__(*args, **kwargs)
 
 		self.reason = []
 		self.b = brain()
@@ -46,7 +46,7 @@ class Deduce(BasePlugin):
 		fp.close()
 
 	@listener("message")
-	def onMessage(self, source, target, message):
+	def onMMESSAGE(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)

@@ -29,8 +29,8 @@ class Stats(BasePlugin):
 	See: commands stats
 	"""
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Spell, self).__init__(*args, **kwargs)
 
 		self.tin = 0
 		self.tout = 0
