@@ -14,15 +14,15 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from socket import gethostname
 
-from pymills.event import listener
+from circuits import listener
 
 from kdb.plugin import BasePlugin
 
 class Drone(BasePlugin):
 	"Drone Mode"
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		if self.bot.getNick() != gethostname():
 			self.bot.ircNICK(gethostname())

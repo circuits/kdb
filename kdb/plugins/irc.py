@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep
 
-from pymills.event import listener, Event
+from circuits import listener, Event
 
 from kdb.plugin import BasePlugin
 
@@ -30,9 +30,9 @@ class Irc(BasePlugin):
 	@listener("numeric")
 	def onNUMERIC(self, source, target, numeric, arg, message):
 		if numeric == 1:
-			self.env.event.push(Event(), "connected")
+			self.push(Event(), "connected")
 		elif numeric == 433:
-			self.env.event.push(Event(), "nicksollision")
+			self.push(Event(), "nicksollision")
 
 	def cmdJUMP(self, source, server, port=6667, ssl=False):
 		"""Connect to another server.

@@ -21,9 +21,8 @@ from time import sleep
 
 import xmpp
 
-from pymills.net.irc import MessageEvent
-from pymills.event import filter, listener, \
-		Event, UnhandledEvent, Worker
+from circuits.lib.irc import MessageEvent
+from circuits import filter, listener, Event, Worker
 
 from kdb.plugin import BasePlugin
 
@@ -38,9 +37,8 @@ class GTalk(BasePlugin, Worker):
 	See: commands gtalk
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
-		Worker.__init__(self, event)
+	def __init__(self, *args, **kwargs):
+		super(GTalk, self).__init__(*args, **kwargs)
 
 		self._username = "kdbbot"
 		self._password = "semaj2891"

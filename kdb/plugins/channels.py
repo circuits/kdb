@@ -11,7 +11,7 @@ joins automatically.
 __ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from pymills.event import listener
+from circuits import listener
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -41,8 +41,8 @@ class ChannelsCommands(CommandHandler):
 class Channels(BasePlugin):
 	"Channel Management"
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		if self.env.config.has_option("bot", "channels"):
 			self.channels = [x.strip() for x in
@@ -54,7 +54,7 @@ class Channels(BasePlugin):
 
 	def cleanup(self):
 		self.env.config.set("bot", "channels", ",".join(self.channels))
-		fp = open(self.env.config.path, "w")
+		fp = open(self.env.config.filename, "w")
 		self.env.config.write(fp)
 		fp.close()
 
@@ -89,5 +89,5 @@ class Channels(BasePlugin):
 				source, *args, **kwargs)
 
 	@listener("connected")
-	def onCONNECTED(self, event):
+	def onCONNECTED(self):
 		self.joinChannels()

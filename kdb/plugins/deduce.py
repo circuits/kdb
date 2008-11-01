@@ -15,7 +15,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import os
 import re
 
-from pymills.event import listener
+from circuits import listener
 from pymills.ai.deduce import fact, brain
 
 from kdb.plugin import BasePlugin
@@ -23,8 +23,8 @@ from kdb.plugin import BasePlugin
 class Deduce(BasePlugin):
 	"Deductive Logic"
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self.reason = []
 		self.b = brain()

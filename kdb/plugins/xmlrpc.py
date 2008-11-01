@@ -18,8 +18,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import cherrypy
 from cherrypy.lib import xmlrpc
 
-from pymills.event import filter, listener, \
-		Event, UnhandledEvent
+from circuits import listener, Event
 
 from kdb.plugin import BasePlugin
 
@@ -30,8 +29,8 @@ class XMLRPCEvent(Event):
 
 class Root(BasePlugin):
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
 		self.bot = bot
 		self.env = env
@@ -39,7 +38,7 @@ class Root(BasePlugin):
 	def __del__(self):
 		self.unregister()
 
-	@filter()
+	@listener(type="filter")
 	def onDEBUG(self, event):
 		if isinstance(event, XMLRPCEvent):
 			self.env.log.debug(event)
@@ -79,10 +78,10 @@ class XMLRPC(BasePlugin):
 	messages to a configured channel.
 	"""
 
-	def __init__(self, event, bot, env):
-		BasePlugin.__init__(self, event, bot, env)
+	def __init__(self, bot, env):
+		BasePlugin.__init__(self, bot, env)
 
-		self.root = Root(event, bot, env)
+		self.root = Root(bot, env)
 
 		cherrypy.config.update({
 			"log.screen": False,
@@ -107,12 +106,11 @@ class XMLRPC(BasePlugin):
 		try:
 			cherrypy.engine.SIGHUP = None
 			cherrypy.engine.SIGTERM = None
-			cherrypy.server.quickstart()
 			cherrypy.engine.start()
+			cherrypy.engine.block()
 		except IOError:
 			pass
 
 	def cleanup(self):
-		cherrypy.server.stop()
 		cherrypy.engine.stop()
 		self.root.unregister()
