@@ -10,6 +10,7 @@ Network and reacts to IRC Events. The Bot Component consists
 of the TCPClient and IRC Components.
 """
 
+from circuits import listener
 from circuits.lib.irc import IRC
 from circuits.lib.sockets import TCPClient
 
@@ -51,25 +52,17 @@ class Bot(TCPClient, IRC):
 		if required and sending our user details and nickname.
 		"""
 
-		auth = self.auth
-
-		if auth.has_key("password"):
+		self.open(self.address, self.port, self.ssl)
+	
+	@listener("connect")
+	def onCONNECT(self, host, port):
+		if self.auth.has_key("password"):
 			self.ircPASS(auth["password"])
 
 		self.ircUSER(
-				auth.get("ident", systemName),
-				auth.get("host", "localhost"),
-				auth.get("server", "localhost"),
-				auth.get("name", systemDesc))
+				self.auth.get("ident", systemName),
+				self.auth.get("host", "localhost"),
+				self.auth.get("server", "localhost"),
+				self.auth.get("name", systemDesc))
 
-		self.ircNICK(auth.get("nick", systemName))
-
-	def ircRAW(self, data):
-		"""B.ircRAW(data) -> None
-
-		Send a raw message.
-
-		THis will send the given data along with a \\r\\n
-		"""
-
-		self.write(data + "\r\n")
+		self.ircNICK(self.auth.get("nick", systemName))
