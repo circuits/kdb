@@ -29,12 +29,6 @@ class XMLRPCEvent(Event):
 
 class Root(BasePlugin):
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
-
-		self.bot = bot
-		self.env = env
-
 	def __del__(self):
 		self.unregister()
 
@@ -78,8 +72,8 @@ class XMLRPC(BasePlugin):
 	messages to a configured channel.
 	"""
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Semnet, self).__init__(*args, **kwargs)
 
 		self.root = Root(bot, env)
 

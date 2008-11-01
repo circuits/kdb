@@ -30,8 +30,8 @@ class RMessage(BasePlugin):
 	Depends on: xmlrpc
 	"""
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Irc, self).__init__(*args, **kwargs)
 
 		self._rlog = Stack(5)
 

@@ -26,8 +26,8 @@ from kdb.plugin import BasePlugin
 class Ai(BasePlugin):
 	"Artificial Intelligence"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Ai, self).__init__(*args, **kwargs)
 
 		self.k = aiml.Kernel()
 

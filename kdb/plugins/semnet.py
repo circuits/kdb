@@ -42,8 +42,8 @@ def tostr(x):
 class Semnet(BasePlugin):
 	"Semantic Network"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Semnet, self).__init__(*args, **kwargs)
 
 		self.isa = GetIsA()
 		self.exampleof = GetExampleOf()
@@ -151,7 +151,7 @@ class Semnet(BasePlugin):
 		return "Okay"
 
 	@listener("message")
-	def onMessage(self, source, target, message):
+	def onMESSAGE(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)

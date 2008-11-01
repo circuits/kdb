@@ -21,8 +21,8 @@ from kdb.plugin import BasePlugin
 class Drone(BasePlugin):
 	"Drone Mode"
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Ai, self).__init__(*args, **kwargs)
 
 		if self.bot.getNick() != gethostname():
 			self.bot.ircNICK(gethostname())

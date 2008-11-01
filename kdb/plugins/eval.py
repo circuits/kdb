@@ -26,8 +26,8 @@ class Eval(BasePlugin):
 	See: help eval
 	"""
 
-	def __init__(self, bot, env):
-		BasePlugin.__init__(self, bot, env)
+	def __init__(self, *args, **kwargs):
+		super(Ai, self).__init__(*args, **kwargs)
 
 		self.rexec = RExec()
 
