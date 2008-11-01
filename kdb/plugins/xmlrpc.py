@@ -73,7 +73,7 @@ class XMLRPC(BasePlugin):
 	"""
 
 	def __init__(self, *args, **kwargs):
-		super(Semnet, self).__init__(*args, **kwargs)
+		super(XMLRPC, self).__init__(*args, **kwargs)
 
 		self.root = Root(bot, env)
 

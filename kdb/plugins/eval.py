@@ -27,7 +27,7 @@ class Eval(BasePlugin):
 	"""
 
 	def __init__(self, *args, **kwargs):
-		super(Ai, self).__init__(*args, **kwargs)
+		super(Eval, self).__init__(*args, **kwargs)
 
 		self.rexec = RExec()
 

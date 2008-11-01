@@ -31,7 +31,7 @@ class RMessage(BasePlugin):
 	"""
 
 	def __init__(self, *args, **kwargs):
-		super(Irc, self).__init__(*args, **kwargs)
+		super(RMessage, self).__init__(*args, **kwargs)
 
 		self._rlog = Stack(5)
 

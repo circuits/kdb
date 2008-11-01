@@ -30,7 +30,7 @@ class Stats(BasePlugin):
 	"""
 
 	def __init__(self, *args, **kwargs):
-		super(Spell, self).__init__(*args, **kwargs)
+		super(Stats, self).__init__(*args, **kwargs)
 
 		self.tin = 0
 		self.tout = 0
