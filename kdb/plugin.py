@@ -14,10 +14,19 @@ from circuits import listener, Event, Component
 
 from pymills.misc import backMerge
 
-class CommandEvent(Event):
+###
+### Events
+###
 
-	def __init__(self, command, tokens):
-		super(CommandEvent, self).__init__(command, tokens)
+class Command(Event):
+	"""Command(Event) -> Command Event
+
+	args: command, tokens
+	"""
+
+###
+### Helper Classes
+###
 
 class CommandHandler(object):
 
@@ -70,13 +79,17 @@ class CommandHandler(object):
 
 		return "Unknown command: %s" % command
 
+###
+### Components
+###
+
 class BasePlugin(Component):
 
-	def __init__(self, event, bot, env):
-		Component.__init__(self, event)
+	def __init__(self, env, bot, *args, **kwargs)
+		Component.__init__(self, *args, **kwargs)
 
-		self.bot = bot
 		self.env = env
+		self.bot = bot
 
 		self._hooks = {}
 		self.__setupCommandHandlers__()
@@ -89,8 +102,8 @@ class BasePlugin(Component):
 			command = name[3:].lower()
 			self._hooks[command] = cmdHandler
 
-	@filter("message")
-	def onMESSAGE(self, event, source, target, message):
+	@listener("message", type="filter")
+	def onMESSAGE(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)
@@ -108,8 +121,8 @@ class BasePlugin(Component):
 
 				return r
 
-	@filter("notice")
-	def onNOTICE(self, event, source, target, message):
+	@listener("notice", type="filter")
+	def onNOTICE(self, source, target, message):
 
 		addressed, target, message = self.isAddressed(
 				source, target, message)
