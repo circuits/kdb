@@ -24,7 +24,7 @@ class Deduce(BasePlugin):
 	"Deductive Logic"
 
 	def __init__(self, *args, **kwargs):
-		super(Decude, self).__init__(*args, **kwargs)
+		super(Deduce, self).__init__(*args, **kwargs)
 
 		self.reason = []
 		self.b = brain()
