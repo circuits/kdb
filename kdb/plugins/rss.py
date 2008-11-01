@@ -102,7 +102,7 @@ class RSS(BasePlugin):
 	"""
 
 	def __init__(self, *args, **kwargs):
-		super(Irc, self).__init__(*args, **kwargs)
+		super(RSS, self).__init__(*args, **kwargs)
 
 		filename = os.path.join(self.env.path, "rss.bin")
 		if os.path.exists(filename):

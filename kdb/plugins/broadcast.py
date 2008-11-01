@@ -22,7 +22,7 @@ class Broadcast(BasePlugin):
 	"Broadcasting Support"
 
 	def __init__(self, *args, **kwargs):
-		super(Ai, self).__init__(*args, **kwargs)
+		super(Broadcast, self).__init__(*args, **kwargs)
 
 		self.prefix = self.env.config.get(
 				"broadcast", "prefix") or "@"

@@ -42,7 +42,7 @@ class Channels(BasePlugin):
 	"Channel Management"
 
 	def __init__(self, *args, **kwargs):
-		super(Ai, self).__init__(*args, **kwargs)
+		super(Channels, self).__init__(*args, **kwargs)
 
 		if self.env.config.has_option("bot", "channels"):
 			self.channels = [x.strip() for x in
