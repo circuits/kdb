@@ -48,10 +48,6 @@ class Core(Component):
 
 		self.env = env
 
-	@listener("start")
-	def onSTART(self):
-		self.send(Run(), "run", self.channel)
-
 	@listener("stop")
 	def onSTOP(self, signal=0, stack=0):
 		if self.env.bot.connected:
@@ -62,8 +58,7 @@ class Core(Component):
 	def onREHASH(self, signal=0, stack=0):
 		self.env.reload()
 
-	@listener("run")
-	def onRUN(self):
+	def run(self):
 		self.running = True
 
 		self.env.bot.connect()
