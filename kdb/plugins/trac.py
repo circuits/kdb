@@ -20,7 +20,3 @@ from kdb.plugin import BasePlugin
 
 class Trac(BasePlugin):
 	"Trac"
-
-	@filter("message")
-	def onMESSAGE(self, event, source, target, message):
-		return False, event
