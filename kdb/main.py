@@ -133,7 +133,7 @@ class Startup(Component):
 
 		core = Core(self.env)
 		self.manager += core
-		self.send(Start(), "start", core.channel)
+		core.run()
 
 	@listener("stop")
 	def onSTOP(self):
