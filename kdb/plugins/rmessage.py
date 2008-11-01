@@ -5,7 +5,7 @@
 """RMessage
 
 This plugin listens for xmlrpc:message events and
-sends a MessageEvent into the system and returning
+sends a Message Event into the system and returning
 any replies generated.
 """
 
@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import listener
 from pymills.datatypes import Stack
-from circuit.lib.irc import MessageEvent
+from circuits.lib.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -24,7 +24,7 @@ class RMessage(BasePlugin):
 
 	This doesn't have any user commands available.
 	This plugin listens for xmlrpc:message events and
-	sends a MessageEvent into the system and returning
+	sends a Message Event into the system and returning
 	any replies generated.
 
 	Depends on: xmlrpc
@@ -49,10 +49,8 @@ class RMessage(BasePlugin):
 		self._rlog.push(message)
 
 		reply = [x for x in self.send(
-			MessageEvent(
-				str(user),
-				self.bot.getNick(),
-				message),
+			Message(
+				str(user), self.bot.getNick(), message),
 			"message") if x is not None]
 
 		if type(reply) == list:
