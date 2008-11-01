@@ -23,13 +23,6 @@ from circuits.lib.log import (
 
 from pymills.utils import State
 
-from __init__ import (
-		__name__ as systemName,
-		__description__ as systemDesc,
-		__version__ as systemVersion)
-
-from bot import Bot
-
 ###
 ### Events
 ###
@@ -55,35 +48,14 @@ class Core(Component):
 
 		self.env = env
 
-		self.port = self.env.config.getint("server", "port", 80)
-		self.address = self.env.config.get("server", "address", "0.0.0.0")
-		self.ssl = self.env.config.getboolean("server", "ssl", False)
-		self.bind = self.env.config.get("server", "bind", None)
-
-		self.auth = {
-				"host": socket.gethostname(),
-				"server": self.address,
-				"nick": self.env.config.get("bot", "nick", systemName),
-				"ident": self.env.config.get("bot", "ident", systemName),
-				"name": self.env.config.get("bot", "name", systemDesc)
-		}
-		if self.env.config.has_option("server", "password"):
-			self.auth["password"] = self.env.config.get("server", "password")
-
-		self.bot = Bot(
-				self.env,
-				self.port, self.address, self.ssl, self.bind,
-				self.auth)
-
 	@listener("start")
 	def onSTART(self):
-		self.manager += self.bot
 		self.send(Run(), "run", self.channel)
 
 	@listener("stop")
 	def onSTOP(self, signal=0, stack=0):
-		if self.bot.connected:
-			self.bot.ircQUIT("Received SIGTERM, terminating...")
+		if self.env.bot.connected:
+			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
 		self.running = False
 
 	@listener("rehash")
@@ -94,18 +66,18 @@ class Core(Component):
 	def onRUN(self):
 		self.running = True
 
-		self.bot.connect()
+		self.env.bot.connect()
 
 		while self.running:
 			try:
 				self.manager.flush()
-				if self.bot.connected:
-					self.bot.poll()
+				if self.env.bot.connected:
+					self.env.bot.poll()
 				else:
 					sleep(1)
 			except KeyboardInterrupt:
-				if self.bot.connected:
-					self.bot.ircQUIT("Received ^C, terminating...")
+				if self.env.bot.connected:
+					self.env.bot.ircQUIT("Received ^C, terminating...")
 				self.running = False
 			except Exception, error:
 				self.env.errors += 1
