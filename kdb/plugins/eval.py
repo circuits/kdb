@@ -9,10 +9,8 @@ This plugin provides a command to evaluate python expressions
 and can be used as a simple way of performing calculations.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-from rexec import RExec
 
 from kdb.plugin import BasePlugin
 
@@ -26,11 +24,6 @@ class Eval(BasePlugin):
 	See: help eval
 	"""
 
-	def __init__(self, *args, **kwargs):
-		super(Eval, self).__init__(*args, **kwargs)
-
-		self.rexec = RExec()
-
 	def cmdEVAL(self, source, s):
 		"""Evaluates the given expression and displays the result.
 
@@ -38,7 +31,7 @@ class Eval(BasePlugin):
 		"""
 
 		try:
-			msg = str(self.rexec.r_eval(s)).split("\n")
+			msg = str(eval(s)).split("\n")
 		except Exception, e:
 			msg = ["ERROR: (%s) %s" % (e.__class__.__name__, e)]
 
