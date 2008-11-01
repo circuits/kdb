@@ -85,7 +85,7 @@ class CommandHandler(object):
 
 class BasePlugin(Component):
 
-	def __init__(self, env, bot, *args, **kwargs)
+	def __init__(self, env, bot, *args, **kwargs):
 		Component.__init__(self, *args, **kwargs)
 
 		self.env = env
@@ -191,7 +191,7 @@ class BasePlugin(Component):
 								if x is not None])
 
 		if r:
-			self.push(CommandEvent(command, tokens), "PostCommand")
+			self.push(Command(command, tokens), "PostCommand")
 
 		return r
 
