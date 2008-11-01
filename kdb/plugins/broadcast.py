@@ -39,4 +39,4 @@ class Broadcast(BasePlugin):
 						Message(source, target,
 							"%s, %s" % (
 								self.bot.getNick(),
-								message[1:])), "message", self)
+								message[1:])), "message")
