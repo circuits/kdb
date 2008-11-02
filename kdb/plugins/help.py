@@ -26,7 +26,7 @@ class Help(BasePlugin):
 	See: commands help
 	"""
 
-	def cmdCOMMANDS(self, source, plugin=None):
+	def cmdCOMMANDS(self, source, s=None):
 		"""Display a list of commands for 'plugin'.
 		
 		Syntax: COMMANDS <plugin>
@@ -34,20 +34,29 @@ class Help(BasePlugin):
 
 		msg = None
 
-		if plugin is None:
-			plugin = "help"
+		if s is None:
+			plugins = ["help"]
+		elif s == "*":
+			plugins = [x.lower() for x in self.env.plugins.keys()]
+		else:
+			plugins = [s.lower()]
 
-		if self.env.plugins.has_key(plugin.lower()):
-			o = self.env.plugins[plugin.lower()]
-			commands = [x[0][3:].lower() for x in inspect.getmembers(
-				o, lambda x: inspect.ismethod(x) and
-				callable(x) and x.__name__.startswith("cmd"))]
+		commands = []
+		for plugin in plugins:
+			if plugin in self.env.plugins:
+				o = self.env.plugins[plugin]
+				commands.extend([x[0][3:].lower() for x in inspect.getmembers(
+					o, lambda x: inspect.ismethod(x) and
+					callable(x) and x.__name__.startswith("cmd"))])
 
+		if not s == "*":
 			msg = "Available commands for %s: %s" % (
 				plugin, " ".join(commands))
+		else:
+			msg = "All available commands: %s" % " ".join(commands)
 
 		if msg is None:
-			msg = ["ERROR: Plugin mis-match or not loaded."]
+			msg = ["No commands for %s or %s is not loaded" % s]
 
 		return msg
 
