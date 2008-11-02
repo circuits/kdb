@@ -10,12 +10,24 @@ Network and reacts to IRC Events. The Bot Component consists
 of the TCPClient and IRC Components.
 """
 
-from circuits import listener
 from circuits.lib.irc import IRC
 from circuits.lib.sockets import TCPClient
+from circuits import listener, Event, Timer
+from circuits.lib.log import Info as LogInfo
 
 from kdb import __name__ as systemName
 from kdb import __description__ as systemDesc
+
+###
+### Events
+###
+
+class Reconnect(Event):
+	"Reconnect Event"
+
+###
+### Components
+###
 
 class Bot(TCPClient, IRC):
 	"""Bot(env, port=6667, address="127.0.0.1") -> Bot Component
@@ -53,6 +65,10 @@ class Bot(TCPClient, IRC):
 		"""
 
 		self.open(self.address, self.port, self.ssl)
+
+	@listener("timer:reconnect")
+	def onTIMERRECONNECT(self):
+		self.connect()
 	
 	@listener("connect")
 	def onCONNECT(self, host, port):
@@ -66,3 +82,11 @@ class Bot(TCPClient, IRC):
 				self.auth.get("name", systemDesc))
 
 		self.ircNICK(self.auth.get("nick", systemName))
+
+	@listener("disconnect")
+	def onDISCONNECT(self):
+		s = 60
+		self.push(LogInfo("Disconnected. Reconnecting in %ds" % s), "info", "log")
+		timer = Timer(s, Reconnect(), "timer:reconnect")
+		self.manager += timer
+		self.env.timers.append(timer)
