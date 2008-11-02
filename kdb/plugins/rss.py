@@ -118,7 +118,9 @@ class RSS(BasePlugin):
 		else:
 			self.entities = {}
 
-		self.env.timers.append(Timer(60, RSSTick(), "rsstick", persist=True))
+		timer = Timer(60, RSSTick(), "rsstick", persist=True)
+		self.manager += timer
+		self.env.timers.append(timer)
 
 	def cleanup(self):
 		filename = os.path.join(self.env.path, "rss.bin")
