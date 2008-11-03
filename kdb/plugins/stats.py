@@ -8,14 +8,14 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.0.8"
+__ver__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
 
-from pymills.misc import bytes
 from circuits import listener
-from pymills.misc import duration, buildAverage
+from pymills.utils import memory, resident, stacksize
+from pymills.misc import bytes, duration, buildAverage
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -109,6 +109,19 @@ class Stats(BasePlugin):
 				kdb.__author_email__,
 				kdb.__copyright__,
 				kdb.__url__)
+		return msg
+
+	def cmdMSTATS(self, source):
+		"""Display current memory stats
+		
+		Syntax: MSTATS
+		"""
+
+		msg = "Memory: %s %s %s" % (
+			"%0.2f%s" % bytes(memory()),
+			"%0.2f%s" % bytes(resident()),
+			"%0.2f%s" % bytes(stacksize(),))
+
 		return msg
 
 	@listener("PostCommand", type="filter")
