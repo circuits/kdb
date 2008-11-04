@@ -4,16 +4,16 @@
 
 """Notify
 
-This plugin listens for xmlrpc:notify and xmlrpc:update events
+This plugin listens for xmlrpc.notify and xmlrpc.scmupdate events
 and displays them on the default xmlrpc channel.
 """
 
-__ver__ = "0.0.4"
+__ver__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from cPickle import loads
 
-from pymills.event import listener
+from circuits import listener
 
 from kdb.plugin import BasePlugin
 
@@ -28,7 +28,7 @@ class Notify(BasePlugin):
 	Depends on: xmlrpc
 	"""
 
-	@listener("xmlrpc:scmupdate")
+	@listener("xmlrpc.scmupdate")
 	def onSCMUPDATE(self, data):
 
 		if self.env.config.has_option("xmlrpc", "channel"):
@@ -56,8 +56,10 @@ class Notify(BasePlugin):
 
 		return "Message sent to %s" % channel
 
-	@listener("xmlrpc:notify")
+	@listener("xmlrpc.notify")
 	def onNOTIFY(self, source="unknown", message=""):
+
+		print "onNOTIFY: ..."
 
 		if self.env.config.has_option("xmlrpc", "channel"):
 			channel = self.env.config.get("xmlrpc", "channel")

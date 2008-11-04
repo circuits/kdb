@@ -22,28 +22,21 @@ from circuits import listener, Event
 
 from kdb.plugin import BasePlugin
 
-class XMLRPCEvent(Event):
-
-	def __init__(self, *args):
-		Event.__init__(self, *args)
+class RPC(Event):
+	"RPC(Event) -> RPC Event"
 
 class Root(BasePlugin):
 
 	@listener(type="filter")
 	def onDEBUG(self, event, *args, **kwargs):
-		if isinstance(event, XMLRPCEvent):
+		if isinstance(event, RPC):
 			self.env.log.debug(event)
 
 	def __call__(self, *vpath, **params):
 		args, method = xmlrpc.process_body()
 
-		try:
-			r = self.send(XMLRPCEvent(*args), "xmlrpc:%s" % method)
-		except UnhandledEvent:
-			raise Exception, "No handler found for '%s'" % method
-
-		r = [x for x in r if x is not None]
-		body = "\n".join(r)
+		r = self.iter(RPC(*args), "xmlrpc.%s" % method, "bot")
+		body = "\n".join([x for x in r if x is not None])
 
 		conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
 		xmlrpc.respond(
@@ -69,10 +62,10 @@ class XMLRPC(BasePlugin):
 	messages to a configured channel.
 	"""
 
-	def __init__(self, *args, **kwargs):
-		super(XMLRPC, self).__init__(*args, **kwargs)
+	def __init__(self, env, bot, *args, **kwargs):
+		super(XMLRPC, self).__init__(env, bot, *args, **kwargs)
 
-		self.root = Root(self.bot, self.env)
+		self.root = Root(self.env, self.bot)
 
 		cherrypy.config.update({
 			"log.screen": False,
@@ -100,6 +93,9 @@ class XMLRPC(BasePlugin):
 			cherrypy.engine.start()
 		except IOError:
 			pass
+
+	def registered(self):
+		self.manager += self.root
 
 	def cleanup(self):
 		self.root.unregister()

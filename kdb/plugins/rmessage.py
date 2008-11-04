@@ -4,7 +4,7 @@
 
 """RMessage
 
-This plugin listens for xmlrpc:message events and
+This plugin listens for xmlrpc.message events and
 sends a Message Event into the system and returning
 any replies generated.
 """
@@ -23,15 +23,15 @@ class RMessage(BasePlugin):
 	"""RMessage plugin
 
 	This doesn't have any user commands available.
-	This plugin listens for xmlrpc:message events and
+	This plugin listens for xmlrpc.message events and
 	sends a Message Event into the system and returning
 	any replies generated.
 
 	Depends on: xmlrpc
 	"""
 
-	def __init__(self, *args, **kwargs):
-		super(RMessage, self).__init__(*args, **kwargs)
+	def __init__(self, env, bot, *args, **kwargs):
+		super(RMessage, self).__init__(env, bot, *args, **kwargs)
 
 		self._rlog = Stack(5)
 
@@ -43,20 +43,13 @@ class RMessage(BasePlugin):
 
 		return ["Last 5 remote messages:"] + list(self._rlog)
 
-	@listener("xmlrpc:message")
+	@listener("xmlrpc.message")
 	def onXMLRPCMESSAGE(self, user="anonymous", message=""):
 
 		self._rlog.push(message)
 
-		reply = [x for x in self.send(
-			Message(
-				str(user), self.bot.getNick(), message),
-			"message") if x is not None]
-
-		if type(reply) == list:
-			if len(reply) > 0:
-				if type(reply[0]) == list:
-					reply = reply[0] + reply[1:]
-			reply = "\n".join(reply)
+		e = Message(str(user), self.bot.getNick(), message)
+		r = self.iter(e, "message", self.channel)
+		reply = "\n".join([x for x in r if x is not None])
 
 		return reply.strip()
