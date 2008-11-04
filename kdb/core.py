@@ -59,6 +59,8 @@ class Core(Component):
 	def run(self):
 		self.running = True
 
+		self.env.loadPlugins()
+
 		self.env.bot.connect()
 
 		while self.running:

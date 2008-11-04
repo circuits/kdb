@@ -103,8 +103,6 @@ class SystemEnvironment(Environment):
 		self.bridge = Bridge(port, address)
 		self.manager += self.bridge
 
-		self.loadPlugins()
-
 	def loadPlugin(self, plugin):
 		"""E.loadPlugin(plugin) -> None
 
