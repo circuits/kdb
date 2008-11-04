@@ -8,6 +8,7 @@ This module provides the basic infastructure for kdb
 plugins. Plugins should sub-class BasePlugin.
 """
 
+import re
 import inspect
 
 from circuits import listener, Event, Component
@@ -113,6 +114,8 @@ class BasePlugin(Component):
 		if addressed:
 			r = self.processCommand(target, message)
 			if r is not None:
+				if re.match(".*@.*\/", target):
+					pass
 				if type(target) == tuple:
 					target = target[0]
 				if type(r) == list:
@@ -120,6 +123,8 @@ class BasePlugin(Component):
 						self.bot.ircPRIVMSG(target, line)
 				else:
 					self.bot.ircPRIVMSG(target, r)
+
+			return r
 
 	@listener("notice", type="filter")
 	def onNOTICE(self, source, target, message):
