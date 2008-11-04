@@ -8,13 +8,14 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.1"
+__ver__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+import os
 import time
 
 from circuits import listener
-from pymills.utils import memory, resident, stacksize
+from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
 
 import kdb
@@ -117,10 +118,12 @@ class Stats(BasePlugin):
 		Syntax: MSTATS
 		"""
 
+		m= MemoryStats(os.getpid())
+
 		msg = "Memory: %s %s %s" % (
-			"%0.2f%s" % bytes(memory()),
-			"%0.2f%s" % bytes(resident()),
-			"%0.2f%s" % bytes(stacksize(),))
+			"%0.2f%s" % bytes(m.size),
+			"%0.2f%s" % bytes(m.rss),
+			"%0.2f%s" % bytes(m.stack))
 
 		return msg
 
