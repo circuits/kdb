@@ -29,11 +29,8 @@ class XMLRPCEvent(Event):
 
 class Root(BasePlugin):
 
-	def __del__(self):
-		self.unregister()
-
 	@listener(type="filter")
-	def onDEBUG(self, event):
+	def onDEBUG(self, event, *args, **kwargs):
 		if isinstance(event, XMLRPCEvent):
 			self.env.log.debug(event)
 
@@ -75,7 +72,7 @@ class XMLRPC(BasePlugin):
 	def __init__(self, *args, **kwargs):
 		super(XMLRPC, self).__init__(*args, **kwargs)
 
-		self.root = Root(bot, env)
+		self.root = Root(self.bot, self.env)
 
 		cherrypy.config.update({
 			"log.screen": False,
@@ -101,10 +98,10 @@ class XMLRPC(BasePlugin):
 			cherrypy.engine.SIGHUP = None
 			cherrypy.engine.SIGTERM = None
 			cherrypy.engine.start()
-			cherrypy.engine.block()
 		except IOError:
 			pass
 
 	def cleanup(self):
-		cherrypy.engine.stop()
 		self.root.unregister()
+		cherrypy.engine.stop()
+		cherrypy.engine.exit()
