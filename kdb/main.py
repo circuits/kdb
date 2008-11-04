@@ -101,8 +101,7 @@ class Startup(Component):
 
 		self.env = SystemEnvironment(path, systemName)
 
-	@listener("registered")
-	def onREGISTERED(self):
+	def registered(self):
 		self.manager += self.env
 
 		if not self.command == "init":
