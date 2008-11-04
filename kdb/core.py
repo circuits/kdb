@@ -21,8 +21,6 @@ from circuits.lib.log import (
 		Debug as LogDebug,
 		Exception as LogException)
 
-from pymills.utils import State
-
 ###
 ### Events
 ###
