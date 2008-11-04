@@ -44,6 +44,8 @@ class Bot(TCPClient, IRC):
 	port and address.
 	"""
 
+	channel = "bot"
+
 	def __init__(self, env, port=6667, address="127.0.0.1",
 			ssl=False, bind=None, auth=None):
 		"initializes x; see x.__class__.__doc__ for signature"

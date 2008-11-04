@@ -66,15 +66,20 @@ class Core(Component):
 		while self.running:
 			try:
 				self.manager.flush()
+
 				if self.env.bot.connected:
 					self.env.bot.poll()
 				else:
 					sleep(1)
+
+				self.env.bridge.poll()
+
 				for timer in self.env.timers[:]:
 					if timer.manager == self.manager:
 						timer.poll()
 					else:
 						self.env.timers.remove(timer)
+
 				sleep(0.01)
 			except KeyboardInterrupt:
 				if self.env.bot.connected:

@@ -30,9 +30,9 @@ class Irc(BasePlugin):
 	@listener("numeric")
 	def onNUMERIC(self, source, target, numeric, arg, message):
 		if numeric == 1:
-			self.push(Event(), "connected")
+			self.push(Event(), "connected", self.channel)
 		elif numeric == 433:
-			self.push(Event(), "nicksollision")
+			self.push(Event(), "nicksollision", self.channel)
 
 	def cmdJUMP(self, source, server, port=6667, ssl=False):
 		"""Connect to another server.
@@ -81,7 +81,7 @@ class Irc(BasePlugin):
 		"""
 
 		self.cmdQUIT(source, message)
-		self.push(Event(), "term")
+		self.push(Event(), "stop", "core")
 
 		return "Terminating"
 

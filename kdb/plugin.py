@@ -85,6 +85,8 @@ class CommandHandler(object):
 
 class BasePlugin(Component):
 
+	channel = "bot"
+
 	def __init__(self, env, bot, *args, **kwargs):
 		super(BasePlugin, self).__init__(*args, **kwargs)
 
@@ -119,8 +121,6 @@ class BasePlugin(Component):
 				else:
 					self.bot.ircPRIVMSG(target, r)
 
-				return True
-
 	@listener("notice", type="filter")
 	def onNOTICE(self, source, target, message):
 
@@ -137,8 +137,6 @@ class BasePlugin(Component):
 						self.bot.ircNOTICE(target, line)
 				else:
 					self.bot.ircNOTICE(target, r)
-
-				return True
 
 	def unknownCommand(self, source, command):
 		self.bot.ircNOTICE(source, "Unknown command: %s" % command)

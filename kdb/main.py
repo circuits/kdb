@@ -18,7 +18,7 @@ import optparse
 from time import sleep
 from traceback import format_exc
 
-from circuits import listener, Event, Component, Manager
+from circuits import listener, Event, Component, Debugger, Manager
 
 from circuits.lib.env import (
 		Load as LoadEnvironment,
