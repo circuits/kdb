@@ -21,7 +21,7 @@ from pymills.utils import safe__import__
 
 from circuits.lib import config
 from circuits.lib.env import Environment
-from circuits import listener, Event, Component
+from circuits import listener, Event, Component, Bridge
 
 from circuits.lib.log import (
 		Info as LogInfo,
@@ -97,6 +97,11 @@ class SystemEnvironment(Environment):
 
 		self.bot = Bot(self,	port, address, ssl, bind, auth)
 		self.manager += self.bot
+
+		port = self.config.getint("bridge", "port", 8000)
+		address = self.config.get("bridge", "address", "0.0.0.0")
+		self.bridge = Bridge(port, address)
+		self.manager += self.bridge
 
 		self.loadPlugins()
 
