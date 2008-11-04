@@ -114,17 +114,16 @@ class BasePlugin(Component):
 		if addressed:
 			r = self.processCommand(target, message)
 			if r is not None:
-				if re.match(".*@.*\/", target):
-					pass
-				if type(target) == tuple:
-					target = target[0]
-				if type(r) == list:
-					for line in r:
-						self.bot.ircPRIVMSG(target, line)
+				if re.match(".*@.*\/", source):
+					return r
 				else:
-					self.bot.ircPRIVMSG(target, r)
-
-			return r
+					if type(target) == tuple:
+						target = target[0]
+					if type(r) == list:
+						for line in r:
+							self.bot.ircPRIVMSG(target, line)
+					else:
+						self.bot.ircPRIVMSG(target, r)
 
 	@listener("notice", type="filter")
 	def onNOTICE(self, source, target, message):
