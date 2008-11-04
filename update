@@ -1,6 +1,0 @@
-#!/bin/bash
-
-hg push
-
-python setup.py sdist bdist_egg register upload
-scp dist/* cancer:www/downloads/software/
