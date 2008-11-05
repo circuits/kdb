@@ -205,7 +205,7 @@ class BasePlugin(Component):
 
 		if target.lower() == self.bot.getNick().lower():
 			if len(message) > len(self.bot.getNick()) and \
-					message[0:len(self.bot.getNick())].lower() \
+					message[:len(self.bot.getNick())].lower() \
 					== self.bot.getNick().lower():
 				message = message[len(self.bot.getNick()):]
 				while len(message) > 0 and message[0] in [
@@ -215,7 +215,7 @@ class BasePlugin(Component):
 			return True, source, message
 		else:
 			if len(message) > len(self.bot.getNick()) and \
-					message[0:len(self.bot.getNick())].lower() \
+					message[:len(self.bot.getNick())].lower() \
 					== self.bot.getNick().lower():
 
 				message = message[len(self.bot.getNick()):]
