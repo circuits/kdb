@@ -6,8 +6,8 @@ Googles stuff.
 __ver__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import urllib
 import re
+import urllib
 
 from kdb.plugin import BasePlugin
 
@@ -17,6 +17,7 @@ class Google(BasePlugin):
 	Google stuff
 	Usage: .google [-d<results> ]<search terms>
 	"""
+
 	data = ""
 
 	def cmdGoogle(self, source, search):
