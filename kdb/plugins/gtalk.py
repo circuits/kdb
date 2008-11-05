@@ -13,7 +13,7 @@ user = kdb
 password = foobar
 """
 
-__ver__ = "0.1"
+__ver__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep
@@ -36,14 +36,14 @@ class GTalk(BasePlugin, Worker):
 	See: commands gtalk
 	"""
 
-	def __init__(self, *args, **kwargs):
-		super(GTalk, self).__init__(*args, **kwargs)
+	def __init__(self, env, bot, *args, **kwargs):
+		super(GTalk, self).__init__(env, bot, *args, **kwargs)
 
 		self._username = self.env.config.get("gtalk", "username", "kdbbot")
 		self._password = self.env.config.get("gtalk", "password", "semaj2891")
 		self._name = "kdb"
 
-		self._client = cnx = xmpp.Client("gmail.com", debug=[])
+		self._client = xmpp.Client("gmail.com", debug=[])
 
 		self.start()
 
@@ -65,16 +65,15 @@ class GTalk(BasePlugin, Worker):
 			else:
 				try:
 					self._client.connect(server=("gmail.com", 5223))
-				except:
+					self._client.auth(
+							self._username,
+							self._password,
+							self._name)
+					self._client.RegisterHandler("message", self.messageHandler)
+					self._client.sendInitPresence()
+				except Exception, error:
 					sleep(60)
-				self._client.auth(
-						self._username,
-						self._password,
-						self._name)
 
-				self._client.RegisterHandler(
-						"message", self.messageHandler)
-				self._client.sendInitPresence()
 				sleep(1)
 
 	def messageHandler(self, cnx, message):
@@ -86,14 +85,16 @@ class GTalk(BasePlugin, Worker):
 
 			if " " in text:
 				command, args = text.split(" ", 1)
-				command = command.upper()
 			else:
 				command, text = text, ""
+
+			command = command.upper()
 
 			if command == "SUBSCRIBE":
 				self._client.Roster.Authorize(user)
 				reply = "Authorized."
 			else:
+				text = message.getBody()
 				e = Message(str(user), self.bot.getNick(), text)
 				r = self.iter(e, "message", self.channel)
 				reply = "\n".join([x for x in r if x is not None])
