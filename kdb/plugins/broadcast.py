@@ -9,7 +9,7 @@ messages by listening for a certain pattern of message
 and performing some command or event on that.
 """
 
-__ver__ = "0.0.2"
+__version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import listener

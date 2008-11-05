@@ -9,7 +9,7 @@ can be used to display the current Swatch Time or
 Internet Time or Beat.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills prologic at shortcircuit dot net dot au"
 
 from pymills.misc import beat

@@ -9,7 +9,7 @@ a somewhat crude artificial intelligence that can
 respond to users.
 """
 
-__ver__ = "0.0.2"
+__version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 

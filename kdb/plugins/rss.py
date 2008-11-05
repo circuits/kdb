@@ -9,7 +9,7 @@ user allowing the user to set personal and public RSS feeds
 to be retrieved at regular intervals and messages to them.
 """
 
-__ver__ = "0.0.8"
+__version__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os

@@ -9,7 +9,7 @@ if it's nick is registered. The configuration is
 provided in the configuration file.
 """
 
-__ver__ = "0.1"
+__version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re

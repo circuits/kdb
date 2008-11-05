@@ -3,7 +3,7 @@
 Displays information about tv shows.
 """
 
-__ver__ = "0.0.1"
+__version__ = "0.0.1"
 __author__ = "liato"
 
 import urllib

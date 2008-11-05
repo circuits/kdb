@@ -8,7 +8,7 @@ This plugin provides various tools to work with
 hostnames and ip addresses.
 """
 
-__ver__ = "0.0.4"
+__version__ = "0.0.4"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import string

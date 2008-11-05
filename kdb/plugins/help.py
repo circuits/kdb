@@ -9,7 +9,7 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__ver__ = "0.0.7"
+__version__ = "0.0.7"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import inspect

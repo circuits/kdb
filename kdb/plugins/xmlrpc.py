@@ -11,7 +11,7 @@ allowing other plugins to respond to "xmlrpc" events.
 channel = #lab
 """
 
-__ver__ = "0.0.8"
+__version__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import cherrypy

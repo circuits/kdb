@@ -8,7 +8,7 @@ This plugin provides a command to evaluate python expressions
 and can be used as a simple way of performing calculations.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin

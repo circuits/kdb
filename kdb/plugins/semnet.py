@@ -9,7 +9,7 @@ that allows the user to create relationships between things
 and ask questions.
 """
 
-__ver__ = "0.0.2"
+__version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
