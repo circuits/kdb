@@ -1,4 +1,3 @@
-# Filename: deduce.py
 # Module:	deduce
 # Date:		03th July 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
@@ -23,8 +22,8 @@ from kdb.plugin import BasePlugin
 class Deduce(BasePlugin):
 	"Deductive Logic"
 
-	def __init__(self, *args, **kwargs):
-		super(Deduce, self).__init__(*args, **kwargs)
+	def __init__(self, env, bot, *args, **kwargs):
+		super(Deduce, self).__init__(env, bot, *args, **kwargs)
 
 		self.reason = []
 		self.b = brain()
