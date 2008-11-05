@@ -76,13 +76,26 @@ class GTalk(BasePlugin, Worker):
 						"message", self.messageHandler)
 				self._client.sendInitPresence()
 				sleep(1)
-	
+
 	def messageHandler(self, cnx, message):
 		text = message.getBody()
 		user = message.getFrom()
+
 		if text is not None:
 			self.env.log.debug("<%s> %s" % (user, text))
-			e = Message(str(user), self.bot.getNick(), text)
-			r = self.iter(e, "message", self.channel)
-			reply = "\n".join([x for x in r if x is not None])
+
+			if " " in text:
+				command, args = text.split(" ", 1)
+				command = command.upper()
+			else:
+				command, text = text, ""
+
+			if command == "SUBSCRIBE":
+				self._client.Roster.Authorize(user)
+				reply = "Authorized."
+			else:
+				e = Message(str(user), self.bot.getNick(), text)
+				r = self.iter(e, "message", self.channel)
+				reply = "\n".join([x for x in r if x is not None])
+
 			self.sendMsg(user, reply)
