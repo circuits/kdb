@@ -8,7 +8,7 @@ This plugin collects various statistics and allows the
 user to access and display them.
 """
 
-__ver__ = "0.2"
+__ver__ = "0.2.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
@@ -137,6 +137,6 @@ class Stats(BasePlugin):
 	def onREAD(self, line):
 		self.tin += len(line) + 2
 
-	@listener("write", type="filter", target="bot")
-	def onWRITE(self, data):
+	@listener("send", type="filter", target="bot")
+	def onSEND(self, data):
 		self.tout += len(data)
