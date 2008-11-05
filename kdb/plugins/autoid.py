@@ -1,4 +1,3 @@
-# Filename: autoid.py
 # Module:	autoid
 # Date:		03th July 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
@@ -10,12 +9,12 @@ if it's nick is registered. The configuration is
 provided in the configuration file.
 """
 
-__ver__ = "0.0.2"
+__ver__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re
 
-from pymills.event import listener
+from circuits import listener
 
 from kdb.plugin import BasePlugin
 
