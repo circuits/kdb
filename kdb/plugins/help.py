@@ -9,10 +9,10 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
-__version__ = "0.0.7"
+__version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import inspect
+from inspect import ismethod, getmembers, getmodule
 
 from kdb.plugin import BasePlugin
 
@@ -44,8 +44,8 @@ class Help(BasePlugin):
 		for plugin in plugins:
 			if plugin in self.env.plugins:
 				o = self.env.plugins[plugin]
-				commands.extend([x[0][3:].lower() for x in inspect.getmembers(
-					o, lambda x: inspect.ismethod(x) and
+				commands.extend([x[0][3:].lower() for x in getmembers(
+					o, lambda x: ismethod(x) and
 					callable(x) and x.__name__.startswith("cmd"))])
 
 		if not s == "*":
@@ -94,5 +94,35 @@ class Help(BasePlugin):
 
 		if msg is None:
 			msg = ["ERROR: Can't find help for '%s'" % s]
+
+		return msg
+
+	def cmdINFO(self, source, plugin):
+		"""Display info for the given plugin.
+		
+		Syntax: INFO plugin
+		"""
+
+		msg = None
+
+		plugin = plugin.lower()
+
+		if plugin in self.env.plugins:
+			m = getmodule(self.env.plugins[plugin])
+			name = plugin
+			description = m.__dict__.get("__doc__", plugin)
+			description = description.split("\n", 1)[0]
+			version = m.__dict__.get("__version__", "Unknown")
+			author = m.__dict__.get("__author__", "Unknown")
+			msg = "%s - %s v%s by %s" % (
+					name, description,
+					version, author)
+
+		if msg is None:
+			msg = "No info available for '%s'. To get a list of plugins, type: plugins" % s
+
+		msg = msg.strip()
+		msg = msg.replace("\t", "   ")
+		msg = msg.split("\n")
 
 		return msg
