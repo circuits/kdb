@@ -1,4 +1,3 @@
-# Filename: swatch.py
 # Module:	swatch
 # Date:		19th December 2006
 # Author:	James Mills prologic at shortcircuit dot net dot au

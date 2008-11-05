@@ -1,4 +1,3 @@
-# Filename: help.py
 # Module:	help
 # Date:		30th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au
