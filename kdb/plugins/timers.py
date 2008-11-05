@@ -9,7 +9,7 @@ Provides a test command to create a message to be
 display in x seconds.
 """
 
-__ver__ = "0.0.2"
+__version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import listener, Event, Timer

@@ -9,7 +9,7 @@ kdb's core. You can load/unload plugins on the fly and
 rehash kdb forcing it to re-load it's environment.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin

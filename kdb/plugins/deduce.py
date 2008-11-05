@@ -9,7 +9,7 @@ This plugin implements a simple deductive logic which
 allows the user to define facts and ask questions about it.
 """
 
-__ver__ = "0.0.1"
+__version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os

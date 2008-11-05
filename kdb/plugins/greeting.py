@@ -9,7 +9,7 @@ Users that have been greeted before will not get further
 greetings, unless they haven't been seen for over 3 days.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os

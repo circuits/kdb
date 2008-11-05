@@ -8,7 +8,7 @@ This plugin provides responses to IRC CTCP Events and
 responds to them appropiately.
 """
 
-__ver__ = "0.1"
+__version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time

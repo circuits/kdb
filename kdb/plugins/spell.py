@@ -9,7 +9,7 @@ can be used to check the spelling of words and
 give suggestions for incorrectly spelled words.
 """
 
-__ver__ = "0.0.1"
+__version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import enchant

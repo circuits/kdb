@@ -8,7 +8,7 @@ This plugin provides various commands to control the
 IRC specific features of kdb. eg: Changing it's nickname.
 """
 
-__ver__ = "0.0.9"
+__version__ = "0.0.9"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep

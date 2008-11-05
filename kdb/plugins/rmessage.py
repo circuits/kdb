@@ -9,7 +9,7 @@ sends a Message Event into the system and returning
 any replies generated.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import listener

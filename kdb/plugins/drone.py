@@ -8,7 +8,7 @@ This plugin enables drone-mode. For now this means
 just setting the bot's nickname to the system hostname.
 """
 
-__ver__ = "0.0.3"
+__version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from socket import gethostname

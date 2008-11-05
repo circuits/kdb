@@ -8,7 +8,7 @@ This plugin listens for xmlrpc.notify and xmlrpc.scmupdate events
 and displays them on the default xmlrpc channel.
 """
 
-__ver__ = "0.1"
+__version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from cPickle import loads
