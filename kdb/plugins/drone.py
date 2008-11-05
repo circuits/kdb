@@ -1,4 +1,3 @@
-# Filename: drone.py
 # Module:	drone
 # Date:		22th December 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au

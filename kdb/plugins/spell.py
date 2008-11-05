@@ -1,4 +1,3 @@
-# Filename: spell.py
 # Module:	spell
 # Date:		30th June 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au

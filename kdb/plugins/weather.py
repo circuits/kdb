@@ -1,4 +1,3 @@
-# Filename: weather.py
 # Module:	weather
 # Date:		01th July 2006
 # Author:	James Mills, prologic at shortcircuit dot net dot au

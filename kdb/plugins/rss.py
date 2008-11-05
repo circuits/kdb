@@ -1,4 +1,3 @@
-# Filename: rss.py
 # Module:	rss
 # Date:		25th March 2007
 # Author:	James Mills, prologic at shortcircuit dot net dot au
