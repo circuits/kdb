@@ -133,10 +133,10 @@ class Stats(BasePlugin):
 			self.commands[command] = 0
 		self.commands[command] += 1
 
-	@listener("bot:read", type="filter")
+	@listener("read", type="filter", target="bot")
 	def onREAD(self, line):
 		self.tin += len(line) + 2
 
-	@listener("bot:write", type="filter")
+	@listener("write", type="filter", target="bot")
 	def onWRITE(self, data):
 		self.tout += len(data)
