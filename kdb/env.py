@@ -21,7 +21,7 @@ from pymills.utils import safe__import__
 
 from circuits.lib import config
 from circuits.lib.env import Environment
-from circuits import listener, Event, Component, Bridge
+from circuits import listener, Event, Component, Bridge, Debugger
 
 from circuits.lib.log import (
 		Info as LogInfo,
@@ -102,6 +102,9 @@ class SystemEnvironment(Environment):
 		address = self.config.get("bridge", "address", "0.0.0.0")
 		self.bridge = Bridge(port, address)
 		self.manager += self.bridge
+
+		if self.debug:
+			self.manager += Debugger(self.log)
 
 	def loadPlugin(self, plugin):
 		"""E.loadPlugin(plugin) -> None
