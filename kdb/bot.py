@@ -84,8 +84,7 @@ class Bot(TCPClient, IRC):
 
 		self.ircNICK(self.auth.get("nick", systemName))
 
-	@listener("disconnect")
-	def onDISCONNECT(self):
+	def disconnected(self):
 		s = 60
 		self.push(LogInfo("Disconnected. Reconnecting in %ds" % s), "info", "log")
 		timer = Timer(s, Reconnect(), "timer:reconnect")
