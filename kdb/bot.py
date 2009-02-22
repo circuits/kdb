@@ -72,8 +72,7 @@ class Bot(TCPClient, IRC):
 	def onTIMERRECONNECT(self):
 		self.connect()
 	
-	@listener("connect")
-	def onCONNECT(self, host, port):
+	def connected(self, host, port):
 		if self.auth.has_key("password"):
 			self.ircPASS(auth["password"])
 
