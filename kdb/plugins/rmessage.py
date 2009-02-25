@@ -1,6 +1,6 @@
-# Module:	rmessage
-# Date:		24th September 2007
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   rmessage
+# Date:     24th September 2007
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """RMessage
 
@@ -20,36 +20,36 @@ from kdb.plugin import BasePlugin
 
 class RMessage(BasePlugin):
 
-	"""RMessage plugin
+    """RMessage plugin
 
-	This doesn't have any user commands available.
-	This plugin listens for xmlrpc.message events and
-	sends a Message Event into the system and returning
-	any replies generated.
+    This doesn't have any user commands available.
+    This plugin listens for xmlrpc.message events and
+    sends a Message Event into the system and returning
+    any replies generated.
 
-	Depends on: xmlrpc
-	"""
+    Depends on: xmlrpc
+    """
 
-	def __init__(self, env, bot, *args, **kwargs):
-		super(RMessage, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env, bot, *args, **kwargs):
+        super(RMessage, self).__init__(env, bot, *args, **kwargs)
 
-		self._rlog = Stack(5)
+        self._rlog = Stack(5)
 
-	def cmdRLOG(self, source):
-		"""View Remote Log
+    def cmdRLOG(self, source):
+        """View Remote Log
 
-		Syntax: RLOG
-		"""
+        Syntax: RLOG
+        """
 
-		return ["Last 5 remote messages:"] + list(self._rlog)
+        return ["Last 5 remote messages:"] + list(self._rlog)
 
-	@listener("xmlrpc.message")
-	def onXMLRPCMESSAGE(self, user="anonymous", message=""):
+    @listener("xmlrpc.message")
+    def onXMLRPCMESSAGE(self, user="anonymous", message=""):
 
-		self._rlog.push(message)
+        self._rlog.push(message)
 
-		e = Message(str(user), self.bot.getNick(), message)
-		r = self.iter(e, "message", self.channel)
-		reply = "\n".join([x for x in r if x is not None])
+        e = Message(str(user), self.bot.getNick(), message)
+        r = self.iter(e, "message", self.channel)
+        reply = "\n".join([x for x in r if x is not None])
 
-		return reply.strip()
+        return reply.strip()

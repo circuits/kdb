@@ -1,6 +1,6 @@
-# Module:	eval
-# Date:		30th June 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   eval
+# Date:     30th June 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Expression Evaluation 
 
@@ -15,25 +15,25 @@ from kdb.plugin import BasePlugin
 
 class Eval(BasePlugin):
 
-	"""Evalulation (expression) plugin
+    """Evalulation (expression) plugin
 
-	Provides a command to evaluate python expressions and
-	can be used as a simple way of calculating expressions.
+    Provides a command to evaluate python expressions and
+    can be used as a simple way of calculating expressions.
 
-	See: help eval
-	"""
+    See: help eval
+    """
 
-	def cmdEVAL(self, source, s):
-		"""Evaluates the given expression and displays the result.
+    def cmdEVAL(self, source, s):
+        """Evaluates the given expression and displays the result.
 
-		Syntax: EVAL <expr>
-		"""
+        Syntax: EVAL <expr>
+        """
 
-		return "Disabled"
+        return "Disabled"
 
-		try:
-			msg = str(eval(s)).split("\n")
-		except Exception, e:
-			msg = ["ERROR: (%s) %s" % (e.__class__.__name__, e)]
+        try:
+            msg = str(eval(s)).split("\n")
+        except Exception, e:
+            msg = ["ERROR: (%s) %s" % (e.__class__.__name__, e)]
 
-		return msg
+        return msg

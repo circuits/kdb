@@ -1,6 +1,6 @@
-# Module:	core
-# Date:		09th May 2005
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   core
+# Date:     09th May 2005
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Core and Plugin Management
 
@@ -15,71 +15,71 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 from kdb.plugin import BasePlugin
 
 class Core(BasePlugin):
-	"Core and Plugin Management"
+    "Core and Plugin Management"
 
-	def cmdREHASH(self, source):
-		"""Reload environment
+    def cmdREHASH(self, source):
+        """Reload environment
 
-		Syntax: RELOAD
-		"""
+        Syntax: RELOAD
+        """
 
-		self.env.reload()
-		msg = "Environment reloaded"
-		return msg
+        self.env.reload()
+        msg = "Environment reloaded"
+        return msg
 
-	def cmdPLUGINS(self, source):
-		"""List loaded plugins
+    def cmdPLUGINS(self, source):
+        """List loaded plugins
 
-		Syntax: PLUGINS
-		"""
+        Syntax: PLUGINS
+        """
 
-		plugins = self.env.plugins.keys()
-		msg = "Plugins loaded: %s" % ", ".join(plugins)
-		return msg
+        plugins = self.env.plugins.keys()
+        msg = "Plugins loaded: %s" % ", ".join(plugins)
+        return msg
 
-	def cmdLOAD(self, source, plugin):
-		"""Load a plugin
+    def cmdLOAD(self, source, plugin):
+        """Load a plugin
 
-		Syntax: LOAD <plugin>
-		"""
+        Syntax: LOAD <plugin>
+        """
 
-		if self.env.loadPlugin(plugin):
-			msg = "Plugin '%s' loaded" % plugin
-		else:
-			msg = "Error while loading plugin '%s' (See log)" % plugin
-		return msg
+        if self.env.loadPlugin(plugin):
+            msg = "Plugin '%s' loaded" % plugin
+        else:
+            msg = "Error while loading plugin '%s' (See log)" % plugin
+        return msg
 
-	def cmdRELOAD(self, source, plugin):
-		"""Reload an already loaded plugin
+    def cmdRELOAD(self, source, plugin):
+        """Reload an already loaded plugin
 
-		Syntax: RELOAD <plugin>
-		"""
+        Syntax: RELOAD <plugin>
+        """
 
-		if plugin not in self.env.plugins:
-			msg = "ERROR: Plugin '%s' is not loaded" % plugin
+        if plugin not in self.env.plugins:
+            msg = "ERROR: Plugin '%s' is not loaded" % plugin
 
-		self.env.unloadPlugin(plugin)
-		if self.env.loadPlugin(plugin):
-			msg = "Plugin '%s' reloaded" % plugin
-		else:
-			msg = "Error while loading plugin '%s' (See log)" % plugin
+        self.env.unloadPlugin(plugin)
+        if self.env.loadPlugin(plugin):
+            msg = "Plugin '%s' reloaded" % plugin
+        else:
+            msg = "Error while loading plugin '%s' (See log)" % plugin
 
-		return msg
+        return msg
 
-	def cmdUNLOAD(self, source, plugin):
-		"""Unload an already loaded plugin
+    def cmdUNLOAD(self, source, plugin):
+        """Unload an already loaded plugin
 
-		Note: You cannot unload the "core" plugin.
+        Note: You cannot unload the "core" plugin.
 
-		Syntax: UNLOAD <plugin>
-		"""
+        Syntax: UNLOAD <plugin>
+        """
 
-		if plugin == "core":
-			return "ERROR: Unloading the core plugin is disallowed."
+        if plugin == "core":
+            return "ERROR: Unloading the core plugin is disallowed."
 
-		if plugin in self.env.plugins:
-			self.env.unloadPlugin(plugin)
-			msg = "Plugin '%s' unloaded" % plugin
-		else:
-			msg = "ERROR: Plugin '%s' is not loaded" % plugin
-		return msg
+        if plugin in self.env.plugins:
+            self.env.unloadPlugin(plugin)
+            msg = "Plugin '%s' unloaded" % plugin
+        else:
+            msg = "ERROR: Plugin '%s' is not loaded" % plugin
+        return msg

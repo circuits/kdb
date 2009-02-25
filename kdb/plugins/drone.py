@@ -1,6 +1,6 @@
-# Module:	drone
-# Date:		22th December 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   drone
+# Date:     22th December 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Drone Mode
 
@@ -18,20 +18,20 @@ from circuits import listener
 from kdb.plugin import BasePlugin
 
 class Drone(BasePlugin):
-	"Drone Mode"
+    "Drone Mode"
 
-	def __init__(self, *args, **kwargs):
-		super(Drone, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Drone, self).__init__(*args, **kwargs)
 
-		if self.bot.getNick() != gethostname():
-			self.bot.ircNICK(gethostname())
+        if self.bot.getNick() != gethostname():
+            self.bot.ircNICK(gethostname())
 
-	@listener("connected")
-	def onCONNECTED(self):
-		if self.bot.getNick() != gethostname():
-			self.bot.ircNICK(gethostname())
+    @listener("connected")
+    def onCONNECTED(self):
+        if self.bot.getNick() != gethostname():
+            self.bot.ircNICK(gethostname())
 
-	@listener("nicksollision")
-	def onNICKCOLLISION(self):
-		if self.bot.getNick() != gethostname():
-			self.bot.ircNICK(gethostname())
+    @listener("nicksollision")
+    def onNICKCOLLISION(self):
+        if self.bot.getNick() != gethostname():
+            self.bot.ircNICK(gethostname())

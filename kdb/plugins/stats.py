@@ -1,6 +1,6 @@
-# Module:	stats
-# Date:		30th June 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   stats
+# Date:     30th June 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Statistics
 
@@ -23,120 +23,120 @@ from kdb.plugin import BasePlugin
 
 class Stats(BasePlugin):
 
-	"""Statistics plugin
+    """Statistics plugin
 
-	Provides various statistical functions and information.
-	Namely, network, uptime and error stats.
-	See: commands stats
-	"""
+    Provides various statistical functions and information.
+    Namely, network, uptime and error stats.
+    See: commands stats
+    """
 
-	def __init__(self, *args, **kwargs):
-		super(Stats, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Stats, self).__init__(*args, **kwargs)
 
-		self.tin = 0
-		self.tout = 0
-		self.commands = {}
+        self.tin = 0
+        self.tout = 0
+        self.commands = {}
 
-		self.stime = time.time()
+        self.stime = time.time()
 
-	def cmdERRORS(self, source):
-		"""Display numbers of errors that have occured
-		
-		Syntax: ERRORS
-		"""
+    def cmdERRORS(self, source):
+        """Display numbers of errors that have occured
+        
+        Syntax: ERRORS
+        """
 
-		if self.env.errors == 0:
-			msg = "No errors"
-		else:
-			msg = "Errors: %d" % self.env.errors
-		return msg
+        if self.env.errors == 0:
+            msg = "No errors"
+        else:
+            msg = "Errors: %d" % self.env.errors
+        return msg
 
-	def cmdUPTIME(self, source):
-		"""Display current uptime and cpu usage
-		
-		Syntax: UPTIME
-		"""
+    def cmdUPTIME(self, source):
+        """Display current uptime and cpu usage
+        
+        Syntax: UPTIME
+        """
 
-		tTime = time.time() - self.stime
-		uptime = duration(tTime)
-		cpu = time.clock()
-		rate = (cpu / tTime) * 100.0
-		msg = "Uptime: %s+%s:%s:%s (CPU: %0.2fs %0.2f%%)" % (
-				uptime + (cpu, rate))
-		return msg
+        tTime = time.time() - self.stime
+        uptime = duration(tTime)
+        cpu = time.clock()
+        rate = (cpu / tTime) * 100.0
+        msg = "Uptime: %s+%s:%s:%s (CPU: %0.2fs %0.2f%%)" % (
+                uptime + (cpu, rate))
+        return msg
 
-	def cmdCSTATS(self, source):
-		"""Display command usage stats
+    def cmdCSTATS(self, source):
+        """Display command usage stats
 
-		Syntax: CSTATS
-		"""
+        Syntax: CSTATS
+        """
 
-		totalCommands = sum(self.commands.values())
+        totalCommands = sum(self.commands.values())
 
-		l = list(self.commands.iteritems())[:5]
-		l.sort(lambda x, y: x[1] - y[1])
-		x = [cmd[0] for cmd in l]
-		x.reverse()
+        l = list(self.commands.iteritems())[:5]
+        l.sort(lambda x, y: x[1] - y[1])
+        x = [cmd[0] for cmd in l]
+        x.reverse()
 
-		msg = "Command Stats: %s Total: %d Top 5: %s" % (
-				buildAverage(self.stime, totalCommands) + (" ".join(x),))
+        msg = "Command Stats: %s Total: %d Top 5: %s" % (
+                buildAverage(self.stime, totalCommands) + (" ".join(x),))
 
-		return msg
+        return msg
 
 
-	def cmdNSTATS(self, source):
-		"""Display current network stats
-		
-		Syntax: NSTATS
-		"""
+    def cmdNSTATS(self, source):
+        """Display current network stats
+        
+        Syntax: NSTATS
+        """
 
-		msg = "Traffic: (I, O, T) = (%s, %s, %s)" % (
-				"%0.2f%s" % (bytes(self.tin)),
-				"%0.2f%s" % (bytes(self.tout)),
-				"%0.2f%s" % (bytes(self.tin + self.tout)))
+        msg = "Traffic: (I, O, T) = (%s, %s, %s)" % (
+                "%0.2f%s" % (bytes(self.tin)),
+                "%0.2f%s" % (bytes(self.tout)),
+                "%0.2f%s" % (bytes(self.tin + self.tout)))
 
-		return msg
+        return msg
 
-	def cmdVERSION(self, source):
-		"""Display version information
-		
-		Syntax: VERSION
-		"""
+    def cmdVERSION(self, source):
+        """Display version information
+        
+        Syntax: VERSION
+        """
 
-		msg = "%s [ %s ] v%s by %s - %s - %s" % (
-				kdb.__name__,
-				kdb.__description__,
-				kdb.__version__,
-				kdb.__author_email__,
-				kdb.__copyright__,
-				kdb.__url__)
-		return msg
+        msg = "%s [ %s ] v%s by %s - %s - %s" % (
+                kdb.__name__,
+                kdb.__description__,
+                kdb.__version__,
+                kdb.__author_email__,
+                kdb.__copyright__,
+                kdb.__url__)
+        return msg
 
-	def cmdMSTATS(self, source):
-		"""Display current memory stats
-		
-		Syntax: MSTATS
-		"""
+    def cmdMSTATS(self, source):
+        """Display current memory stats
+        
+        Syntax: MSTATS
+        """
 
-		m= MemoryStats(os.getpid())
+        m= MemoryStats(os.getpid())
 
-		msg = "Memory: %s %s %s" % (
-			"%0.2f%s" % bytes(m.size),
-			"%0.2f%s" % bytes(m.rss),
-			"%0.2f%s" % bytes(m.stack))
+        msg = "Memory: %s %s %s" % (
+            "%0.2f%s" % bytes(m.size),
+            "%0.2f%s" % bytes(m.rss),
+            "%0.2f%s" % bytes(m.stack))
 
-		return msg
+        return msg
 
-	@listener("PostCommand", type="filter")
-	def onPOSTCOMMAND(self, command, tokens):
-		if not self.commands.has_key(command):
-			self.commands[command] = 0
-		self.commands[command] += 1
+    @listener("PostCommand", type="filter")
+    def onPOSTCOMMAND(self, command, tokens):
+        if not self.commands.has_key(command):
+            self.commands[command] = 0
+        self.commands[command] += 1
 
-	@listener("read", type="filter", target="bot")
-	def onREAD(self, line):
-		self.tin += len(line) + 2
+    @listener("read", type="filter", target="bot")
+    def onREAD(self, line):
+        self.tin += len(line) + 2
 
-	@listener("send", type="filter", target="bot")
-	def onSEND(self, data):
-		self.tout += len(data)
+    @listener("send", type="filter", target="bot")
+    def onSEND(self, data):
+        self.tout += len(data)
