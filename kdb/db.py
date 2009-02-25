@@ -1,6 +1,6 @@
-# Module:	db
-# Date:		11th September 2008
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   db
+# Date:     11th September 2008
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """db - Database Module
 
@@ -22,33 +22,33 @@ from circuits import listener, Event, Component
 
 class Database(Base):
 
-	def __init__(self, path="db"):
-		basename = self.__class__.__name__
-		super(Database, self).__init__(basename, path)
-		self.set_string_format(unicode, "utf-8")
+    def __init__(self, path="db"):
+        basename = self.__class__.__name__
+        super(Database, self).__init__(basename, path)
+        self.set_string_format(unicode, "utf-8")
 
-	def create(self, **kwargs):
-		return Base.create(self, *self.fields, **kwargs)
+    def create(self, **kwargs):
+        return Base.create(self, *self.fields, **kwargs)
 
 ###
 ### Databases
 ###
 
 class Enum(Database):
-	fields = (
-			("type", str),
-			("name", str),
-			("value", str))
+    fields = (
+            ("type", str),
+            ("name", str),
+            ("value", str))
 
 class Users(Database):
-	fields = (
-			("username", str),
-			("password", str))
+    fields = (
+            ("username", str),
+            ("password", str))
 
 DEFAULTS = [
-	("users", [
-		("admin", "admin")
-	])
+    ("users", [
+        ("admin", "admin")
+    ])
 ]
 
 ###
@@ -56,13 +56,13 @@ DEFAULTS = [
 ###
 
 class Create(Event):
-	"""Create(Event) -> Create Event"""
+    """Create(Event) -> Create Event"""
 
 class Load(Event):
-	"""Load(Event) -> Load Event"""
+    """Load(Event) -> Load Event"""
 
 class Save(Event):
-	"""Save(Event) -> Save Event"""
+    """Save(Event) -> Save Event"""
 
 ###
 ### Components
@@ -70,41 +70,41 @@ class Save(Event):
 
 class Databases(Component):
 
-	channel = "db"
+    channel = "db"
 
-	def __init__(self, env):
-		super(Databases, self).__init__()
+    def __init__(self, env):
+        super(Databases, self).__init__()
 
-		self.env = env
+        self.env = env
 
-		self.enum = Enum(os.path.join(self.env.path, "db"))
-		self.users = Users(os.path.join(self.env.path, "db"))
+        self.enum = Enum(os.path.join(self.env.path, "db"))
+        self.users = Users(os.path.join(self.env.path, "db"))
 
-		self.dbs = [x for x in getmembers(self) if isinstance(x[1], Database)]
+        self.dbs = [x for x in getmembers(self) if isinstance(x[1], Database)]
 
-	@listener("create")
-	def onCREATE(self):
-		for db in (db[1] for db in self.dbs):
-			db.create()
+    @listener("create")
+    def onCREATE(self):
+        for db in (db[1] for db in self.dbs):
+            db.create()
 
-		for name, data in DEFAULTS:
-			db = getattr(self, name)
-			for values in data:
-				x = []
-				for v in values:
-					if type(v) == tuple:
-						x.append(getattr(self, v[0])[v[1]])
-					else:
-						x.append(v)
-				db.insert(*x)
-			db.commit()
+        for name, data in DEFAULTS:
+            db = getattr(self, name)
+            for values in data:
+                x = []
+                for v in values:
+                    if type(v) == tuple:
+                        x.append(getattr(self, v[0])[v[1]])
+                    else:
+                        x.append(v)
+                db.insert(*x)
+            db.commit()
 
-	@listener("load")
-	def onLOAD(self):
-		for db in (db[1] for db in self.dbs):
-			db.open()
+    @listener("load")
+    def onLOAD(self):
+        for db in (db[1] for db in self.dbs):
+            db.open()
 
-	@listener("save")
-	def onSAVE(self):
-		for db in (db[1] for db in self.dbs):
-			db.commit()
+    @listener("save")
+    def onSAVE(self):
+        for db in (db[1] for db in self.dbs):
+            db.commit()

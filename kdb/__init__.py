@@ -32,30 +32,30 @@ __license__ = "GPL"
 __platforms__ = "POSIX"
 __keywords__ = "Knowledge Database IRC Bot Framework"
 __classifiers__ = [
-		"Development Status :: 5 - Production/Stable",
-		"Environment :: No Input/Output (Daemon)",
-		"Intended Audience :: Developers",
-		"Intended Audience :: End Users/Desktop",
-		"License :: OSI Approved :: GNU General Public License (GPL)",
-		"Natural Language :: English",
-		"Operating System :: OS Independent",
-		"Programming Language :: Python",
-		"Topic :: Communications :: Chat :: Internet Relay Chat",
-		"Topic :: Scientific/Engineering :: Artificial Intelligence"
-		]
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: No Input/Output (Daemon)",
+        "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Communications :: Chat :: Internet Relay Chat",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence"
+        ]
 __str__ = "%s-%s" % (__name__, __version__)
 
 __package_data__ = {
-		}
+        }
 
 __install_requires__ = [
-		]
+        ]
 
 __setup_requires__ = [
-		]
+        ]
 
 __extras_require__ = {
-		}
+        }
 
 __entry_points__ = """
 [console_scripts]
