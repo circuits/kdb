@@ -54,6 +54,12 @@ class Core(Component):
 	def rehash(self, signal=0, stack=0):
 		self.env.reload()
 
+	def error(self, *args, **kwargs):
+		if len(args) == 3 and issubclass(args[0], BaseException):
+			self.env.errors += 1
+			self.push(LogException("ERROR: %s" % args[1]), "exception", "log")
+			self.push(LogDebug(args[3]), "debug", "log")
+
 	def run(self):
 		self.running = True
 
@@ -82,9 +88,5 @@ class Core(Component):
 				if self.env.bot.connected:
 					self.env.bot.ircQUIT("Received ^C, terminating...")
 				self.running = False
-			except Exception, error:
-				self.env.errors += 1
-				self.push(LogException("ERROR: %s" % error), "exception", "log")
-				self.push(LogDebug(format_exc()), "debug", "log")
 
 		self.env.unloadPlugins()
