@@ -71,7 +71,7 @@ class Core(Component):
 			try:
 				self.manager.flush()
 
-				if self.env.bot.connected:
+				if self.env.bot.isConnected():
 					self.env.bot.poll()
 				else:
 					sleep(1)
@@ -85,7 +85,7 @@ class Core(Component):
 						self.env.timers.remove(timer)
 
 			except KeyboardInterrupt:
-				if self.env.bot.connected:
+				if self.env.bot.isConnected():
 					self.env.bot.ircQUIT("Received ^C, terminating...")
 				self.running = False
 
