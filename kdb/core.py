@@ -16,7 +16,7 @@ import socket
 from time import sleep
 from traceback import format_exc
 
-from circuits import listener, Event, Component
+from circuits import Event, Component
 from circuits.lib.log import (
 		Debug as LogDebug,
 		Exception as LogException)
@@ -41,19 +41,17 @@ class Core(Component):
 	def __init__(self, env):
 		super(Core, self).__init__()
 
-		signal.signal(signal.SIGHUP, self.onREHASH)
-		signal.signal(signal.SIGTERM, self.onSTOP)
+		signal.signal(signal.SIGHUP, self.rehash)
+		signal.signal(signal.SIGTERM, self.stop)
 
 		self.env = env
 
-	@listener("stop")
-	def onSTOP(self, signal=0, stack=0):
-		if self.env.bot.connected:
+	def stop(self, signal=0, stack=0):
+		if self.env.bot.isConnected():
 			self.env.bot.ircQUIT("Received SIGTERM, terminating...")
 		self.running = False
 
-	@listener("rehash")
-	def onREHASH(self, signal=0, stack=0):
+	def rehash(self, signal=0, stack=0):
 		self.env.reload()
 
 	def run(self):
