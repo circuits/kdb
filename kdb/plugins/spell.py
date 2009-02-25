@@ -1,6 +1,6 @@
-# Module:	spell
-# Date:		30th June 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   spell
+# Date:     30th June 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Spell Checker
 
@@ -19,25 +19,25 @@ from kdb.plugin import BasePlugin
 DEFAULT_LANGUAGE = "en_US"
 
 class Spell(BasePlugin):
-	"Spell Checker"
+    "Spell Checker"
 
-	def __init__(self, *args, **kwargs):
-		super(Spell, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Spell, self).__init__(*args, **kwargs)
 
-		self.language = DEFAULT_LANGUAGE
-		self.d = d = enchant.request_dict(self.language)
+        self.language = DEFAULT_LANGUAGE
+        self.d = d = enchant.request_dict(self.language)
 
-	def cmdSPELL(self, source, word):
-		"""Check the spelling of the given word
-		
-		Syntax: SPELL <word>
-		"""
+    def cmdSPELL(self, source, word):
+        """Check the spelling of the given word
+        
+        Syntax: SPELL <word>
+        """
 
-		if self.d.check(word):
-			msg = "%s is spelled correctly." % word
-		else:
-			suggestions = self.d.suggest(word)
-			msg = "%s ? Try -> %s" % (
-					word, ", ".join(suggestions))
+        if self.d.check(word):
+            msg = "%s is spelled correctly." % word
+        else:
+            suggestions = self.d.suggest(word)
+            msg = "%s ? Try -> %s" % (
+                    word, ", ".join(suggestions))
 
-		return msg
+        return msg

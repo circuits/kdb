@@ -1,6 +1,6 @@
-# Module:	broadcast
-# Date:		22th December 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   broadcast
+# Date:     22th December 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Broadtcasting Support
 
@@ -18,24 +18,24 @@ from circuits.lib.irc import Message
 from kdb.plugin import BasePlugin
 
 class Broadcast(BasePlugin):
-	"Broadcasting Support"
+    "Broadcasting Support"
 
-	def __init__(self, *args, **kwargs):
-		super(Broadcast, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Broadcast, self).__init__(*args, **kwargs)
 
-		self.prefix = self.env.config.get(
-				"broadcast", "prefix") or "@"
+        self.prefix = self.env.config.get(
+                "broadcast", "prefix") or "@"
 
-	@listener("message")
-	def onMESSAGE(self, source, target, message):
+    @listener("message")
+    def onMESSAGE(self, source, target, message):
 
-		addressed, target, message = self.isAddressed(
-				source, target, message)
+        addressed, target, message = self.isAddressed(
+                source, target, message)
 
-		if not addressed and len(message) > 0:
-			if message[0] == self.prefix:
-				self.push(
-						Message(source, target,
-							"%s, %s" % (
-								self.bot.getNick(),
-								message[1:])), "message", self.channel)
+        if not addressed and len(message) > 0:
+            if message[0] == self.prefix:
+                self.push(
+                        Message(source, target,
+                            "%s, %s" % (
+                                self.bot.getNick(),
+                                message[1:])), "message", self.channel)

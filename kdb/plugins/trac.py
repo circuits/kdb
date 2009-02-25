@@ -1,6 +1,6 @@
-# Module:	trac
-# Date:		01th July 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   trac
+# Date:     01th July 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Trac
 
@@ -18,4 +18,4 @@ from pymills.event import filter
 from kdb.plugin import BasePlugin
 
 class Trac(BasePlugin):
-	"Trac"
+    "Trac"

@@ -1,6 +1,6 @@
-# Module:	swatch
-# Date:		19th December 2006
-# Author:	James Mills prologic at shortcircuit dot net dot au
+# Module:   swatch
+# Date:     19th December 2006
+# Author:   James Mills prologic at shortcircuit dot net dot au
 
 """Swatch Time
 
@@ -17,24 +17,24 @@ from pymills.misc import beat
 from kdb.plugin import BasePlugin
 
 class Swatch(BasePlugin):
-	"""Swatch Time plugin
+    """Swatch Time plugin
 
-	Provides commands to display Internet Time or Swatch Time.
-	See: commands swatch
-	"""
+    Provides commands to display Internet Time or Swatch Time.
+    See: commands swatch
+    """
 
-	def cmdBEAT(self, source):
-		"""Display the current Swatch Time (Internet Time)
-		
-		Syntax: BEAT
-		"""
+    def cmdBEAT(self, source):
+        """Display the current Swatch Time (Internet Time)
+        
+        Syntax: BEAT
+        """
 
-		return "@%0.2f" % beat()
+        return "@%0.2f" % beat()
 
-	def cmdITIME(self, source):
-		"""Synonym, of BEAT
-		
-		See: BEAT
-		"""
+    def cmdITIME(self, source):
+        """Synonym, of BEAT
+        
+        See: BEAT
+        """
 
-		return self.cmdBEAT(source)
+        return self.cmdBEAT(source)

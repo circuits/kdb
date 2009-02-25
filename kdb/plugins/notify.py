@@ -1,6 +1,6 @@
-# Module:	notify
-# Date:		30th June 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   notify
+# Date:     30th June 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Notify
 
@@ -19,59 +19,59 @@ from kdb.plugin import BasePlugin
 
 class Notify(BasePlugin):
 
-	"""Notification plugin
+    """Notification plugin
 
-	This doesn't have any user commands available.
-	This provides notification support via XML-RPC and
-	displays messages on the configured channel.
+    This doesn't have any user commands available.
+    This provides notification support via XML-RPC and
+    displays messages on the configured channel.
 
-	Depends on: xmlrpc
-	"""
+    Depends on: xmlrpc
+    """
 
-	@listener("xmlrpc.scmupdate")
-	def onSCMUPDATE(self, data):
+    @listener("xmlrpc.scmupdate")
+    def onSCMUPDATE(self, data):
 
-		if self.env.config.has_option("xmlrpc", "channel"):
-			channel = self.env.config.get("xmlrpc", "channel")
-		else:
-			channel = None
+        if self.env.config.has_option("xmlrpc", "channel"):
+            channel = self.env.config.get("xmlrpc", "channel")
+        else:
+            channel = None
 
-		if channel is not None:
+        if channel is not None:
 
-			d = loads(data)
-			files = d["files"]
+            d = loads(data)
+            files = d["files"]
 
-			if len(files) > 3:
-				d["files"] = "%s ... %d more files" % (
-						" ".join(files[:3]),
-						len(files) - 3)
-			else:
-				d["files"] = " ".join(files)
+            if len(files) > 3:
+                d["files"] = "%s ... %d more files" % (
+                        " ".join(files[:3]),
+                        len(files) - 3)
+            else:
+                d["files"] = " ".join(files)
 
-			msg = """\
+            msg = """\
 %(project)s: 8%(committer)s 12%(rev)s \
 %(logmsg)s (%(files)s)"""
 
-			self.bot.ircPRIVMSG(channel, msg % d)
+            self.bot.ircPRIVMSG(channel, msg % d)
 
-		return "Message sent to %s" % channel
+        return "Message sent to %s" % channel
 
-	@listener("xmlrpc.notify")
-	def onNOTIFY(self, source="unknown", message=""):
+    @listener("xmlrpc.notify")
+    def onNOTIFY(self, source="unknown", message=""):
 
-		print "onNOTIFY: ..."
+        print "onNOTIFY: ..."
 
-		if self.env.config.has_option("xmlrpc", "channel"):
-			channel = self.env.config.get("xmlrpc", "channel")
-		else:
-			channel = None
+        if self.env.config.has_option("xmlrpc", "channel"):
+            channel = self.env.config.get("xmlrpc", "channel")
+        else:
+            channel = None
 
-		if channel is not None:
+        if channel is not None:
 
-			self.bot.ircPRIVMSG(channel,
-					"Message from %s:" % source)
+            self.bot.ircPRIVMSG(channel,
+                    "Message from %s:" % source)
 
-			for line in message.split("\n"):
-				self.bot.ircPRIVMSG(channel, line)
+            for line in message.split("\n"):
+                self.bot.ircPRIVMSG(channel, line)
 
-		return "Message sent to %s" % channel
+        return "Message sent to %s" % channel

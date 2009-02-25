@@ -1,6 +1,6 @@
-# Module:	deduce
-# Date:		03th July 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   deduce
+# Date:     03th July 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """Deductive Logic
 
@@ -20,85 +20,85 @@ from pymills.ai.deduce import fact, brain
 from kdb.plugin import BasePlugin
 
 class Deduce(BasePlugin):
-	"Deductive Logic"
+    "Deductive Logic"
 
-	def __init__(self, env, bot, *args, **kwargs):
-		super(Deduce, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env, bot, *args, **kwargs):
+        super(Deduce, self).__init__(env, bot, *args, **kwargs)
 
-		self.reason = []
-		self.b = brain()
+        self.reason = []
+        self.b = brain()
 
-		filename = os.path.join(self.env.path, "deduce.bin")
-		if os.path.exists(filename):
-			fp = open(filename, "r")
-			for i, line in enumerate(fp):
-				line = line.strip()
-				msg, self.reason = self.b.learn(line)
-				self.env.log.debug(
-						"%d: %s (%s)" % (i, line, msg))
-			fp.close()
+        filename = os.path.join(self.env.path, "deduce.bin")
+        if os.path.exists(filename):
+            fp = open(filename, "r")
+            for i, line in enumerate(fp):
+                line = line.strip()
+                msg, self.reason = self.b.learn(line)
+                self.env.log.debug(
+                        "%d: %s (%s)" % (i, line, msg))
+            fp.close()
 
-	def cleanup(self):
-		filename = os.path.join(self.env.path, "deduce.bin")
-		fp = open(filename, "w")
-		fp.write(str(self.b))
-		fp.close()
+    def cleanup(self):
+        filename = os.path.join(self.env.path, "deduce.bin")
+        fp = open(filename, "w")
+        fp.write(str(self.b))
+        fp.close()
 
-	@listener("message")
-	def onMMESSAGE(self, source, target, message):
+    @listener("message")
+    def onMMESSAGE(self, source, target, message):
 
-		addressed, target, message = self.isAddressed(
-				source, target, message)
+        addressed, target, message = self.isAddressed(
+                source, target, message)
 
-		if addressed:
+        if addressed:
 
-			if type(target) == tuple:
-				target = target[0]
+            if type(target) == tuple:
+                target = target[0]
 
-			if re.match(" *why ?\??(?i)", message):
-				if len(self.reason) == 0:
-					msg = "*shrugs*"
-				elif len(self.reason) == 1:
-					if (self.reason[0].subj == self.reason[0].obj):
-						if (self.reason[0].negative == 0):
-							msg = "What else would %s %s be ?" % (
-									self.reason[0].subj_adj,
-									self.reason[0].subj)
-						else:
-							msg = "%s %s %s" % (
-									self.reason[0].subj,
-									self.reason[0].orig_verb,
-									self.reason[0].ob)
-					else:
-						msg = "Someone said earlier that %s" % \
-								self.reason[0].swap_person()
-				else:
-					msg = ["Because:"] + \
-							[" %s" % r.swap_person()
-									for r in self.reason]
+            if re.match(" *why ?\??(?i)", message):
+                if len(self.reason) == 0:
+                    msg = "*shrugs*"
+                elif len(self.reason) == 1:
+                    if (self.reason[0].subj == self.reason[0].obj):
+                        if (self.reason[0].negative == 0):
+                            msg = "What else would %s %s be ?" % (
+                                    self.reason[0].subj_adj,
+                                    self.reason[0].subj)
+                        else:
+                            msg = "%s %s %s" % (
+                                    self.reason[0].subj,
+                                    self.reason[0].orig_verb,
+                                    self.reason[0].ob)
+                    else:
+                        msg = "Someone said earlier that %s" % \
+                                self.reason[0].swap_person()
+                else:
+                    msg = ["Because:"] + \
+                            [" %s" % r.swap_person()
+                                    for r in self.reason]
 
-				if type(msg) == list:
-					for line in msg:
-						self.bot.ircPRIVMSG(target, line)
-				else:
-						self.bot.ircPRIVMSG(target, msg)
-				return msg
+                if type(msg) == list:
+                    for line in msg:
+                        self.bot.ircPRIVMSG(target, line)
+                else:
+                        self.bot.ircPRIVMSG(target, msg)
+                return msg
 
-			message = message.strip()
+            message = message.strip()
 
-			self.env.log.debug(message)
+            self.env.log.debug(message)
 
-			f = fact(message)
+            f = fact(message)
 
-			if f.question == 0:
-				self.env.log.debug("Learning: %s" % message)
-				msg, self.reason = self.b.learn(message)
-			else:
-				self.env.log.debug("Querying: %s" % message)
-				ans, msg, self.reason = self.b.query(message)
-				self.env.log.debug(ans)
-				self.env.log.debug(msg)
+            if f.question == 0:
+                self.env.log.debug("Learning: %s" % message)
+                msg, self.reason = self.b.learn(message)
+            else:
+                self.env.log.debug("Querying: %s" % message)
+                ans, msg, self.reason = self.b.query(message)
+                self.env.log.debug(ans)
+                self.env.log.debug(msg)
 
-			self.bot.ircPRIVMSG(target, msg)
+            self.bot.ircPRIVMSG(target, msg)
 
-			return msg
+            return msg

@@ -1,6 +1,6 @@
-# Module:	xmlrpc
-# Date:		30th June 2006
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   xmlrpc
+# Date:     30th June 2006
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """XML RPC
 
@@ -22,81 +22,81 @@ from circuits import listener, Event
 from kdb.plugin import BasePlugin
 
 class RPC(Event):
-	"RPC(Event) -> RPC Event"
+    "RPC(Event) -> RPC Event"
 
 class Root(BasePlugin):
 
-	@listener(type="filter")
-	def onDEBUG(self, event, *args, **kwargs):
-		if isinstance(event, RPC):
-			self.env.log.debug(event)
+    @listener(type="filter")
+    def onDEBUG(self, event, *args, **kwargs):
+        if isinstance(event, RPC):
+            self.env.log.debug(event)
 
-	def __call__(self, *vpath, **params):
-		args, method = xmlrpc.process_body()
+    def __call__(self, *vpath, **params):
+        args, method = xmlrpc.process_body()
 
-		r = self.iter(RPC(*args), "xmlrpc.%s" % method, "bot")
-		body = "\n".join([x for x in r if x is not None])
+        r = self.iter(RPC(*args), "xmlrpc.%s" % method, "bot")
+        body = "\n".join([x for x in r if x is not None])
 
-		conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
-		xmlrpc.respond(
-				body,
-				conf.get("encoding", "utf-8"),
-				conf.get("allow_none", True))
-		return cherrypy.response.body
-	__call__.exposed = True
+        conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
+        xmlrpc.respond(
+                body,
+                conf.get("encoding", "utf-8"),
+                conf.get("allow_none", True))
+        return cherrypy.response.body
+    __call__.exposed = True
 
-	index = __call__
-	default = __call__
+    index = __call__
+    default = __call__
 
 class XMLRPC(BasePlugin):
 
-	"""XML-RPC plugin
+    """XML-RPC plugin
 
-	This plugin provides no user commands. This plugin gives
-	XML-RPC support to the system allowing other systems to
-	interact with the system and other loaded plugins.
+    This plugin provides no user commands. This plugin gives
+    XML-RPC support to the system allowing other systems to
+    interact with the system and other loaded plugins.
 
-	The "notify" plugin is one such plugin that uses this
-	to allow remote machines to send XML-RPC notification
-	messages to a configured channel.
-	"""
+    The "notify" plugin is one such plugin that uses this
+    to allow remote machines to send XML-RPC notification
+    messages to a configured channel.
+    """
 
-	def __init__(self, env, bot, *args, **kwargs):
-		super(XMLRPC, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env, bot, *args, **kwargs):
+        super(XMLRPC, self).__init__(env, bot, *args, **kwargs)
 
-		self.root = Root(self.env, self.bot)
+        self.root = Root(self.env, self.bot)
 
-		cherrypy.config.update({
-			"log.screen": False,
-			"log.error.file": "",
-			"engine.autoreload_on": False,
-			"server.socket_host": "0.0.0.0",
-			"server.socket_port":  8080,
-			"server.thread_pool":  1,
-			})
+        cherrypy.config.update({
+            "log.screen": False,
+            "log.error.file": "",
+            "engine.autoreload_on": False,
+            "server.socket_host": "0.0.0.0",
+            "server.socket_port":  8080,
+            "server.thread_pool":  1,
+            })
 
-		cherrypy.tree.mount(
-				self.root,
-				config={
-					"/": {
-						"tools.gzip.on": True,
-						"tools.xmlrpc.on": True,
-						"request.dispatch": cherrypy.dispatch.XMLRPCDispatcher(),
-						"tools.trailing_slash.on": False
-						}
-					})
+        cherrypy.tree.mount(
+                self.root,
+                config={
+                    "/": {
+                        "tools.gzip.on": True,
+                        "tools.xmlrpc.on": True,
+                        "request.dispatch": cherrypy.dispatch.XMLRPCDispatcher(),
+                        "tools.trailing_slash.on": False
+                        }
+                    })
 
-		try:
-			cherrypy.engine.SIGHUP = None
-			cherrypy.engine.SIGTERM = None
-			cherrypy.engine.start()
-		except IOError:
-			pass
+        try:
+            cherrypy.engine.SIGHUP = None
+            cherrypy.engine.SIGTERM = None
+            cherrypy.engine.start()
+        except IOError:
+            pass
 
-	def registered(self):
-		self.manager += self.root
+    def registered(self):
+        self.manager += self.root
 
-	def cleanup(self):
-		self.root.unregister()
-		cherrypy.engine.stop()
-		cherrypy.engine.exit()
+    def cleanup(self):
+        self.root.unregister()
+        cherrypy.engine.stop()
+        cherrypy.engine.exit()
