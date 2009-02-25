@@ -29,7 +29,7 @@ class Irc(BasePlugin):
 	@listener("numeric")
 	def onNUMERIC(self, source, target, numeric, arg, message):
 		if numeric == 1:
-			self.push(Event(), "connected", self.channel)
+			self.push(Event(), "joinchannels", self.channel)
 		elif numeric == 433:
 			self.push(Event(), "nicksollision", self.channel)
 
