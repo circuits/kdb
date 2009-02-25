@@ -1,6 +1,6 @@
-# Module:	main
-# Date:		11th September 2008
-# Author:	James Mills, prologic at shortcircuit dot net dot au
+# Module:   main
+# Date:     11th September 2008
+# Author:   James Mills, prologic at shortcircuit dot net dot au
 
 """main - Main Module
 
@@ -21,9 +21,9 @@ from traceback import format_exc
 from circuits import listener, Event, Component, Manager
 
 from circuits.lib.env import (
-		Load as LoadEnvironment,
-		Create as CreateEnvironment,
-		Upgrade as UpgradeEnvironment)
+        Load as LoadEnvironment,
+        Create as CreateEnvironment,
+        Upgrade as UpgradeEnvironment)
 
 from pymills.utils import getProgName, writePID, daemonize
 
@@ -48,25 +48,25 @@ VERSION = "%prog v" + systemVersion
 ###
 
 def parse_options():
-	"""parse_options() -> opts, args
+    """parse_options() -> opts, args
 
-	Parse any command-line options given returning both
-	the parsed options and arguments.
-	"""
+    Parse any command-line options given returning both
+    the parsed options and arguments.
+    """
 
-	parser = optparse.OptionParser(usage=USAGE, version=VERSION)
+    parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
-	parser.add_option("-d", "--daemon",
-			action="store_true", default=False, dest="daemon",
-			help="Enable daemon mode")
+    parser.add_option("-d", "--daemon",
+            action="store_true", default=False, dest="daemon",
+            help="Enable daemon mode")
 
-	opts, args = parser.parse_args()
+    opts, args = parser.parse_args()
 
-	if len(args) < 2:
-		parser.print_help()
-		raise SystemExit, 1
+    if len(args) < 2:
+        parser.print_help()
+        raise SystemExit, 1
 
-	return opts, args
+    return opts, args
 
 ###
 ### Errors
@@ -79,10 +79,10 @@ class Error(Exception): pass
 ###
 
 class Command(Event):
-	"""Command(Event) -> Command Event
+    """Command(Event) -> Command Event
 
-	args: command
-	"""
+    args: command
+    """
 
 ###
 ### Components
@@ -90,152 +90,152 @@ class Command(Event):
 
 class Startup(Component):
 
-	channel = "startup"
+    channel = "startup"
 
-	def __init__(self, path, opts, command):
-		super(Startup, self).__init__()
+    def __init__(self, path, opts, command):
+        super(Startup, self).__init__()
 
-		self.path = path
-		self.opts = opts
-		self.command = command
+        self.path = path
+        self.opts = opts
+        self.command = command
 
-		self.env = SystemEnvironment(path, systemName)
+        self.env = SystemEnvironment(path, systemName)
 
-	def registered(self):
-		self.manager += self.env
+    def registered(self):
+        self.manager += self.env
 
-		if not self.command == "init":
-			if not os.path.exists(self.env.path):
-				raise Error("Environment path %s does not exist!" % self.env)
-			self.send(LoadEnvironment(), "load", self.env.channel)
+        if not self.command == "init":
+            if not os.path.exists(self.env.path):
+                raise Error("Environment path %s does not exist!" % self.env)
+            self.send(LoadEnvironment(), "load", self.env.channel)
 
-		self.send(Command(), self.command, self.channel)
+        self.send(Command(), self.command, self.channel)
 
-	@listener("start")
-	def onSTART(self):
-		"""onSTART(self) -> None
+    @listener("start")
+    def onSTART(self):
+        """onSTART(self) -> None
 
-		Start the system. Daemonize if self.opts.daemon == True
-		or if daemon = True is found in the configuration file
-		under the [general] section.
-		Write the PID of this process to the environment path
-		and start the core.
-		"""
+        Start the system. Daemonize if self.opts.daemon == True
+        or if daemon = True is found in the configuration file
+        under the [general] section.
+        Write the PID of this process to the environment path
+        and start the core.
+        """
 
-		if self.opts.daemon:
-			daemonize(path=self.env.path)
+        if self.opts.daemon:
+            daemonize(path=self.env.path)
 
-		pidfile = self.env.config.get("general", "pidfile")
-		if not os.path.isabs(pidfile):
-			pidfile = os.path.join(self.env.path, pidfile)
-		writePID(pidfile)
+        pidfile = self.env.config.get("general", "pidfile")
+        if not os.path.isabs(pidfile):
+            pidfile = os.path.join(self.env.path, pidfile)
+        writePID(pidfile)
 
-		core = Core(self.env)
-		self.manager += core
-		core.run()
+        core = Core(self.env)
+        self.manager += core
+        core.run()
 
-	@listener("stop")
-	def onSTOP(self):
-		"""onSTOP(self) -> None
+    @listener("stop")
+    def onSTOP(self):
+        """onSTOP(self) -> None
 
-		Stop the system by sending the KILL signal to the
-		pid found in the environment. If an error occurs
-		while trying to do this, the error is printed and
-		exitcode 1 is returned.
-		"""
+        Stop the system by sending the KILL signal to the
+        pid found in the environment. If an error occurs
+        while trying to do this, the error is printed and
+        exitcode 1 is returned.
+        """
 
-		pidfile = self.env.config.get("general", "pidfile")
-		if not os.path.isabs(pidfile):
-			pidfile = os.path.join(self.env.path, pidfile)
+        pidfile = self.env.config.get("general", "pidfile")
+        if not os.path.isabs(pidfile):
+            pidfile = os.path.join(self.env.path, pidfile)
 
-		with open(pidfile, "r") as f:
-			pid = int(f.read().strip())
-			os.kill(pid, signal.SIGTERM)
+        with open(pidfile, "r") as f:
+            pid = int(f.read().strip())
+            os.kill(pid, signal.SIGTERM)
 
-	@listener("restart")
-	def onRESTART(self):
-		"""onRESTART(self) -> None
+    @listener("restart")
+    def onRESTART(self):
+        """onRESTART(self) -> None
 
-		Attempt a restart of the system by first stopping the
-		system then starting it again.
-		"""
+        Attempt a restart of the system by first stopping the
+        system then starting it again.
+        """
 
-		self.send(Command(), "stop", self.channel)
-		sleep(1)
-		self.send(Command(), "start", self.channel)
+        self.send(Command(), "stop", self.channel)
+        sleep(1)
+        self.send(Command(), "start", self.channel)
 
-	@listener("rehash")
-	def onREHASH(self):
-		"""onREHASH(self) -> None
+    @listener("rehash")
+    def onREHASH(self):
+        """onREHASH(self) -> None
 
-		Rehash the system by sending the SIGUP signal to the
-		pid found in the environment. If an error occurs while
-		trying to do this, the error is printed and exitcode 1
-		is returned.
-		"""
+        Rehash the system by sending the SIGUP signal to the
+        pid found in the environment. If an error occurs while
+        trying to do this, the error is printed and exitcode 1
+        is returned.
+        """
 
-		pidfile = self.env.config.get("general", "pidfile")
-		if not os.path.isabs(pidfile):
-			pidfile = os.path.join(self.env.path, pidfile)
+        pidfile = self.env.config.get("general", "pidfile")
+        if not os.path.isabs(pidfile):
+            pidfile = os.path.join(self.env.path, pidfile)
 
-		with open(pidfile, "r") as f:
-			pid = int(f.read())
-			os.kill(pid, signal.SIGHUP)
+        with open(pidfile, "r") as f:
+            pid = int(f.read())
+            os.kill(pid, signal.SIGHUP)
 
-	@listener("init")
-	def onINIT(self):
-		"""onINIT(self) -> None
+    @listener("init")
+    def onINIT(self):
+        """onINIT(self) -> None
 
-		Initialize (create) a new environment. Check that
-		the path doesn't already exist, printing an error
-		and returning an exitcode of 1 if it does.
-		"""
+        Initialize (create) a new environment. Check that
+        the path doesn't already exist, printing an error
+        and returning an exitcode of 1 if it does.
+        """
 
-		if os.path.exists(self.env.path):
-			raise Error("Environment path %s already exists!" % self.env.path)
+        if os.path.exists(self.env.path):
+            raise Error("Environment path %s already exists!" % self.env.path)
 
-		self.send(CreateEnvironment(), "create", self.env.channel)
+        self.send(CreateEnvironment(), "create", self.env.channel)
 
-	@listener("upgrade")
-	def onUPGRADE(self):
-		"""onUPGRADE() -> None
+    @listener("upgrade")
+    def onUPGRADE(self):
+        """onUPGRADE() -> None
 
-		Upgrade the environment. Check if the path exists,
-		printing an error and returning an exitcode of 1 if
-		it doesn't exist.
-		"""
+        Upgrade the environment. Check if the path exists,
+        printing an error and returning an exitcode of 1 if
+        it doesn't exist.
+        """
 
-		if not os.path.exists(self.env.path):
-			raise Error("Environment path %s does not exist!" % self.env.path)
+        if not os.path.exists(self.env.path):
+            raise Error("Environment path %s does not exist!" % self.env.path)
 
-		self.send(UpgradeEnvironment(), "upgrade", self.env.channel)
+        self.send(UpgradeEnvironment(), "upgrade", self.env.channel)
 
 ###
 ### Main
 ###
 
 def main():
-	"""main() -> None
+    """main() -> None
 
-	Parse all command-line arguments and options
-	determine what command to run. The environment
-	path must be the first argument specified.
-	If no valid command is given as the second
-	argument, an error is printed and the system
-	is terminated with an error code of 1.
-	"""
+    Parse all command-line arguments and options
+    determine what command to run. The environment
+    path must be the first argument specified.
+    If no valid command is given as the second
+    argument, an error is printed and the system
+    is terminated with an error code of 1.
+    """
 
-	opts, args = parse_options()
+    opts, args = parse_options()
 
-	path = args[0]
-	command = args[1].lower()
+    path = args[0]
+    command = args[1].lower()
 
-	manager = Manager()
-	manager += Startup(path, opts, command)
+    manager = Manager()
+    manager += Startup(path, opts, command)
 
 ###
 ### Entry Point
 ###
 
 if __name__ == "__main__":
-	main()
+    main()
