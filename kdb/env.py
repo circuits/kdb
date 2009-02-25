@@ -21,7 +21,7 @@ from pymills.utils import safe__import__
 
 from circuits.lib import config
 from circuits.lib.env import Environment
-from circuits import listener, Event, Component, Bridge, Debugger
+from circuits import Event, Component, Bridge, Debugger
 
 from circuits.lib.log import (
 		Info as LogInfo,
@@ -49,8 +49,7 @@ class SystemEnvironment(Environment):
 	version = 1
 	name = systemName
 
-	@listener("created")
-	def onCREATED(self):
+	def created(self):
 		for section in defaults.CONFIG:
 			if not self.config.has_section(section):
 				self.config.add_section(section)
@@ -64,8 +63,7 @@ class SystemEnvironment(Environment):
 		self.manager += self.db
 		self.send(CreateDatabases(), "create", "db")
 
-	@listener("loaded")
-	def onLOADED(self):
+	def loaded(self):
 		self.db = Databases(self)
 		self.manager += self.db
 		self.send(LoadDatabases(), "load", "db")
