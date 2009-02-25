@@ -58,7 +58,7 @@ class Channels(BasePlugin):
 		self.env.config.write(fp)
 		fp.close()
 
-	def joinChannels(self):
+	def joinchannels(self):
 		for channel in self.channels:
 			self.bot.ircJOIN(channel)
 
@@ -87,7 +87,3 @@ class Channels(BasePlugin):
 		self.env.log.debug(command)
 		return ChannelsCommands(self)(command,
 				source, *args, **kwargs)
-
-	@listener("connected")
-	def onCONNECTED(self):
-		self.joinChannels()
