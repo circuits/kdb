@@ -16,7 +16,8 @@ import socket
 from time import sleep
 from traceback import format_exc
 
-from circuits import Event, Component
+from circuits.tools import graph
+from circuits import listener, Event, Component
 from circuits.lib.log import (
         Debug as LogDebug,
         Exception as LogException)
@@ -31,6 +32,37 @@ class Start(Event):
 class Run(Event):
     """Run(Event) -> Run Event"""
 
+class Stop(Event):
+    """Stop(Event) -> Stop Event"""
+
+class ErrorHandler(Component):
+
+    def __init__(self, env, *args, **kwargs):
+        super(ErrorHandler, self).__init__(*args, **kwargs)
+
+        self.env = env
+
+    def error(self, *args, **kwargs):
+        if len(args) == 3 and issubclass(args[0], BaseException):
+            type, value, traceback = args
+
+            self.env.errors += 1
+            self.push(LogException("ERROR: %s" % args[1]), "exception", "log")
+            self.push(LogDebug(args[2]), "debug", "log")
+
+            if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
+                self.push(Stop(), "stop", "core")
+
+class EventCounter(Component):
+
+    def __init__(self, env, *args, **kwargs):
+        super(EventCounter, self).__init__(*args, **kwargs)
+
+        self.env = env
+
+    @listener(type="filter")
+    def onEVENT(self, *args, **kwargs):
+        self.env.events += 1
 
 class Core(Component):
 
@@ -46,47 +78,22 @@ class Core(Component):
 
         self.env = env
 
+        self.errorhandler = ErrorHandler(self.env)
+        self.eventcounter = EventCounter(self.env)
+        self.manager += self.errorhandler
+        self.manager += self.eventcounter
+
+    def registered(self):
+        self.manager += self.errorhandler
+        self.manager += self.eventcounter
+        self.env.loadPlugins()
+        self.env.bot.connect()
+
     def stop(self, signal=0, stack=0):
-        if self.env.bot.isConnected():
-            self.env.bot.ircQUIT("Received SIGTERM, terminating...")
-        self.running = False
+        if self.env.bot.client.isConnected():
+            self.env.bot.irc.ircQUIT("Received SIGTERM, terminating...")
+        self.env.unloadPlugins()
+        raise SystemExit, 0
 
     def rehash(self, signal=0, stack=0):
         self.env.reload()
-
-    def error(self, *args, **kwargs):
-        if len(args) == 3 and issubclass(args[0], BaseException):
-            self.env.errors += 1
-            self.push(LogException("ERROR: %s" % args[1]), "exception", "log")
-            self.push(LogDebug(args[3]), "debug", "log")
-
-    def run(self):
-        self.running = True
-
-        self.env.loadPlugins()
-
-        self.env.bot.connect()
-
-        while self.running:
-            try:
-                self.manager.flush()
-
-                if self.env.bot.isConnected():
-                    self.env.bot.poll()
-                else:
-                    sleep(1)
-
-                self.env.bridge.poll()
-
-                for timer in self.env.timers[:]:
-                    if timer.manager == self.manager:
-                        timer.poll()
-                    else:
-                        self.env.timers.remove(timer)
-
-            except KeyboardInterrupt:
-                if self.env.bot.isConnected():
-                    self.env.bot.ircQUIT("Received ^C, terminating...")
-                self.running = False
-
-        self.env.unloadPlugins()

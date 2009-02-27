@@ -45,8 +45,8 @@ class Ctcp(BasePlugin):
         elif type.lower() == "finger":
             response = ("FINGER",
                     "%s - %s" % (
-                        self.bot.getNick(),
-                        self.bot.getName()))
+                        self.bot.irc.getNick(),
+                        self.bot.irc.getName()))
         elif type.lower() == "version":
             response = ("VERSION",
                     "%s - v%s (%s)" % (
@@ -55,4 +55,4 @@ class Ctcp(BasePlugin):
                         kdb.__url__))
 
         if response is not None:
-            self.bot.ircCTCPREPLY(source, *response)
+            self.bot.irc.ircCTCPREPLY(source, *response)

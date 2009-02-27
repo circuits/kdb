@@ -52,7 +52,7 @@ class Notify(BasePlugin):
 %(project)s: 8%(committer)s 12%(rev)s \
 %(logmsg)s (%(files)s)"""
 
-            self.bot.ircPRIVMSG(channel, msg % d)
+            self.bot.irc.ircPRIVMSG(channel, msg % d)
 
         return "Message sent to %s" % channel
 
@@ -68,10 +68,10 @@ class Notify(BasePlugin):
 
         if channel is not None:
 
-            self.bot.ircPRIVMSG(channel,
+            self.bot.irc.ircPRIVMSG(channel,
                     "Message from %s:" % source)
 
             for line in message.split("\n"):
-                self.bot.ircPRIVMSG(channel, line)
+                self.bot.irc.ircPRIVMSG(channel, line)
 
         return "Message sent to %s" % channel

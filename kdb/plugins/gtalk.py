@@ -20,12 +20,12 @@ from time import sleep
 
 import xmpp
 
+from circuits import Manager
 from circuits.lib.irc import Message
-from circuits import listener, Event, Worker
 
 from kdb.plugin import BasePlugin
 
-class GTalk(BasePlugin, Worker):
+class GTalk(BasePlugin):
 
     """Google Talk Plugin
 
@@ -45,6 +45,12 @@ class GTalk(BasePlugin, Worker):
 
         self._client = xmpp.Client("gmail.com", debug=[])
 
+    def registered(self):
+        print "Starting gtalk..."
+        print list(self._calls())
+        print isinstance(self, Manager)
+        print issubclass(self.__class__, Manager)
+        print getattr(self, "tick")
         self.start()
 
     def cleanup(self):
@@ -54,27 +60,23 @@ class GTalk(BasePlugin, Worker):
     def sendMsg(self, to, message):
         self._client.send(xmpp.Message(to, message))
 
-    def run(self):
-        while self.running:
-            if self._client.isConnected():
-                if hasattr(self._client, "Process"):
-                    self._client.Process()
-                    sleep(0.01)
-                else:
-                    sleep(1)
+    def tick(self):
+        print "."
+        if self._client.isConnected():
+            if hasattr(self._client, "Process"):
+                self._client.Process()
+                sleep(0.01)
             else:
-                try:
-                    self._client.connect(server=("gmail.com", 5223))
-                    self._client.auth(
-                            self._username,
-                            self._password,
-                            self._name)
-                    self._client.RegisterHandler("message", self.messageHandler)
-                    self._client.sendInitPresence()
-                except Exception, error:
-                    sleep(60)
-
                 sleep(1)
+        else:
+            try:
+                self._client.connect(server=("gmail.com", 5223))
+                self._client.auth(self._username, self._password, self._name)
+                self._client.RegisterHandler("message", self.messageHandler)
+                self._client.sendInitPresence()
+                sleep(1)
+            except Exception, error:
+                sleep(60)
 
     def messageHandler(self, cnx, message):
         text = message.getBody()
@@ -95,7 +97,7 @@ class GTalk(BasePlugin, Worker):
                 reply = "Authorized."
             else:
                 text = message.getBody()
-                e = Message(str(user), self.bot.getNick(), text)
+                e = Message(str(user), self.bot.irc.getNick(), text)
                 r = self.iter(e, "message", self.channel)
                 reply = "\n".join([x for x in r if x is not None])
 

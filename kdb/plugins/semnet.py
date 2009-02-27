@@ -171,19 +171,19 @@ class Semnet(BasePlugin):
                         self.relations.has_key(d["relation"]):
                     agent = self.entities[d["agent"]]
                     relation = self.relations[d["relation"]]
-                    self.bot.ircPRIVMSG(
+                    self.bot.irc.ircPRIVMSG(
                         target,
                         tostr(agent.objects(relation)))
                 else:
-                    self.bot.ircPRIVMSG(
+                    self.bot.irc.ircPRIVMSG(
                         target,
                         "I don't understand.")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What is a %s ?" % d["agent"])
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What does %s mean ?" % d["relation"])
 
@@ -204,23 +204,23 @@ class Semnet(BasePlugin):
                     object = self.entities[d["object"]]
 
                     if relation(agent, object):
-                        self.bot.ircPRIVMSG(target, "yes")
+                        self.bot.irc.ircPRIVMSG(target, "yes")
                     else:
-                        self.bot.ircPRIVMSG(target, "no")
+                        self.bot.irc.ircPRIVMSG(target, "no")
                 else:
-                    self.bot.ircPRIVMSG(
+                    self.bot.irc.ircPRIVMSG(
                         target,
                         "I don't understand.")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What is a %s ?" % d["agent"])
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What does %s mean ?" % d["relation"])
                     if not self.entities.has_key(d["object"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What is a %s ?" % d["object"])
 
@@ -241,26 +241,26 @@ class Semnet(BasePlugin):
                     object = self.entities[d["object"]]
 
                     if relation(agent, object):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                                 target,
                                 "I already knew that.")
                     else:
                         Fact(agent, relation, object)
-                        self.bot.ircPRIVMSG(target, "Okay")
+                        self.bot.irc.ircPRIVMSG(target, "Okay")
                 else:
-                    self.bot.ircPRIVMSG(
+                    self.bot.irc.ircPRIVMSG(
                         target,
                         "I don't understand.")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What is a %s ?" % d["agent"])
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What does %s mean ?" % d["relation"])
                     if not self.entities.has_key(d["object"]):
-                        self.bot.ircPRIVMSG(
+                        self.bot.irc.ircPRIVMSG(
                             target,
                             "What is a %s ?" % d["object"])
 

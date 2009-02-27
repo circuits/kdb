@@ -48,7 +48,7 @@ class RMessage(BasePlugin):
 
         self._rlog.push(message)
 
-        e = Message(str(user), self.bot.getNick(), message)
+        e = Message(str(user), self.bot.irc.getNick(), message)
         r = self.iter(e, "message", self.channel)
         reply = "\n".join([x for x in r if x is not None])
 

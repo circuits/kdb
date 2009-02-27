@@ -41,7 +41,7 @@ class Irc(BasePlugin):
 
         return "Not implemented."
 
-    #   self.bot.ircQUIT("Reconnecting to %s:%s" % (server, port)))
+    #   self.bot.irc.ircQUIT("Reconnecting to %s:%s" % (server, port)))
     #   bot.open(host, port, ssl)
     #   sleep(1)
     #   if bot.connected:
@@ -56,10 +56,10 @@ class Irc(BasePlugin):
 
         msg = "I am %s on the %s IRC Network connected to " \
                 "%s running version %s" % ("%s!%s@%s" % (
-                    self.bot.getNick(), self.bot.getIdent(),
-                    self.bot.getHost()),
-                    self.bot.getNetwork(), self.bot.getServer(),
-                    self.bot.getServerVersion())
+                    self.bot.irc.getNick(), self.bot.irc.getIdent(),
+                    self.bot.irc.getHost()),
+                    self.bot.irc.getNetwork(), self.bot.irc.getServer(),
+                    self.bot.irc.getServerVersion())
 
         return msg
 
@@ -69,7 +69,7 @@ class Irc(BasePlugin):
         Syntax: QUIT [<message>]
         """
 
-        self.bot.ircQUIT(message)
+        self.bot.irc.ircQUIT(message)
 
         return "Left IRC"
 
@@ -90,6 +90,6 @@ class Irc(BasePlugin):
         Syntax: NICK <newnick>
         """
 
-        self.bot.ircNICK(nick)
+        self.bot.irc.ircNICK(nick)
 
         return "Nickname changed to %s" % nick

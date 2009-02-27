@@ -68,10 +68,9 @@ class SystemEnvironment(Environment):
         self.manager += self.db
         self.send(LoadDatabases(), "load", "db")
 
-        self.debug = self.config.getboolean("main", "debug", False)
+        self.debug = self.config.getboolean("logging", "debug", False)
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
-        self.timers = []
         self.plugins = weakref.WeakValueDictionary()
 
         self.errors = 0
@@ -93,16 +92,16 @@ class SystemEnvironment(Environment):
         if self.config.has_option("server", "password"):
             auth["password"] = self.config.get("server", "password")
 
-        self.bot = Bot(self,    port, address, ssl, bind, auth)
+        self.bot = Bot(self, port, address, ssl, bind, auth)
         self.manager += self.bot
 
         port = self.config.getint("bridge", "port", 8000)
         address = self.config.get("bridge", "address", "0.0.0.0")
-        self.bridge = Bridge(port, address)
+        self.bridge = Bridge(port, address, channel="bridge")
         self.manager += self.bridge
 
         if self.debug:
-            self.manager += Debugger(self.log)
+            self.manager += Debugger(self.verbose, True, self.log)
 
     def loadPlugin(self, plugin):
         """E.loadPlugin(plugin) -> None

@@ -64,6 +64,6 @@ class AutoID(BasePlugin):
                                 password = self.env.config.get(
                                         "autoid", "password")
 
-                                self.bot.ircPRIVMSG(
+                                self.bot.irc.ircPRIVMSG(
                                         nickserv,
                                         command % password)
