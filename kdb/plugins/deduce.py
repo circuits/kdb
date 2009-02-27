@@ -79,9 +79,9 @@ class Deduce(BasePlugin):
 
                 if type(msg) == list:
                     for line in msg:
-                        self.bot.ircPRIVMSG(target, line)
+                        self.bot.irc.ircPRIVMSG(target, line)
                 else:
-                        self.bot.ircPRIVMSG(target, msg)
+                        self.bot.irc.ircPRIVMSG(target, msg)
                 return msg
 
             message = message.strip()
@@ -99,6 +99,6 @@ class Deduce(BasePlugin):
                 self.env.log.debug(ans)
                 self.env.log.debug(msg)
 
-            self.bot.ircPRIVMSG(target, msg)
+            self.bot.irc.ircPRIVMSG(target, msg)
 
             return msg

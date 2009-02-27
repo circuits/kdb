@@ -106,7 +106,7 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.bot.ircPRIVMSG(target, sentence)
+                    self.bot.irc.ircPRIVMSG(target, sentence)
                 return reply
 
     @listener("notice")
@@ -124,5 +124,5 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.bot.ircNOTICE(target, sentence)
+                    self.bot.irc.ircNOTICE(target, sentence)
                 return reply

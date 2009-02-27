@@ -121,9 +121,9 @@ class BasePlugin(Component):
                         target = target[0]
                     if type(r) == list:
                         for line in r:
-                            self.bot.ircPRIVMSG(target, line)
+                            self.bot.irc.ircPRIVMSG(target, line)
                     else:
-                        self.bot.ircPRIVMSG(target, r)
+                        self.bot.irc.ircPRIVMSG(target, r)
 
     @listener("notice", type="filter")
     def onNOTICE(self, source, target, message):
@@ -138,17 +138,17 @@ class BasePlugin(Component):
                     target = target[0]
                 if type(r) == list:
                     for line in r:
-                        self.bot.ircNOTICE(target, line)
+                        self.bot.irc.ircNOTICE(target, line)
                 else:
-                    self.bot.ircNOTICE(target, r)
+                    self.bot.irc.ircNOTICE(target, r)
 
     def unknownCommand(self, source, command):
-        self.bot.ircNOTICE(source, "Unknown command: %s" % command)
+        self.bot.irc.ircNOTICE(source, "Unknown command: %s" % command)
 
     def syntaxError(self, source, command, message, args):
-        self.bot.ircNOTICE(source, "Syntax error (%s): %s" % (
+        self.bot.irc.ircNOTICE(source, "Syntax error (%s): %s" % (
             command, message))
-        self.bot.ircNOTICE(source, "Expected: %s" %
+        self.bot.irc.ircNOTICE(source, "Expected: %s" %
                 " ".join(args))
 
     def processCommand(self, source, message):
@@ -200,25 +200,25 @@ class BasePlugin(Component):
     def isAddressed(self, source, target, message):
         addressed = False
 
-        if self.bot.getNick() is None:
+        if self.bot.irc.getNick() is None:
             return False, target, message
 
-        if target.lower() == self.bot.getNick().lower():
-            if len(message) > len(self.bot.getNick()) and \
-                    message[:len(self.bot.getNick())].lower() \
-                    == self.bot.getNick().lower():
-                message = message[len(self.bot.getNick()):]
+        if target.lower() == self.bot.irc.getNick().lower():
+            if len(message) > len(self.bot.irc.getNick()) and \
+                    message[:len(self.bot.irc.getNick())].lower() \
+                    == self.bot.irc.getNick().lower():
+                message = message[len(self.bot.irc.getNick()):]
                 while len(message) > 0 and message[0] in [
                         ",", ":", " "]:
                     message = message[1:]
 
             return True, source, message
         else:
-            if len(message) > len(self.bot.getNick()) and \
-                    message[:len(self.bot.getNick())].lower() \
-                    == self.bot.getNick().lower():
+            if len(message) > len(self.bot.irc.getNick()) and \
+                    message[:len(self.bot.irc.getNick())].lower() \
+                    == self.bot.irc.getNick().lower():
 
-                message = message[len(self.bot.getNick()):]
+                message = message[len(self.bot.irc.getNick()):]
                 while len(message) > 0 and message[0] in [
                         ",", ":", " "]:
                     message = message[1:]

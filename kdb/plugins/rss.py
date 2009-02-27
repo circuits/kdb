@@ -117,9 +117,7 @@ class RSS(BasePlugin):
         else:
             self.entities = {}
 
-        timer = Timer(60, RSSTick(), "rsstick", persist=True)
-        self.manager += timer
-        self.env.timers.append(timer)
+        self.manager += Timer(60, RSSTick(), "rsstick", persist=True)
 
     def cleanup(self):
         filename = os.path.join(self.env.path, "rss.bin")
@@ -133,7 +131,7 @@ class RSS(BasePlugin):
             for f in self.entities[entity]:
                 if f.checkTime():
                     for line in f.getItems():
-                        self.bot.ircPRIVMSG(f.target, line)
+                        self.bot.irc.ircPRIVMSG(f.target, line)
 
     def cmdRADD(self, source, url, interval="60"):
         """Add a new RSS feed to be checked at the given interval.

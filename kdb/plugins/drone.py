@@ -23,15 +23,15 @@ class Drone(BasePlugin):
     def __init__(self, *args, **kwargs):
         super(Drone, self).__init__(*args, **kwargs)
 
-        if self.bot.getNick() != gethostname():
-            self.bot.ircNICK(gethostname())
+        if self.bot.irc.getNick() != gethostname():
+            self.bot.irc.ircNICK(gethostname())
 
     @listener("connected")
     def onCONNECTED(self):
-        if self.bot.getNick() != gethostname():
-            self.bot.ircNICK(gethostname())
+        if self.bot.irc.getNick() != gethostname():
+            self.bot.irc.ircNICK(gethostname())
 
     @listener("nicksollision")
     def onNICKCOLLISION(self):
-        if self.bot.getNick() != gethostname():
-            self.bot.ircNICK(gethostname())
+        if self.bot.irc.getNick() != gethostname():
+            self.bot.irc.ircNICK(gethostname())

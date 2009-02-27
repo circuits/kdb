@@ -37,5 +37,5 @@ class Broadcast(BasePlugin):
                 self.push(
                         Message(source, target,
                             "%s, %s" % (
-                                self.bot.getNick(),
+                                self.bot.irc.getNick(),
                                 message[1:])), "message", self.channel)

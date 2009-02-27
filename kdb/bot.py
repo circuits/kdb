@@ -12,8 +12,8 @@ of the TCPClient and IRC Components.
 
 from circuits.lib.irc import IRC
 from circuits.lib.sockets import TCPClient
-from circuits import listener, Event, Timer
 from circuits.lib.log import Info as LogInfo
+from circuits import listener, Event, Component, Timer
 
 from kdb import __name__ as systemName
 from kdb import __description__ as systemDesc
@@ -29,7 +29,7 @@ class Reconnect(Event):
 ### Components
 ###
 
-class Bot(TCPClient, IRC):
+class Bot(Component):
     """Bot(env, port=6667, address="127.0.0.1") -> Bot Component
 
     Arguments:
@@ -44,13 +44,11 @@ class Bot(TCPClient, IRC):
     port and address.
     """
 
-    channel = "bot"
-
     def __init__(self, env, port=6667, address="127.0.0.1",
-            ssl=False, bind=None, auth=None):
+            ssl=False, bind=None, auth=None, channel="bot"):
         "initializes x; see x.__class__.__doc__ for signature"
 
-        super(Bot, self).__init__()
+        super(Bot, self).__init__(channel=channel)
 
         self.env = env
         self.port = port
@@ -59,6 +57,16 @@ class Bot(TCPClient, IRC):
         self.bind = bind
         self.auth = auth
 
+        self.irc = IRC(channel=channel)
+        self.client = TCPClient(channel=channel)
+
+        self.manager += self.irc
+        self.manager += self.client
+
+    def registered(self):
+        self.manager += self.irc
+        self.manager += self.client
+
     def connect(self):
         """B.connect()
 
@@ -66,7 +74,7 @@ class Bot(TCPClient, IRC):
         if required and sending our user details and nickname.
         """
 
-        self.open(self.address, self.port, self.ssl)
+        self.client.open(self.address, self.port, self.ssl)
 
     @listener("timer:reconnect")
     def onTIMERRECONNECT(self):
@@ -74,19 +82,17 @@ class Bot(TCPClient, IRC):
     
     def connected(self, host, port):
         if self.auth.has_key("password"):
-            self.ircPASS(auth["password"])
+            self.irc.ircPASS(auth["password"])
 
-        self.ircUSER(
+        self.irc.ircUSER(
                 self.auth.get("ident", systemName),
                 self.auth.get("host", "localhost"),
                 self.auth.get("server", "localhost"),
                 self.auth.get("name", systemDesc))
 
-        self.ircNICK(self.auth.get("nick", systemName))
+        self.irc.ircNICK(self.auth.get("nick", systemName))
 
     def disconnected(self):
         s = 60
         self.push(LogInfo("Disconnected. Reconnecting in %ds" % s), "info", "log")
-        timer = Timer(s, Reconnect(), "timer:reconnect")
-        self.manager += timer
-        self.env.timers.append(timer)
+        self.manager += Timer(s, Reconnect(), "timer:reconnect", self.channel)

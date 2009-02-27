@@ -9,23 +9,19 @@ after the command-line options have been parsed and
 passed to here by the cli module.
 """
 
-from __future__ import with_statement
-
 import os
-import sys
 import signal
 import optparse
 from time import sleep
-from traceback import format_exc
 
-from circuits import listener, Event, Component, Manager
+from circuits import Event, Component, Manager, Debugger
 
 from circuits.lib.env import (
         Load as LoadEnvironment,
         Create as CreateEnvironment,
         Upgrade as UpgradeEnvironment)
 
-from pymills.utils import getProgName, writePID, daemonize
+from pymills.utils import writePID, daemonize
 
 from core import Core, Start
 from env import SystemEnvironment
@@ -111,9 +107,8 @@ class Startup(Component):
 
         self.send(Command(), self.command, self.channel)
 
-    @listener("start")
-    def onSTART(self):
-        """onSTART(self) -> None
+    def start(self):
+        """start(self) -> None
 
         Start the system. Daemonize if self.opts.daemon == True
         or if daemon = True is found in the configuration file
@@ -130,13 +125,10 @@ class Startup(Component):
             pidfile = os.path.join(self.env.path, pidfile)
         writePID(pidfile)
 
-        core = Core(self.env)
-        self.manager += core
-        core.run()
+        self.manager += Core(self.env)
 
-    @listener("stop")
-    def onSTOP(self):
-        """onSTOP(self) -> None
+    def stop(self):
+        """stop(self) -> None
 
         Stop the system by sending the KILL signal to the
         pid found in the environment. If an error occurs
@@ -152,9 +144,8 @@ class Startup(Component):
             pid = int(f.read().strip())
             os.kill(pid, signal.SIGTERM)
 
-    @listener("restart")
-    def onRESTART(self):
-        """onRESTART(self) -> None
+    def restart(self):
+        """restart(self) -> None
 
         Attempt a restart of the system by first stopping the
         system then starting it again.
@@ -164,9 +155,8 @@ class Startup(Component):
         sleep(1)
         self.send(Command(), "start", self.channel)
 
-    @listener("rehash")
-    def onREHASH(self):
-        """onREHASH(self) -> None
+    def rehash(self):
+        """rehash(self) -> None
 
         Rehash the system by sending the SIGUP signal to the
         pid found in the environment. If an error occurs while
@@ -182,9 +172,8 @@ class Startup(Component):
             pid = int(f.read())
             os.kill(pid, signal.SIGHUP)
 
-    @listener("init")
-    def onINIT(self):
-        """onINIT(self) -> None
+    def init(self):
+        """init(self) -> None
 
         Initialize (create) a new environment. Check that
         the path doesn't already exist, printing an error
@@ -196,9 +185,8 @@ class Startup(Component):
 
         self.send(CreateEnvironment(), "create", self.env.channel)
 
-    @listener("upgrade")
-    def onUPGRADE(self):
-        """onUPGRADE() -> None
+    def upgrade(self):
+        """upgrade() -> None
 
         Upgrade the environment. Check if the path exists,
         printing an error and returning an exitcode of 1 if
@@ -230,8 +218,7 @@ def main():
     path = args[0]
     command = args[1].lower()
 
-    manager = Manager()
-    manager += Startup(path, opts, command)
+    (Manager() + Debugger(events=False) + Startup(path, opts, command)).run()
 
 ###
 ### Entry Point

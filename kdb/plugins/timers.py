@@ -27,7 +27,7 @@ class Timers(BasePlugin):
 
     @listener("timer")
     def onTIMER(self, target, message):
-        self.bot.ircPRIVMSG(target, message)
+        self.bot.irc.ircPRIVMSG(target, message)
 
     def cmdTIMER(self, source, length, message="Hello World"):
         """Create a new time with the given length and message
@@ -40,8 +40,6 @@ class Timers(BasePlugin):
         except ValueError:
             return  "Invalid length specified"
 
-        timer = Timer(length, Message(source, message))
-        self.manager += timer
-        self.env.timers.append(timer)
+        self.manager += Timer(length, Message(source, message))
 
         return "Okay timer set"

@@ -44,23 +44,21 @@ class Channels(BasePlugin):
     def __init__(self, *args, **kwargs):
         super(Channels, self).__init__(*args, **kwargs)
 
-        if self.env.config.has_option("bot", "channels"):
-            self.channels = [x.strip() for x in
-                    self.env.config.get(
-                        "bot", "channels").split(",")
-                    if not x.strip() == ""]
+        s = self.env.config.get("bot", "channels", None)
+        if s:
+            self.mychannels = [x.strip() for x in s.split(",") if x.strip()]
         else:
-            self.channels = []
+            self.mychannels = []
 
     def cleanup(self):
-        self.env.config.set("bot", "channels", ",".join(self.channels))
+        self.env.config.set("bot", "channels", ",".join(self.mychannels))
         fp = open(self.env.config.filename, "w")
         self.env.config.write(fp)
         fp.close()
 
     def joinchannels(self):
-        for channel in self.channels:
-            self.bot.ircJOIN(channel)
+        for channel in self.mychannels:
+            self.bot.irc.ircJOIN(channel)
 
     def cmdJOIN(self, source, channel):
         """Join the specified channel
@@ -68,7 +66,7 @@ class Channels(BasePlugin):
         Syntax: JOIN <channel>
         """
 
-        self.bot.ircJOIN(channel)
+        self.bot.irc.ircJOIN(channel)
 
         return "Joined channel %s" % channel
 
@@ -78,7 +76,7 @@ class Channels(BasePlugin):
         Syntax: PART <channel> [<message>]
         """
 
-        self.bot.ircPART(channel, message)
+        self.bot.irc.ircPART(channel, message)
 
         return "Left channel %s" % channel
 

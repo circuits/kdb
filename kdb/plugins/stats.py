@@ -39,8 +39,16 @@ class Stats(BasePlugin):
 
         self.stime = time.time()
 
+    def cmdEVENTS(self, source):
+        """Display number of events processed
+
+        Syntax; EVENTS
+        """
+
+        return "Events: %d" % self.env.events
+
     def cmdERRORS(self, source):
-        """Display numbers of errors that have occured
+        """Display number of errors that have occured
         
         Syntax: ERRORS
         """

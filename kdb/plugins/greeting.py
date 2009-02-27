@@ -71,16 +71,16 @@ class Irc(BasePlugin):
     def onJOIN(self, nick, channel):
         nick = nick.lower()
 
-        if nick == self.bot.getNick().lower():
+        if nick == self.bot.irc.getNick().lower():
             return
 
         if self._history.has_key(nick):
             if (time() - self._history[nick]) > (60*60*24*3):
                 msg = "Welcome back %s :)" % nick
-                self.bot.ircPRIVMSG(channel, msg)
+                self.bot.irc.ircPRIVMSG(channel, msg)
         else:
             msg = "Hello there %s, Welcome to %s" % (nick, channel)
-            self.bot.ircPRIVMSG(channel, msg)
+            self.bot.irc.ircPRIVMSG(channel, msg)
 
         self._history[nick] = time()
 
