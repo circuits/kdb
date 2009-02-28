@@ -131,6 +131,7 @@ class Startup(Component):
         writePID(pidfile)
 
         self.manager += Core(self.env)
+        self.unregister()
 
     def stop(self):
         """stop(self) -> None
