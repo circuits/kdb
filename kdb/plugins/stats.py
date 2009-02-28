@@ -13,10 +13,13 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
 import time
+from urllib import urlopen, urlencode
 
 from circuits import listener
 from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
+
+from circuits.tools import graph
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -38,6 +41,24 @@ class Stats(BasePlugin):
         self.commands = {}
 
         self.stime = time.time()
+
+    def cmdGRAPH(self, source):
+        """Display graph structure of system
+
+        Syntax; GRAPH
+        """
+
+        code = graph(self.env.manager)
+        lang = "Plain Text"
+        data = {"code": code, "lang": lang, "submit": "Submit"}
+        url = "http://codepad.org/"
+        r = urlopen(url, urlencode(data))
+        if r.code == 200:
+            msg = "Ok. Pasted -> %s" % r.url
+        else:
+            msg = "Error %d" % r.code
+
+        return msg
 
     def cmdEVENTS(self, source):
         """Display number of events processed
