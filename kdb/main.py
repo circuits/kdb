@@ -97,6 +97,11 @@ class Startup(Component):
 
         self.env = SystemEnvironment(path, systemName)
 
+    def __tick__(self):
+        if self.command in ("stop", "restart", "rehash", "init", "upgrade"):
+            if len(self.manager) == 0:
+                raise SystemExit, 0
+
     def registered(self):
         self.manager += self.env
 
