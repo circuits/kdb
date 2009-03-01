@@ -71,7 +71,7 @@ class GTalk(BasePlugin):
             if " " in text:
                 command, args = text.split(" ", 1)
             else:
-                command, text = text, ""
+                command, _ = text, ""
 
             command = command.upper()
 
@@ -82,5 +82,8 @@ class GTalk(BasePlugin):
                 e = Message(str(user), self.bot.irc.getNick(), text)
                 reply = self.send(e, "message", self.channel)
                 self.env.log.debug("Reply: %s" % reply)
+
+            if type(reply) == list:
+                reply = "\n".join(reply)
 
             self.sendMsg(user, reply)
