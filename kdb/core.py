@@ -92,6 +92,7 @@ class Core(Component):
         self.env.bot.connect()
 
     def stop(self, signal=0, stack=0):
+        self._running = False
         if self.env.bot.client.isConnected():
             self.env.bot.irc.ircQUIT("Received SIGTERM, terminating...")
         self.env.unloadPlugins()
