@@ -60,12 +60,8 @@ class Bot(Component):
         self.irc = IRC(channel=channel)
         self.client = TCPClient(channel=channel)
 
-        self.manager += self.irc
-        self.manager += self.client
-
-    def registered(self):
-        self.manager += self.irc
-        self.manager += self.client
+        self.client += self.irc
+        self += self.client
 
     def connect(self):
         """B.connect()
