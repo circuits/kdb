@@ -72,10 +72,10 @@ class Core(Component):
 
     channel = "core"
 
-    running = False
-
     def __init__(self, env):
         super(Core, self).__init__()
+
+        self._running = True
 
         signal.signal(signal.SIGHUP, self.rehash)
         signal.signal(signal.SIGTERM, self.stop)
