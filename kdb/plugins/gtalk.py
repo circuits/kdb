@@ -16,11 +16,8 @@ password = foobar
 __version__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from time import sleep
-
 import xmpp
 
-from circuits import Manager
 from circuits.lib.irc import Message
 
 from kdb.plugin import BasePlugin
@@ -43,46 +40,32 @@ class GTalk(BasePlugin):
         self._password = self.env.config.get("gtalk", "password", "semaj2891")
         self._name = "kdb"
 
-        self._client = xmpp.Client("gmail.com", debug=[])
-
-    def registered(self):
-        print "Starting gtalk..."
-        print list(self._calls())
-        print isinstance(self, Manager)
-        print issubclass(self.__class__, Manager)
-        print getattr(self, "tick")
+        self._client = xmpp.Client("gmail.com")
         self.start()
+
+    def __tick__(self):
+        if self._client.isConnected():
+            if hasattr(self._client, "Process"):
+                self._client.Process()
+        else:
+            self._client.connect(server=("gmail.com", 5223))
+            self._client.auth(self._username, self._password, self._name)
+            self._client.RegisterHandler("message", self.messageHandler)
+            self._client.sendInitPresence()
 
     def cleanup(self):
         self._client.disconnect()
         self.stop()
-    
+
     def sendMsg(self, to, message):
         self._client.send(xmpp.Message(to, message))
-
-    def tick(self):
-        print "."
-        if self._client.isConnected():
-            if hasattr(self._client, "Process"):
-                self._client.Process()
-                sleep(0.01)
-            else:
-                sleep(1)
-        else:
-            try:
-                self._client.connect(server=("gmail.com", 5223))
-                self._client.auth(self._username, self._password, self._name)
-                self._client.RegisterHandler("message", self.messageHandler)
-                self._client.sendInitPresence()
-                sleep(1)
-            except Exception, error:
-                sleep(60)
 
     def messageHandler(self, cnx, message):
         text = message.getBody()
         user = message.getFrom()
 
-        if text is not None:
+        if text:
+            text = text.strip()
             self.env.log.debug("<%s> %s" % (user, text))
 
             if " " in text:
@@ -96,9 +79,8 @@ class GTalk(BasePlugin):
                 self._client.Roster.Authorize(user)
                 reply = "Authorized."
             else:
-                text = message.getBody()
                 e = Message(str(user), self.bot.irc.getNick(), text)
-                r = self.iter(e, "message", self.channel)
-                reply = "\n".join([x for x in r if x is not None])
+                reply = self.send(e, "message", self.channel)
+                self.env.log.debug("Reply: %s" % reply)
 
             self.sendMsg(user, reply)
