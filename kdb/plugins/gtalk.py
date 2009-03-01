@@ -58,7 +58,6 @@ class GTalk(BasePlugin):
             sleep(1)
 
     def cleanup(self):
-        self._client.disconnect()
         self.stop()
 
     def sendMsg(self, to, message):
