@@ -16,6 +16,8 @@ password = foobar
 __version__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+from time import sleep
+
 import xmpp
 
 from circuits.lib.irc import Message
@@ -47,11 +49,13 @@ class GTalk(BasePlugin):
         if self._client.isConnected():
             if hasattr(self._client, "Process"):
                 self._client.Process()
+                sleep(0.1)
         else:
             self._client.connect(server=("gmail.com", 5223))
             self._client.auth(self._username, self._password, self._name)
             self._client.RegisterHandler("message", self.messageHandler)
             self._client.sendInitPresence()
+            sleep(1)
 
     def cleanup(self):
         self._client.disconnect()
