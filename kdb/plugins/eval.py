@@ -29,8 +29,6 @@ class Eval(BasePlugin):
         Syntax: EVAL <expr>
         """
 
-        return "Disabled"
-
         try:
             msg = str(eval(s)).split("\n")
         except Exception, e:
