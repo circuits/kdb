@@ -88,8 +88,6 @@ class Core(Component):
         self.manager += self.eventcounter
 
     def registered(self):
-        self.manager += self.errorhandler
-        self.manager += self.eventcounter
         self.env.loadPlugins()
         self.env.bot.connect()
 
