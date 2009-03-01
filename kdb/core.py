@@ -82,7 +82,7 @@ class Core(Component):
 
         self.env = env
 
-        self.errorhandler = ErrorHandler(self.env)
+        self.errorhandler = ErrorHandler(self.env, self)
         self.eventcounter = EventCounter(self.env)
         self.manager += self.errorhandler
         self.manager += self.eventcounter
