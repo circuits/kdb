@@ -48,11 +48,14 @@ class ErrorHandler(Component):
             type, value, traceback = args
 
             self.env.errors += 1
-            self.push(LogException("ERROR: %s" % args[1]), "exception", "log")
-            self.push(LogDebug(args[2]), "debug", "log")
+
+            log = self.env.log.channel
+            self.push(LogException("ERROR: %s" % args[1]), "exception", log)
+            self.push(LogDebug(args[2]), "debug", log)
 
             if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
-                self.push(Stop(), "stop", "core")
+                if self.core._running:
+                    self.push(Stop(), "stop", self.core.channel)
 
 class EventCounter(Component):
 
