@@ -101,7 +101,7 @@ class SystemEnvironment(Environment):
         self.manager += self.bridge
 
         if self.debug:
-            self.manager += Debugger(self.verbose, True, self.log)
+            self.manager += Debugger(events=self.verbose, logger=self.log)
 
     def loadPlugin(self, plugin):
         """E.loadPlugin(plugin) -> None
