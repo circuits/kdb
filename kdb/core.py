@@ -37,10 +37,11 @@ class Stop(Event):
 
 class ErrorHandler(Component):
 
-    def __init__(self, env, *args, **kwargs):
+    def __init__(self, env, core, *args, **kwargs):
         super(ErrorHandler, self).__init__(*args, **kwargs)
 
         self.env = env
+        self.core = core
 
     def error(self, *args, **kwargs):
         if len(args) == 3 and issubclass(args[0], BaseException):
