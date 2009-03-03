@@ -18,7 +18,7 @@ import marshal
 
 import aiml
 
-from circuits import listener
+from circuits.lib.irc import Message, Notice
 
 from kdb.plugin import BasePlugin
 
@@ -89,8 +89,7 @@ class Ai(BasePlugin):
 
         return msg
 
-    @listener("message")
-    def onMESSAGE(self, source, target, message):
+    def message(self, source, target, message):
 
         addressed, target, message = self.isAddressed(
                 source, target, message)
@@ -106,11 +105,10 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.bot.irc.ircPRIVMSG(target, sentence)
+                    self.push(Message(target, sentence), "PRIVMSG")
                 return reply
 
-    @listener("notice")
-    def onNOTICE(self, source, target, message):
+    def notice(self, source, target, message):
 
         addressed, target, message = self.isAddressed(
                 source, target, message)
@@ -124,5 +122,5 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.bot.irc.ircNOTICE(target, sentence)
+                    self.push(Notice(target, sentence), "NOTICE")
                 return reply

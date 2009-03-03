@@ -36,6 +36,5 @@ class Broadcast(BasePlugin):
             if message[0] == self.prefix:
                 self.push(
                         Message(source, target,
-                            "%s, %s" % (
-                                self.bot.irc.getNick(),
+                            "%s, %s" % (self("getNick"),
                                 message[1:])), "message", self.channel)

@@ -13,7 +13,9 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from time import sleep
 
-from circuits import listener, Event
+from circuits import Event
+from circuits.lib.irc import Quit, Nick
+from circuits.lib.sockets import Connect
 
 from kdb.plugin import BasePlugin
 
@@ -26,8 +28,7 @@ class Irc(BasePlugin):
     See: commands irc
     """
 
-    @listener("numeric")
-    def onNUMERIC(self, source, target, numeric, arg, message):
+    def numeric(self, source, target, numeric, arg, message):
         if numeric == 1:
             self.push(Event(), "joinchannels", self.channel)
         elif numeric == 433:
@@ -39,13 +40,8 @@ class Irc(BasePlugin):
         Syntax: JUMP <server> [<port>] [<ssl>]
         """
 
-        return "Not implemented."
-
-    #   self.bot.irc.ircQUIT("Reconnecting to %s:%s" % (server, port)))
-    #   bot.open(host, port, ssl)
-    #   sleep(1)
-    #   if bot.connected:
-    #       bot.connect(auth)
+        self.push(Quit("Reconnecting to %s:%s" % (server, port)), "QUIT")
+        self.push(Connect(host, port, ssl), "connect")
 
     def cmdIRCINFO(self, source):
         """Display current IRC information such as server,
@@ -56,10 +52,10 @@ class Irc(BasePlugin):
 
         msg = "I am %s on the %s IRC Network connected to " \
                 "%s running version %s" % ("%s!%s@%s" % (
-                    self.bot.irc.getNick(), self.bot.irc.getIdent(),
-                    self.bot.irc.getHost()),
-                    self.bot.irc.getNetwork(), self.bot.irc.getServer(),
-                    self.bot.irc.getServerVersion())
+                    self("getNick"), self("getIdent"),
+                    self("getHost")),
+                    self("getNetwork"), self("getServer"),
+                    self("getServerVersion"))
 
         return msg
 
@@ -69,9 +65,9 @@ class Irc(BasePlugin):
         Syntax: QUIT [<message>]
         """
 
-        self.bot.irc.ircQUIT(message)
+        self.push(Quit(message), "QUIT")
 
-        return "Left IRC"
+        return "Okay"
 
     def cmdDIE(self, source, message="Terminating! Bye!"):
         """Quit and Terminate
@@ -90,6 +86,6 @@ class Irc(BasePlugin):
         Syntax: NICK <newnick>
         """
 
-        self.bot.irc.ircNICK(nick)
+        self.push(Nick(nick), "NICK")
 
-        return "Nickname changed to %s" % nick
+        return "Okay"

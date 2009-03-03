@@ -93,8 +93,8 @@ class XMLRPC(BasePlugin):
         except IOError:
             pass
 
-    def registered(self):
-        self.manager += self.root
+    def registered(self, manager):
+        manager += self.root
 
     def cleanup(self):
         self.root.unregister()

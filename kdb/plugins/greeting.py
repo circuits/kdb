@@ -17,6 +17,7 @@ import marshal
 from time import time
 
 from circuits import listener, Event
+from circuits.lib.irc import Message
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -71,16 +72,16 @@ class Irc(BasePlugin):
     def onJOIN(self, nick, channel):
         nick = nick.lower()
 
-        if nick == self.bot.irc.getNick().lower():
+        if nick == self("getNick").lower():
             return
 
         if self._history.has_key(nick):
             if (time() - self._history[nick]) > (60*60*24*3):
                 msg = "Welcome back %s :)" % nick
-                self.bot.irc.ircPRIVMSG(channel, msg)
+                self.push(Message(channel, msg), "PRIVMSG")
         else:
             msg = "Hello there %s, Welcome to %s" % (nick, channel)
-            self.bot.irc.ircPRIVMSG(channel, msg)
+            self.push(Message(channel, msg), "PRIVMSG")
 
         self._history[nick] = time()
 

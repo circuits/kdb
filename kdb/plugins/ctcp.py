@@ -14,6 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import time
 
 from circuits import listener
+from circuits.lib.irc import Ctcp
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -44,9 +45,7 @@ class Ctcp(BasePlugin):
             response = ("TIME", time.asctime())
         elif type.lower() == "finger":
             response = ("FINGER",
-                    "%s - %s" % (
-                        self.bot.irc.getNick(),
-                        self.bot.irc.getName()))
+                    "%s - %s" % (self("getNick"), self("getName")))
         elif type.lower() == "version":
             response = ("VERSION",
                     "%s - v%s (%s)" % (
@@ -55,4 +54,4 @@ class Ctcp(BasePlugin):
                         kdb.__url__))
 
         if response is not None:
-            self.bot.irc.ircCTCPREPLY(source, *response)
+            self.push(Ctcp(source, *response), "CTCPREPLY")

@@ -15,6 +15,7 @@ import os
 import re
 
 from circuits import listener
+from circuits.lib.irc import Message
 from pymills.ai.deduce import fact, brain
 
 from kdb.plugin import BasePlugin
@@ -79,9 +80,9 @@ class Deduce(BasePlugin):
 
                 if type(msg) == list:
                     for line in msg:
-                        self.bot.irc.ircPRIVMSG(target, line)
+                        self.push(Message(target, line), "PRIVMSG")
                 else:
-                        self.bot.irc.ircPRIVMSG(target, msg)
+                    self.push(Message(target, msg), "PRIVMSG")
                 return msg
 
             message = message.strip()
@@ -99,6 +100,6 @@ class Deduce(BasePlugin):
                 self.env.log.debug(ans)
                 self.env.log.debug(msg)
 
-            self.bot.irc.ircPRIVMSG(target, msg)
+            self.push(Message(target, msg), "PRIVMSG")
 
             return msg
