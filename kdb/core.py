@@ -17,6 +17,8 @@ from time import sleep
 from traceback import format_exc
 
 from circuits.tools import graph
+from circuits.lib.irc import Quit
+from circuits.lib.sockets import Connect
 from circuits import listener, Event, Component
 from circuits.lib.log import (
         Debug as LogDebug,
@@ -87,14 +89,14 @@ class Core(Component):
         self.manager += self.errorhandler
         self.manager += self.eventcounter
 
-    def registered(self):
+    def registered(self, manager):
         self.env.loadPlugins()
-        self.env.bot.connect()
+        self.push(Connect(), "connect", self.env.bot)
 
     def stop(self, signal=0, stack=0):
         self._running = False
         if self.env.bot.client.isConnected():
-            self.env.bot.irc.ircQUIT("Received SIGTERM, terminating...")
+            self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
         self.env.unloadPlugins()
         raise SystemExit, 0
 

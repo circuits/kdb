@@ -19,6 +19,7 @@ from time import mktime, time
 import feedparser
 
 from pymills.misc import strToBool
+from circuits.lib.irc import Message
 from circuits import listener, Event, Timer
 from pymills.utils import notags, decodeHTML
 
@@ -131,7 +132,7 @@ class RSS(BasePlugin):
             for f in self.entities[entity]:
                 if f.checkTime():
                     for line in f.getItems():
-                        self.bot.irc.ircPRIVMSG(f.target, line)
+                        self.push(Message(f.target, line), "PRIVMSG")
 
     def cmdRADD(self, source, url, interval="60"):
         """Add a new RSS feed to be checked at the given interval.

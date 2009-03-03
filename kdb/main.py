@@ -14,7 +14,7 @@ import signal
 import optparse
 from time import sleep
 
-from circuits import Event, Component, Manager, Debugger
+from circuits import handler, Event, Component, Manager, Debugger
 
 from circuits.lib.env import (
         Load as LoadEnvironment,
@@ -102,9 +102,11 @@ class Startup(Component):
             if len(self.manager) == 0:
                 raise SystemExit, 0
 
-    def registered(self):
-        self.manager += self.env
+    def registered(self, manager):
+        manager += self.env
 
+    @handler("started", target="*")
+    def started(self):
         if not self.command == "init":
             if not os.path.exists(self.env.path):
                 raise Error("Environment path %s does not exist!" % self.env)
@@ -121,6 +123,8 @@ class Startup(Component):
         Write the PID of this process to the environment path
         and start the core.
         """
+
+        print "Starting..."
 
         if self.opts.daemon:
             daemonize(path=self.env.path)

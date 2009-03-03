@@ -14,15 +14,13 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re
 
-from circuits import listener
 
 from kdb.plugin import BasePlugin
 
 class AutoID(BasePlugin):
     "Automatic Identification"
 
-    @listener("notice")
-    def onNOTICE(self, event, source, target, message):
+    def notice(self, event, source, target, message):
         """Automatically login to pircsrv
 
         The password is stored in the config file.
@@ -64,6 +62,6 @@ class AutoID(BasePlugin):
                                 password = self.env.config.get(
                                         "autoid", "password")
 
-                                self.bot.irc.ircPRIVMSG(
-                                        nickserv,
-                                        command % password)
+                                self.push(
+                                        Message(nickserv, command % password),
+                                        "PRIVMSG")

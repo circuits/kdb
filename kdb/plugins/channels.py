@@ -12,6 +12,7 @@ __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import listener
+from circuits.lib.irc import Join, Part
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -58,7 +59,7 @@ class Channels(BasePlugin):
 
     def joinchannels(self):
         for channel in self.mychannels:
-            self.bot.irc.ircJOIN(channel)
+            self.push(Join(channel), "JOIN")
 
     def cmdJOIN(self, source, channel):
         """Join the specified channel
@@ -66,9 +67,9 @@ class Channels(BasePlugin):
         Syntax: JOIN <channel>
         """
 
-        self.bot.irc.ircJOIN(channel)
+        self.push(Join(channel), "JOIN")
 
-        return "Joined channel %s" % channel
+        return "Okay"
 
     def cmdPART(self, source, channel, message="Leaving"):
         """Leave the specified channel
@@ -76,9 +77,9 @@ class Channels(BasePlugin):
         Syntax: PART <channel> [<message>]
         """
 
-        self.bot.irc.ircPART(channel, message)
+        self.push(Part(channel, message), "PART")
 
-        return "Left channel %s" % channel
+        return "Okay"
 
     def cmdCHANNELS(self, source, command, *args, **kwargs):
         self.env.log.debug(source)

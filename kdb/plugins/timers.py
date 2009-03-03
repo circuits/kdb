@@ -12,6 +12,7 @@ display in x seconds.
 __version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+from circuits.lib.irc import Message
 from circuits import listener, Event, Timer
 
 from kdb.plugin import BasePlugin
@@ -27,7 +28,7 @@ class Timers(BasePlugin):
 
     @listener("timer")
     def onTIMER(self, target, message):
-        self.bot.irc.ircPRIVMSG(target, message)
+        self.push(Message(target, message), "PRIVMSG")
 
     def cmdTIMER(self, source, length, message="Hello World"):
         """Create a new time with the given length and message

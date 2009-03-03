@@ -77,14 +77,14 @@ class SystemEnvironment(Environment):
         self.events = 0
         self.sTime = time()
 
+        host = self.config.get("server", "host", "0.0.0.0")
         port = self.config.getint("server", "port", 80)
-        address = self.config.get("server", "address", "0.0.0.0")
         ssl = self.config.getboolean("server", "ssl", False)
         bind = self.config.get("server", "bind", None)
 
         auth = {
                 "host": socket.gethostname(),
-                "server": address,
+                "server": host,
                 "nick": self.config.get("bot", "nick", systemName),
                 "ident": self.config.get("bot", "ident", systemName),
                 "name": self.config.get("bot", "name", systemDesc)
@@ -92,12 +92,12 @@ class SystemEnvironment(Environment):
         if self.config.has_option("server", "password"):
             auth["password"] = self.config.get("server", "password")
 
-        self.bot = Bot(self, port, address, ssl, bind, auth)
+        self.bot = Bot(self, host, port, ssl, bind, auth)
         self.manager += self.bot
 
+        host = self.config.get("bridge", "host", "0.0.0.0")
         port = self.config.getint("bridge", "port", 8000)
-        address = self.config.get("bridge", "address", "0.0.0.0")
-        self.bridge = Bridge(port, address, channel="bridge")
+        self.bridge = Bridge(port, host, channel="bridge")
         self.manager += self.bridge
 
         if self.debug:

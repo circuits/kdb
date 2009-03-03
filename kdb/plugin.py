@@ -11,7 +11,8 @@ plugins. Plugins should sub-class BasePlugin.
 import re
 import inspect
 
-from circuits import listener, Event, Component
+from circuits.lib.irc import Message, Notice
+from circuits import handler, Event, Component
 
 from pymills.misc import backMerge
 
@@ -105,7 +106,7 @@ class BasePlugin(Component):
             command = name[3:].lower()
             self._hooks[command] = cmdHandler
 
-    @listener("message", type="filter")
+    @handler("message", filter=True)
     def onMESSAGE(self, source, target, message):
 
         addressed, target, message = self.isAddressed(
@@ -121,11 +122,11 @@ class BasePlugin(Component):
                         target = target[0]
                     if type(r) == list:
                         for line in r:
-                            self.bot.irc.ircPRIVMSG(target, line)
+                            self.push(Message(target, line), "PRIVMSG")
                     else:
-                        self.bot.irc.ircPRIVMSG(target, r)
+                        self.push(Message(target, r), "PRIVMSG")
 
-    @listener("notice", type="filter")
+    @handler("notice", filter=True)
     def onNOTICE(self, source, target, message):
 
         addressed, target, message = self.isAddressed(
@@ -138,18 +139,17 @@ class BasePlugin(Component):
                     target = target[0]
                 if type(r) == list:
                     for line in r:
-                        self.bot.irc.ircNOTICE(target, line)
+                        self.push(Notice(target, line), "NOTICE")
                 else:
-                    self.bot.irc.ircNOTICE(target, r)
+                    self.push(Notice(target, r), "NOTICE")
 
     def unknownCommand(self, source, command):
-        self.bot.irc.ircNOTICE(source, "Unknown command: %s" % command)
+        self.push(Notice(target, "Unknown command: %s" % command), "NOTICE")
 
     def syntaxError(self, source, command, message, args):
-        self.bot.irc.ircNOTICE(source, "Syntax error (%s): %s" % (
-            command, message))
-        self.bot.irc.ircNOTICE(source, "Expected: %s" %
-                " ".join(args))
+        self.push(Notice(source, "Syntax error (%s): %s" % (
+            command, message)), "NOTICE")
+        self.push(Notice(source, "Expected: %s" % " ".join(args)), "NOTICE")
 
     def processCommand(self, source, message):
         tokens = message.split(" ")
@@ -200,29 +200,19 @@ class BasePlugin(Component):
     def isAddressed(self, source, target, message):
         addressed = False
 
-        if self.bot.irc.getNick() is None:
+        nick = self("getNick")
+        if nick is None:
             return False, target, message
 
-        if target.lower() == self.bot.irc.getNick().lower():
-            if len(message) > len(self.bot.irc.getNick()) and \
-                    message[:len(self.bot.irc.getNick())].lower() \
-                    == self.bot.irc.getNick().lower():
-                message = message[len(self.bot.irc.getNick()):]
-                while len(message) > 0 and message[0] in [
-                        ",", ":", " "]:
-                    message = message[1:]
+        if target.lower() == nick.lower() or message.startswith(nick):
+            if message.startswith(nick):
+                message = message[len(nick):]
+            while len(message) > 0 and message[0] in [",", ":", " "]:
+                message = message[1:]
 
-            return True, source, message
-        else:
-            if len(message) > len(self.bot.irc.getNick()) and \
-                    message[:len(self.bot.irc.getNick())].lower() \
-                    == self.bot.irc.getNick().lower():
-
-                message = message[len(self.bot.irc.getNick()):]
-                while len(message) > 0 and message[0] in [
-                        ",", ":", " "]:
-                    message = message[1:]
-
-                return True, target, message
+            if target.lower() == nick.lower():
+                return True, source, message
             else:
-                return False, target, message
+                return True, target, message
+        else:
+            return False, target, message

@@ -20,6 +20,7 @@ import pickle
 
 from circuits import listener
 from pymills.misc import strToBool
+from circuits.lib.irc import Message
 from pymills.ai.semnet import Fact, Entity, Relation, GetIsA, GetExampleOf
 
 from kdb.plugin import BasePlugin
@@ -171,21 +172,20 @@ class Semnet(BasePlugin):
                         self.relations.has_key(d["relation"]):
                     agent = self.entities[d["agent"]]
                     relation = self.relations[d["relation"]]
-                    self.bot.irc.ircPRIVMSG(
+                    self.push(Message(
                         target,
-                        tostr(agent.objects(relation)))
+                        tostr(agent.objects(relation))),
+                        "PRIVMSG")
                 else:
-                    self.bot.irc.ircPRIVMSG(
-                        target,
-                        "I don't understand.")
+                    self.push(Message(target, "I don't understand."), "PRIVMSG")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What is a %s ?" % d["agent"])
+                            "What is a %s ?" % d["agent"]), "PRIVMSG")
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What does %s mean ?" % d["relation"])
+                            "What does %s mean ?" % d["relation"]), "PRIVMSG")
 
                 return
 
@@ -204,25 +204,25 @@ class Semnet(BasePlugin):
                     object = self.entities[d["object"]]
 
                     if relation(agent, object):
-                        self.bot.irc.ircPRIVMSG(target, "yes")
+                        self.push(Message(target, "yes"), "PRIVMSG")
                     else:
-                        self.bot.irc.ircPRIVMSG(target, "no")
+                        self.push(Message(target, "no"), "PRIVMSG")
                 else:
-                    self.bot.irc.ircPRIVMSG(
+                    self.push(Message(
                         target,
-                        "I don't understand.")
+                        "I don't understand."), "PRIVMSG")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What is a %s ?" % d["agent"])
+                            "What is a %s ?" % d["agent"]), "PRIVMSG")
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What does %s mean ?" % d["relation"])
+                            "What does %s mean ?" % d["relation"]), "PRIVMSG")
                     if not self.entities.has_key(d["object"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What is a %s ?" % d["object"])
+                            "What is a %s ?" % d["object"]), "PRIVMSG")
 
                 return
 
@@ -241,27 +241,27 @@ class Semnet(BasePlugin):
                     object = self.entities[d["object"]]
 
                     if relation(agent, object):
-                        self.bot.irc.ircPRIVMSG(
-                                target,
-                                "I already knew that.")
+                        self.push(Message(
+                            target,
+                            "I already knew that."), "PRIVMSG")
                     else:
                         Fact(agent, relation, object)
-                        self.bot.irc.ircPRIVMSG(target, "Okay")
+                        self.push(Message(target, "Okay"), "PRIVMSG")
                 else:
-                    self.bot.irc.ircPRIVMSG(
+                    self.push(Message(
                         target,
-                        "I don't understand.")
+                        "I don't understand."), "PRIVMSG")
                     if not self.entities.has_key(d["agent"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What is a %s ?" % d["agent"])
+                            "What is a %s ?" % d["agent"]), "PRIVMSG")
                     if not self.relations.has_key(d["relation"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What does %s mean ?" % d["relation"])
+                            "What does %s mean ?" % d["relation"]), "PRIVMSG")
                     if not self.entities.has_key(d["object"]):
-                        self.bot.irc.ircPRIVMSG(
+                        self.push(Message(
                             target,
-                            "What is a %s ?" % d["object"])
+                            "What is a %s ?" % d["object"]), "PRIVMSG")
 
                 return
