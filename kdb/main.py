@@ -102,7 +102,7 @@ class Startup(Component):
             if len(self.manager) == 0:
                 raise SystemExit, 0
 
-    def registered(self, manager):
+    def registered(self, component, manager):
         manager += self.env
 
     @handler("started", target="*")
