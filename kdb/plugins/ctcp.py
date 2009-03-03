@@ -8,12 +8,11 @@ This plugin provides responses to IRC CTCP Events and
 responds to them appropiately.
 """
 
-__version__ = "0.1"
+__version__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
 
-from circuits import listener
 from circuits.lib.irc import Ctcp
 
 import kdb
@@ -29,15 +28,12 @@ class Ctcp(BasePlugin):
     NOTE: There are no commands for this plugin (yet).
     """
 
-    @listener("ctcp")
-    def onCTCP(self, source, target, type, message):
+    def ctcp(self, source, target, type, message):
         """CTCP Event Handler
 
         Handle IRC CTCP Events and respond to them
         appropiately.
         """
-
-        response = None
 
         if type.lower() == "ping":
             response = ("PING", message)
@@ -52,6 +48,8 @@ class Ctcp(BasePlugin):
                         kdb.__name__,
                         kdb.__version__,
                         kdb.__url__))
+        else:
+            response = None
 
         if response is not None:
             self.push(Ctcp(source, *response), "CTCPREPLY")
