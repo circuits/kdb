@@ -124,8 +124,6 @@ class Startup(Component):
         and start the core.
         """
 
-        print "Starting..."
-
         if self.opts.daemon:
             daemonize(path=self.env.path)
 
