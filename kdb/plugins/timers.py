@@ -26,8 +26,7 @@ class Message(Event):
 class Timers(BasePlugin):
     "Timers"
 
-    @listener("timer")
-    def onTIMER(self, target, message):
+    def timer(self, target, message):
         self.push(Message(target, message), "PRIVMSG")
 
     def cmdTIMER(self, source, length, message="Hello World"):
@@ -41,6 +40,6 @@ class Timers(BasePlugin):
         except ValueError:
             return  "Invalid length specified"
 
-        self.manager += Timer(length, Message(source, message))
+        self += Timer(length, Message(source, message), "timer", self)
 
         return "Okay timer set"
