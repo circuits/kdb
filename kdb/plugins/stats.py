@@ -19,7 +19,7 @@ from circuits import listener
 from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
 
-from circuits.tools import graph
+from circuits.tools import graph, inspect
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -41,6 +41,24 @@ class Stats(BasePlugin):
         self.commands = {}
 
         self.stime = time.time()
+
+    def cmdINSPECT(self, source):
+        """Display an inspection report of the system
+
+        Syntax; INSPECT
+        """
+
+        code = inspect(self.env.manager)
+        lang = "Plain Text"
+        data = {"code": code, "lang": lang, "submit": "Submit"}
+        url = "http://codepad.org/"
+        r = urlopen(url, urlencode(data))
+        if r.code == 200:
+            msg = "Ok. Pasted -> %s" % r.url
+        else:
+            msg = "Error %d" % r.code
+
+        return msg
 
     def cmdGRAPH(self, source):
         """Display graph structure of system
