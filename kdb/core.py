@@ -95,8 +95,7 @@ class Core(Component):
 
     def stop(self, signal=0, stack=0):
         self._running = False
-        if self.env.bot.client.isConnected():
-            self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
+        self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
         self.env.unloadPlugins()
         raise SystemExit, 0
 
