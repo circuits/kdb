@@ -100,8 +100,8 @@ class RSS(BasePlugin):
     See: commands rss
     """
 
-    def __init__(self, *args, **kwargs):
-        super(RSS, self).__init__(*args, **kwargs)
+    def __init__(self, env):
+        super(RSS, self).__init__(env)
 
         filename = os.path.join(self.env.path, "rss.bin")
         if os.path.exists(filename):
