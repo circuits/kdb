@@ -24,7 +24,7 @@ from pymills.utils import notags, decodeHTML
 
 from kdb.plugin import BasePlugin
 
-class RSSTick(Event): pass
+class CheckFeeds(Event): pass
 
 class Feed(object):
 
@@ -117,7 +117,7 @@ class RSS(BasePlugin):
         else:
             self.entities = {}
 
-        self.manager += Timer(60, RSSTick(), "rsstick", persist=True)
+        self += Timer(60, CheckFeeds(), "checkfeeds", persist=True)
 
     def cleanup(self):
         filename = os.path.join(self.env.path, "rss.bin")
@@ -125,8 +125,7 @@ class RSS(BasePlugin):
         pickle.dump(self.entities, fd)
         fd.close()
 
-    @listener("rsstick")
-    def onRSSTICK(self):
+    def checkfeeds(self):
         for entity in self.entities:
             for f in self.entities[entity]:
                 if f.checkTime():
