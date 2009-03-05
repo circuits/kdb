@@ -18,9 +18,8 @@ from time import mktime, time
 
 import feedparser
 
-from pymills.misc import strToBool
+from circuits import Event, Timer
 from circuits.lib.irc import Message
-from circuits import listener, Event, Timer
 from pymills.utils import notags, decodeHTML
 
 from kdb.plugin import BasePlugin
