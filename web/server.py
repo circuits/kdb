@@ -10,6 +10,7 @@ import mako
 from mako.lookup import TemplateLookup
 
 from circuits import Debugger
+from circuits.web.loggers import Logger
 from circuits.web import Server, Controller
 
 import kdb
@@ -60,4 +61,4 @@ class Root(Controller):
     def index(self):
         return render(self.tpl)
 
-(Server(8000) + Debugger(events=False) + Root()).run()
+(Server(8001) + Debugger(events=False) + Logger() + Root()).run()
