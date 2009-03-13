@@ -16,14 +16,14 @@ from time import sleep
 
 from circuits import handler, Event, Component, Manager, Debugger
 
-from circuits.lib.env import (
+from circuits.app.env import (
         Load as LoadEnvironment,
         Create as CreateEnvironment,
         Upgrade as UpgradeEnvironment)
 
 from pymills.utils import writePID, daemonize
 
-from core import Core, Start
+from core import Core
 from env import SystemEnvironment
 from __init__ import __name__ as systemName
 from __init__ import __version__ as systemVersion
@@ -106,7 +106,7 @@ class Startup(Component):
         manager += self.env
 
     @handler("started", target="*")
-    def started(self):
+    def started(self, component, mode):
         if not self.command == "init":
             if not os.path.exists(self.env.path):
                 raise Error("Environment path %s does not exist!" % self.env)

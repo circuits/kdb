@@ -10,10 +10,12 @@ Network and reacts to IRC Events. The Bot Component consists
 of the TCPClient and IRC Components.
 """
 
-from circuits.lib.log import Info as LogInfo
-from circuits.lib.irc import IRC, Pass, User, Nick
-from circuits.lib.sockets import TCPClient, Connect
-from circuits import handler, Event, Component, Timer
+import socket
+
+from circuits import Event, Component, Timer
+from circuits.app.log import Info as LogInfo
+from circuits.net.sockets import TCPClient, Connect
+from circuits.net.protocols.irc import IRC, Pass, User, Nick
 
 from kdb import __name__ as systemName
 from kdb import __description__ as systemDesc
@@ -44,21 +46,40 @@ class Bot(Component):
     port and address.
     """
 
-    def __init__(self, env, host="127.0.0.1", port=6667, ssl=False, bind=None,
-            auth=None, channel="bot"):
+    channel = "bot"
+
+    def __init__(self, env):
         "initializes x; see x.__class__.__doc__ for signature"
 
-        super(Bot, self).__init__(channel=channel)
+        super(Bot, self).__init__()
 
         self.env = env
-        self.auth = auth
 
-        irc = IRC(channel=channel)
-        client = TCPClient(host, port, ssl, bind, channel=channel)
+        self.host = self.env.config.get("server", "host", "0.0.0.0")
+        self.port = self.env.config.getint("server", "port", 80)
+        self.ssl  = self.env.config.getboolean("server", "ssl", False)
+        self.bind = self.env.config.get("server", "bind", None)
+
+        self.auth = {
+                "host": socket.gethostname(),
+                "server": self.host,
+                "nick": self.env.config.get("bot", "nick", systemName),
+                "ident": self.env.config.get("bot", "ident", systemName),
+                "name": self.env.config.get("bot", "name", systemDesc)
+        }
+        if self.env.config.has_option("server", "password"):
+            self.auth["password"] = self.env.config.get("server", "password")
+
+        irc = IRC(channel=self.channel)
+        client = TCPClient(self.bind, channel=self.channel)
         self += (client + irc)
 
+    def registered(self, component, manager):
+        if component == self:
+            self.push(Connect(self.host, self.port, self.ssl), "connect")
+
     def reconnect(self):
-        self.push(Connect(), "connect")
+        self.push(Connect(self.host, self.port, self.ssl), "connect")
     
     def connected(self, host, port):
         if self.auth.has_key("password"):

@@ -13,9 +13,13 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from cPickle import loads
 
-from circuits import listener
+from circuits import handler
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
+
+SCM_UPDATE_TPL = """%(project)s: 8%(committer)s 12%(rev)s \
+%(logmsg)s (%(files)s)"""
 
 class Notify(BasePlugin):
 
@@ -28,8 +32,8 @@ class Notify(BasePlugin):
     Depends on: xmlrpc
     """
 
-    @listener("xmlrpc.scmupdate")
-    def onSCMUPDATE(self, data):
+    @handler("xmlrpc.scmupdate")
+    def xmlrpc_scmupdate(self, data):
 
         if self.env.config.has_option("xmlrpc", "channel"):
             channel = self.env.config.get("xmlrpc", "channel")
@@ -48,18 +52,15 @@ class Notify(BasePlugin):
             else:
                 d["files"] = " ".join(files)
 
-            msg = """\
-%(project)s: 8%(committer)s 12%(rev)s \
-%(logmsg)s (%(files)s)"""
+            msg = SCM_UPDATE_TPL % d
+            self.push(Message(channel, msg), "PRIVMSG")
 
-            self.push(Message(channel, msg % d), "PRIVMSG")
+            return "Message sent to %s" % channel
+        else:
+            return "Message not received. XMLRPC Channel not configured."
 
-        return "Message sent to %s" % channel
-
-    @listener("xmlrpc.notify")
-    def onNOTIFY(self, source="unknown", message=""):
-
-        print "onNOTIFY: ..."
+    @handler("xmlrpc.notify")
+    def xmlrpc_notify(self, source="unknown", message=""):
 
         if self.env.config.has_option("xmlrpc", "channel"):
             channel = self.env.config.get("xmlrpc", "channel")
@@ -73,4 +74,6 @@ class Notify(BasePlugin):
             for line in message.split("\n"):
                 self.push(Message(channel, line), "PRIVMSG")
 
-        return "Message sent to %s" % channel
+            return "Message sent to %s" % channel
+        else:
+            return "Message not received. XMLRPC Channel not configured."

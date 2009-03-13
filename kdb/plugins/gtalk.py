@@ -20,7 +20,7 @@ from time import sleep
 
 import xmpp
 
-from circuits.lib.irc import Message
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -35,14 +35,14 @@ class GTalk(BasePlugin):
     See: commands gtalk
     """
 
-    def __init__(self, env, bot, *args, **kwargs):
-        super(GTalk, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env):
+        super(GTalk, self).__init__(env)
 
         self._username = self.env.config.get("gtalk", "username", "kdbbot")
         self._password = self.env.config.get("gtalk", "password", "semaj2891")
         self._name = "kdb"
 
-        self._client = xmpp.Client("gmail.com")
+        self._client = xmpp.Client("gmail.com", debug=[])
         self.start()
 
     def __tick__(self):

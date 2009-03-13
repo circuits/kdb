@@ -15,7 +15,7 @@ import os
 import time
 from urllib import urlopen, urlencode
 
-from circuits import listener
+from circuits import handler
 from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
 
@@ -174,16 +174,16 @@ class Stats(BasePlugin):
 
         return msg
 
-    @listener("PostCommand", type="filter")
+    @handler("PostCommand", filter=True)
     def onPOSTCOMMAND(self, command, tokens):
         if not self.commands.has_key(command):
             self.commands[command] = 0
         self.commands[command] += 1
 
-    @listener("read", type="filter", target="bot")
+    @handler("read", filter=True, target="bot")
     def onREAD(self, line):
         self.tin += len(line) + 2
 
-    @listener("send", type="filter", target="bot")
+    @handler("send", filter=True, target="bot")
     def onSEND(self, data):
         self.tout += len(data)

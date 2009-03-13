@@ -12,8 +12,8 @@ and performing some command or event on that.
 __version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from circuits import listener
-from circuits.lib.irc import Message
+from circuits import handler
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -26,7 +26,7 @@ class Broadcast(BasePlugin):
         self.prefix = self.env.config.get(
                 "broadcast", "prefix") or "@"
 
-    @listener("message")
+    @handler("message")
     def onMESSAGE(self, source, target, message):
 
         addressed, target, message = self.isAddressed(

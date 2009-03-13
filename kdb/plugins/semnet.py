@@ -18,10 +18,11 @@ import types
 import string
 import pickle
 
-from circuits import listener
-from pymills.misc import strToBool
-from circuits.lib.irc import Message
 from pymills.ai.semnet import Fact, Entity, Relation, GetIsA, GetExampleOf
+
+from circuits import handler
+from pymills.misc import strToBool
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -151,7 +152,7 @@ class Semnet(BasePlugin):
 
         return "Okay"
 
-    @listener("message")
+    @handler("message")
     def onMESSAGE(self, source, target, message):
 
         addressed, target, message = self.isAddressed(

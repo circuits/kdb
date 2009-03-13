@@ -43,7 +43,7 @@ class AutoID(BasePlugin):
                 nickserv = self.env.config.get(
                         "autoid", "nickserv")
 
-                if source.lower() == nickserv.lower():
+                if source[0].lower() == nickserv.lower():
 
                     if self.env.config.has_option(
                             "autoid", "pattern"):

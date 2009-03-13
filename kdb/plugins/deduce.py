@@ -14,17 +14,17 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import os
 import re
 
-from circuits import listener
-from circuits.lib.irc import Message
+from circuits import handler
 from pymills.ai.deduce import fact, brain
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
 class Deduce(BasePlugin):
     "Deductive Logic"
 
-    def __init__(self, env, bot, *args, **kwargs):
-        super(Deduce, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env)
+        super(Deduce, self).__init__(env)
 
         self.reason = []
         self.b = brain()
@@ -45,7 +45,7 @@ class Deduce(BasePlugin):
         fp.write(str(self.b))
         fp.close()
 
-    @listener("message")
+    @handler("message")
     def onMMESSAGE(self, source, target, message):
 
         addressed, target, message = self.isAddressed(

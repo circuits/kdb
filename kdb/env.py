@@ -9,21 +9,20 @@ easier access by other parts of the system including plugins.
 Every plugin is passed an instnace of this environment.
 """
 
-import os
 import sys
-import socket
-import inspect
-import weakref
 from time import time
 from traceback import format_exc
+from collections import defaultdict
+from inspect import getmembers, isclass
 
 from pymills.utils import safe__import__
 
-from circuits.lib import config
-from circuits.lib.env import Environment
-from circuits import Event, Component, Bridge, Debugger
+from circuits import Debugger
+from circuits.tools import kill
+from circuits.app import config
+from circuits.app.env import Environment
 
-from circuits.lib.log import (
+from circuits.app.log import (
         Info as LogInfo,
         Debug as LogDebug,
         Error as LogError,
@@ -39,10 +38,7 @@ from db import (
         Load as LoadDatabases,
         Create as CreateDatabases)
 
-from __init__ import (
-        __name__ as systemName,
-        __description__ as systemDesc,
-        __version__ as systemVersion)
+from __init__ import __name__ as systemName
 
 class SystemEnvironment(Environment):
 
@@ -71,37 +67,17 @@ class SystemEnvironment(Environment):
         self.debug = self.config.getboolean("logging", "debug", False)
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
-        self.plugins = weakref.WeakValueDictionary()
+        self.plugins = defaultdict(set)
 
         self.errors = 0
         self.events = 0
         self.sTime = time()
 
-        host = self.config.get("server", "host", "0.0.0.0")
-        port = self.config.getint("server", "port", 80)
-        ssl = self.config.getboolean("server", "ssl", False)
-        bind = self.config.get("server", "bind", None)
-
-        auth = {
-                "host": socket.gethostname(),
-                "server": host,
-                "nick": self.config.get("bot", "nick", systemName),
-                "ident": self.config.get("bot", "ident", systemName),
-                "name": self.config.get("bot", "name", systemDesc)
-        }
-        if self.config.has_option("server", "password"):
-            auth["password"] = self.config.get("server", "password")
-
-        self.bot = Bot(self, host, port, ssl, bind, auth)
-        self.manager += self.bot
-
-        host = self.config.get("bridge", "host", "0.0.0.0")
-        port = self.config.getint("bridge", "port", 8000)
-        self.bridge = Bridge(port, host, channel="bridge")
-        self.manager += self.bridge
-
         if self.debug:
             self.manager += Debugger(events=self.verbose, logger=self.log)
+
+        self.bot = Bot(self)
+        self.manager += self.bot
 
     def loadPlugin(self, plugin):
         """E.loadPlugin(plugin) -> None
@@ -112,44 +88,46 @@ class SystemEnvironment(Environment):
         """
 
         if plugin in self.plugins:
-            self.push(
-                    LogWarning("Not loading plugin '%s' - Already loaded!" % plugin),
-                    "warning", "log")
-            return False
+            msg = "Not loading plugin '%s' - Already loaded!" % plugin
+            self.push(LogWarning(msg), "warning", self.log)
+            return msg
 
         try:
-            fqplugin = "kdb.plugins.%s" % plugin
+            fqplugin = "%s.plugins.%s" % (__package__, plugin)
             if sys.modules.has_key(fqplugin):
                 try:
                     reload(sys.modules[fqplugin])
-                except Exception, err:
-                    self.push(
-                            LogError("Problem reloading plugin '%s'" % plugins),
-                            "error", "log")
-                    self.push(LogException(err), "exception", "log")
-                    self.push(LogDebug(format_exc()), "debug", "log")
-                    return False
+                except Exception, e:
+                    msg = "Problem reloading plugin '%s'" % plugin
+                    self.push(LogError(msg), "error", self.log)
+                    self.push(LogException(e), "exception", self.log)
+                    self.push(LogDebug(format_exc()), "debug", self.log)
+                    return msg
 
-            m = safe__import__("plugins.%s" % plugin,
-                    globals(), locals(), "kdb")
+            moduleName = "plugins.%s" % plugin
+            m = safe__import__(moduleName, globals(), locals(), __package__)
 
-            classes = inspect.getmembers(m,
-                    lambda x: inspect.isclass(x) and
-                    issubclass(x, BasePlugin) and
-                    not x == BasePlugin)
-            for name, c in classes:
-                o = c(self, self.bot)
-                self.manager += o
-                self.plugins[plugin] = o
-            self.push(LogInfo("Loaded plugin: %s" % plugin), "info", "log")
-            return True
-        except Exception, err:
-            self.push(
-                    LogError("Problem loading plugin '%s'" % plugin),
-                    "error", "log")
-            self.push(LogException(err), "exception", "log")
-            self.push(LogDebug(format_exc()), "debug", "log")
-            return False
+            p1 = lambda x: isclass(x) and issubclass(x, BasePlugin)
+            p2 = lambda x: x is not BasePlugin
+            predicate = lambda x: p1(x) and p2(x)
+            plugins = getmembers(m, predicate)
+
+            for name, Plugin in plugins:
+                instance = Plugin(self)
+                instance.register(self.manager)
+                msg = "Registered Component: %s" % instance
+                self.push(LogInfo(msg), "info", self.log)
+                self.plugins[name].add(instance)
+
+            msg = "Loaded plugin: %s" % plugin
+            self.push(LogInfo(msg), "info", self.log)
+            return msg
+        except Exception, e:
+            msg = "Problem loading plugin '%s'" % plugin
+            self.push(LogError(msg), "error", self.log)
+            self.push(LogException(e), "exception", self.log)
+            self.push(LogDebug(format_exc()), "debug", self.log)
+            return msg
 
     def unloadPlugin(self, plugin):
         """E.unloadPlugin(plugin) -> None
@@ -157,13 +135,24 @@ class SystemEnvironment(Environment):
         Unload the specified plugin if it has been loaded.
         """
 
-        if self.plugins.has_key(plugin):
-            o = self.plugins[plugin]
-            o.unregister()
-            if hasattr(o, "cleanup"):
-                o.cleanup()
+        if plugin in self.plugins:
+            instances = self.plugins[plugin]
+            for instance in instances:
+                kill(instance)
+                msg = "Unregistered Component: %s" % instance
+                self.push(LogInfo(msg), "info", self.log)
+                if hasattr(instance, "cleanup"):
+                    instance.cleanup()
+                    msg = "Cleaned up Component: %s" % instance
+                    self.push(LogDebug(msg), "debug", self.log)
             del self.plugins[plugin]
-            self.push(LogInfo("Unloaded plugin: %s" % plugin), "info", "log")
+
+            msg = "Unloaded plugin: %s" % plugin
+        else:
+            msg = "Not unloading plugin '%s' - Not loaded!" % plugin
+
+        self.push(LogInfo(msg), "info", self.log)
+        return msg
 
     def loadPlugins(self):
         """E.loadPlugins() -> None
@@ -178,21 +167,13 @@ class SystemEnvironment(Environment):
 
         if self.config.has_section("plugins"):
             for name, value in self.config.items("plugins"):
-                plugin, comp = name.split(".")
+                plugin, _ = name.split(".")
                 if value.lower() == "enabled":
                     if plugin not in plugins:
                         plugins.append(plugin)
 
         for plugin in plugins:
-            try:
-                self.loadPlugin(plugin)
-            except Exception, err:
-                self.errors += 1
-                self.push(
-                        LogError("Failed to load plugin: %s" % plugin),
-                        "error", "log")
-                self.push(LogException(err), "exception", "log")
-                self.push(LogDebug(format_exc()), "debug", "log")
+            self.loadPlugin(plugin)
 
     def unloadPlugins(self):
         """E.unloadPlugins() -> None

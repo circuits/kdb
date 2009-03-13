@@ -14,7 +14,7 @@ from inspect import getmodule, getmembers
 
 from buzhug import Base
 
-from circuits import listener, Event, Component
+from circuits import handler, Event, Component
 
 ###
 ### Base Database
@@ -82,7 +82,7 @@ class Databases(Component):
 
         self.dbs = [x for x in getmembers(self) if isinstance(x[1], Database)]
 
-    @listener("create")
+    @handler("create")
     def onCREATE(self):
         for db in (db[1] for db in self.dbs):
             db.create()
@@ -99,12 +99,12 @@ class Databases(Component):
                 db.insert(*x)
             db.commit()
 
-    @listener("load")
+    @handler("load")
     def onLOAD(self):
         for db in (db[1] for db in self.dbs):
             db.open()
 
-    @listener("save")
+    @handler("save")
     def onSAVE(self):
         for db in (db[1] for db in self.dbs):
             db.commit()

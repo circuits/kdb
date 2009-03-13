@@ -43,11 +43,7 @@ class Core(BasePlugin):
         Syntax: LOAD <plugin>
         """
 
-        if self.env.loadPlugin(plugin):
-            msg = "Plugin '%s' loaded" % plugin
-        else:
-            msg = "Error while loading plugin '%s' (See log)" % plugin
-        return msg
+        return self.env.loadPlugin(plugin)
 
     def cmdRELOAD(self, source, plugin):
         """Reload an already loaded plugin
@@ -58,13 +54,8 @@ class Core(BasePlugin):
         if plugin not in self.env.plugins:
             msg = "ERROR: Plugin '%s' is not loaded" % plugin
 
-        self.env.unloadPlugin(plugin)
-        if self.env.loadPlugin(plugin):
-            msg = "Plugin '%s' reloaded" % plugin
-        else:
-            msg = "Error while loading plugin '%s' (See log)" % plugin
-
-        return msg
+        yield self.env.unloadPlugin(plugin)
+        yield self.env.loadPlugin(plugin)
 
     def cmdUNLOAD(self, source, plugin):
         """Unload an already loaded plugin
@@ -77,9 +68,4 @@ class Core(BasePlugin):
         if plugin == "core":
             return "ERROR: Unloading the core plugin is disallowed."
 
-        if plugin in self.env.plugins:
-            self.env.unloadPlugin(plugin)
-            msg = "Plugin '%s' unloaded" % plugin
-        else:
-            msg = "ERROR: Plugin '%s' is not loaded" % plugin
-        return msg
+        return self.env.unloadPlugin(plugin)

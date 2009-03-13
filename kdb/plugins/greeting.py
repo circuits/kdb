@@ -16,8 +16,8 @@ import os
 import marshal
 from time import time
 
-from circuits import listener, Event
-from circuits.lib.irc import Message
+from circuits import handler, Event
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -68,7 +68,7 @@ class Irc(BasePlugin):
     def addGreeting(self, greeting):
         self._greetings.append(greeting)
     
-    @listener("join")
+    @handler("join")
     def onJOIN(self, nick, channel):
         nick = nick.lower()
 

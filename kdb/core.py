@@ -10,17 +10,12 @@ also handles system signals to help reload the
 configuration and terminate the system.
 """
 
-import os
-import signal
-import socket
-from time import sleep
-from traceback import format_exc
+from signal import SIGINT, SIGHUP, SIGTERM
 
-from circuits.tools import graph
-from circuits.lib.irc import Quit
-from circuits.lib.sockets import Connect
-from circuits import listener, Event, Component
-from circuits.lib.log import (
+from circuits import handler
+from circuits.net.protocols.irc import Quit
+from circuits import handler, Event, Component
+from circuits.app.log import (
         Debug as LogDebug,
         Exception as LogException)
 
@@ -66,7 +61,7 @@ class EventCounter(Component):
 
         self.env = env
 
-    @listener(type="filter")
+    @handler(filter=True)
     def onEVENT(self, *args, **kwargs):
         self.env.events += 1
 
@@ -77,11 +72,6 @@ class Core(Component):
     def __init__(self, env):
         super(Core, self).__init__()
 
-        self._running = True
-
-        signal.signal(signal.SIGHUP, self.rehash)
-        signal.signal(signal.SIGTERM, self.stop)
-
         self.env = env
 
         self.errorhandler = ErrorHandler(self.env, self)
@@ -91,13 +81,19 @@ class Core(Component):
 
     def registered(self, component, manager):
         self.env.loadPlugins()
-        self.push(Connect(), "connect", self.env.bot)
 
-    def stop(self, signal=0, stack=0):
-        self._running = False
+    @handler("signal", target="*")
+    def signal(self, signal, track):
+        print "Got signal: ", signal
+        if signal == SIGHUP:
+            self.rehash()
+        elif signal in (SIGINT, SIGTERM):
+            self.stop()
+
+    def stop(self):
         self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
         self.env.unloadPlugins()
         raise SystemExit, 0
 
-    def rehash(self, signal=0, stack=0):
+    def rehash(self):
         self.env.reload()

@@ -11,8 +11,8 @@ joins automatically.
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from circuits import listener
-from circuits.lib.irc import Join, Part
+from circuits import handler
+from circuits.net.protocols.irc import Join, Part
 
 from kdb.plugin import BasePlugin, CommandHandler
 

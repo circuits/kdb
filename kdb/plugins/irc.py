@@ -14,8 +14,8 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 from time import sleep
 
 from circuits import Event
-from circuits.lib.irc import Quit, Nick
-from circuits.lib.sockets import Connect
+from circuits.net.sockets import Connect
+from circuits.net.protocols.irc import Quit, Nick
 
 from kdb.plugin import BasePlugin
 
