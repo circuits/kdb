@@ -18,7 +18,7 @@ import marshal
 
 import aiml
 
-from circuits.lib.irc import Message, Notice
+from circuits.net.protocols.irc import Message, Notice
 
 from kdb.plugin import BasePlugin
 

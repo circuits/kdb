@@ -14,28 +14,41 @@ channel = #lab
 __version__ = "0.0.8"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+import xmlrpclib
+from traceback import format_exc
+
 import cherrypy
+from cherrypy import expose
 from cherrypy.lib import xmlrpc
 
-from circuits import listener, Event
+from circuits import handler, Event
+from circuits.app.log import Debug as LogDebug
 
 from kdb.plugin import BasePlugin
+
+def send(url, method, *args):
+    try:
+        server = xmlrpclib.ServerProxy(url, allow_none=True)
+        return getattr(server, method)(*args)
+    except Exception, e:
+        return "ERROR: %s\n%s" % (e, format_exc())
 
 class RPC(Event):
     "RPC(Event) -> RPC Event"
 
 class Root(BasePlugin):
 
-    @listener(type="filter")
-    def onDEBUG(self, event, *args, **kwargs):
+    @handler(filter=True)
+    def event(self, event, *args, **kwargs):
         if isinstance(event, RPC):
-            self.env.log.debug(event)
+            self.push(LogDebug(event), "debug", self.env.log)
 
-    def __call__(self, *vpath, **params):
+    @expose
+    def default(self, *vpath, **params):
         args, method = xmlrpc.process_body()
 
-        r = self.iter(RPC(*args), "xmlrpc.%s" % method, "bot")
-        body = "\n".join([x for x in r if x is not None])
+        channel = "xmlrpc.%s" % method
+        body = self.send(RPC(*args), channel, self.env.bot)
 
         conf = cherrypy.request.toolmaps["tools"].get("xmlrpc", {})
         xmlrpc.respond(
@@ -43,10 +56,6 @@ class Root(BasePlugin):
                 conf.get("encoding", "utf-8"),
                 conf.get("allow_none", True))
         return cherrypy.response.body
-    __call__.exposed = True
-
-    index = __call__
-    default = __call__
 
 class XMLRPC(BasePlugin):
 
@@ -61,10 +70,11 @@ class XMLRPC(BasePlugin):
     messages to a configured channel.
     """
 
-    def __init__(self, env, bot, *args, **kwargs):
-        super(XMLRPC, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env):
+        super(XMLRPC, self).__init__(env)
 
-        self.root = Root(self.env, self.bot)
+        self.root = Root(self.env)
+        self.root.register(self)
 
         cherrypy.config.update({
             "log.screen": False,
@@ -93,10 +103,6 @@ class XMLRPC(BasePlugin):
         except IOError:
             pass
 
-    def registered(self, component, manager):
-        manager += self.root
-
     def cleanup(self):
-        self.root.unregister()
         cherrypy.engine.stop()
         cherrypy.engine.exit()

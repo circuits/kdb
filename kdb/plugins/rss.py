@@ -18,9 +18,10 @@ from time import mktime, time
 
 import feedparser
 
-from circuits import Event, Timer
-from circuits.lib.irc import Message
 from pymills.utils import notags, decodeHTML
+
+from circuits import Event, Timer
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -33,24 +34,22 @@ class Feed(object):
         self.target = target
         self.interval = interval
 
-        self.next = time() + (self.interval * 60)
         self.entries = []
         self.title = ""
         self.link = ""
 
-    def checkTime(self):
-        if time() > self.next:
-            self.next = time() + (self.interval * 60)
-            return True
-        else:
-            return False
+        self.next = 0
+        self.reset()
+
+    def reset(self):
+        self.next = time() + (self.interval * 60)
 
     def getItems(self):
         d = feedparser.parse(self.url)
 
         if self.title == "" and self.link == "":
-            self.title = d.feed.title
-            self.link = d.feed.link
+            self.title = getattr(d.feed, "title", "")
+            self.link = getattr(d.feed, "link", "")
 
         new = []
         for v in d.entries:
@@ -128,9 +127,10 @@ class RSS(BasePlugin):
     def checkfeeds(self):
         for entity in self.entities:
             for f in self.entities[entity]:
-                if f.checkTime():
+                if f.next < time():
                     for line in f.getItems():
                         self.push(Message(f.target, line), "PRIVMSG")
+                    f.reset()
 
     def cmdRADD(self, source, url, interval="60"):
         """Add a new RSS feed to be checked at the given interval.
@@ -198,6 +198,7 @@ class RSS(BasePlugin):
             if n > 0 and n <= len(self.entities[source]):
                 f = self.entities[source][(n - 1)]
                 msg = f.getItems()
+                f.reset()
             else:
                 msg = "Given feed does not exist."
         else:

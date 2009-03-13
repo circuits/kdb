@@ -8,10 +8,10 @@ This module provides the basic infastructure for kdb
 plugins. Plugins should sub-class BasePlugin.
 """
 
-import re
+import types
 import inspect
 
-from circuits.lib.irc import Message, Notice
+from circuits.net.protocols.irc import Message, Notice
 from circuits import handler, Event, Component
 
 from pymills.misc import backMerge
@@ -89,11 +89,10 @@ class BasePlugin(Component):
 
     channel = "bot"
 
-    def __init__(self, env, bot, *args, **kwargs):
-        super(BasePlugin, self).__init__(*args, **kwargs)
+    def __init__(self, env):
+        super(BasePlugin, self).__init__()
 
         self.env = env
-        self.bot = bot
 
         self._hooks = {}
         self.__setupCommandHandlers__()
@@ -115,16 +114,17 @@ class BasePlugin(Component):
         if addressed:
             r = self.processCommand(target, message)
             if r is not None:
-                if re.match(".*@.*\/", source):
+                if "@" in source:
                     return r
                 else:
                     if type(target) == tuple:
                         target = target[0]
-                    if type(r) == list:
+                    if type(r) == list or type(r) is types.GeneratorType:
                         for line in r:
                             self.push(Message(target, line), "PRIVMSG")
                     else:
                         self.push(Message(target, r), "PRIVMSG")
+                return r
 
     @handler("notice", filter=True)
     def onNOTICE(self, source, target, message):
@@ -137,7 +137,7 @@ class BasePlugin(Component):
             if r is not None:
                 if type(target) == tuple:
                     target = target[0]
-                if type(r) == list:
+                if type(r) == list or type(r) is types.GeneratorType:
                     for line in r:
                         self.push(Notice(target, line), "NOTICE")
                 else:

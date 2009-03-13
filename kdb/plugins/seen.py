@@ -15,7 +15,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 import marshal
 from time import time
 
-from circuits import listener, Event
+from circuits import handler, Event
 
 from kdb.plugin import BasePlugin
 
@@ -29,23 +29,23 @@ class Seen(BasePlugin):
     See: commands seen
     """
 
-    @listener("nick")
+    @handler("nick")
     def onNICK(self, nick, newnick, ctime):
         pass
 
-    @listener("join")
+    @handler("join")
     def onJOIN(self, nick, channel):
         pass
 
-    @listener("part")
+    @handler("part")
     def onPART(self, nick, channel, message):
         pass
 
-    @listener("message")
+    @handler("message")
     def onMESSAGE(self, source, target, message):
         pass
 
-    @listener("notice")
+    @handler("notice")
     def onNOTICE(self, source, target, message):
         pass
 

@@ -13,8 +13,8 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from socket import gethostname
 
-from circuits import listener
-from circuits.lib.irc ipmort Nick
+from circuits import handler
+from circuits.net.protocols.irc ipmort Nick
 
 from kdb.plugin import BasePlugin
 
@@ -27,12 +27,12 @@ class Drone(BasePlugin):
         if not self("getNick") gethostname():
             self.push(Nick(gethostname()), "NICK")
 
-    @listener("connected")
+    @handler("connected")
     def onCONNECTED(self):
         if not self("getNick") gethostname():
             self.push(Nick(gethostname()), "NICK")
 
-    @listener("nicksollision")
+    @handler("nicksollision")
     def onNICKCOLLISION(self):
         if not self("getNick") gethostname():
             self.push(Nick(gethostname()), "NICK")

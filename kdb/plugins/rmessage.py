@@ -12,9 +12,9 @@ any replies generated.
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from circuits import listener
+from circuits import handler
 from pymills.datatypes import Stack
-from circuits.lib.irc import Message
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
@@ -30,8 +30,8 @@ class RMessage(BasePlugin):
     Depends on: xmlrpc
     """
 
-    def __init__(self, env, bot, *args, **kwargs):
-        super(RMessage, self).__init__(env, bot, *args, **kwargs)
+    def __init__(self, env):
+        super(RMessage, self).__init__(env)
 
         self._rlog = Stack(5)
 
@@ -43,13 +43,23 @@ class RMessage(BasePlugin):
 
         return ["Last 5 remote messages:"] + list(self._rlog)
 
-    @listener("xmlrpc.message")
-    def onXMLRPCMESSAGE(self, user="anonymous", message=""):
+    @handler("xmlrpc.message")
+    def xmlrpc_message(self, source="anonymous", target=None, message=""):
 
         self._rlog.push(message)
 
-        e = Message(str(user), self("getNick"), message)
-        r = self.iter(e, "message", self.channel)
-        reply = "\n".join([x for x in r if x is not None])
+        ourself = self("getNick")
 
-        return reply.strip()
+        if not (target is None or target == ourself):
+            message = "<%s> %s" % (source, message)
+            e = Message(target, message)
+            self.push(e, "PRIVMSG")
+            return "Message to %s" % target
+        else:
+            if target is None:
+                target = ourself
+
+            e = Message(source, target, message)
+            r = self.send(e, "message")
+            reply = r or ""
+            return reply.strip()

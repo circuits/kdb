@@ -4,7 +4,7 @@
 
 """Trac
 
-This plugin listeners for trac and wiki links and
+This plugin listenes for trac and wiki links and
 tries to provide more information about them as well
 as displaying their absolutel urls so users can easily
 pop open the link in their browser.

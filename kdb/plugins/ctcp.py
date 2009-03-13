@@ -13,12 +13,12 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
 
-from circuits.lib.irc import Ctcp
+from circuits.net.protocols.irc import Ctcp
 
 import kdb
 from kdb.plugin import BasePlugin
 
-class Ctcp(BasePlugin):
+class CtcpReplies(BasePlugin):
 
     """IRC CTCP Events Plugin
 

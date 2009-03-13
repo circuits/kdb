@@ -12,8 +12,8 @@ display in x seconds.
 __version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from circuits.lib.irc import Message
-from circuits import listener, Event, Timer
+from circuits import handler, Event, Timer
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
