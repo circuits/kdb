@@ -14,6 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re
 
+from circuits.net.protocols.irc import Message
 
 from kdb.plugin import BasePlugin
 
