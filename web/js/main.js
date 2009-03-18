@@ -25,7 +25,7 @@ Ext.onReady(function() {
 		var reply = Ext.get("reply");
 
 		reply.load({
-			url: "/send",
+			url: "/message",
 			params: "message=" + Ext.get("message").dom.value,
 			text: "Retrieving response...",
 			callback: checkResponse
