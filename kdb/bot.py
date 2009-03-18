@@ -82,7 +82,7 @@ class Bot(Component):
         self.push(Connect(self.host, self.port, self.ssl), "connect")
     
     def connected(self, host, port):
-        if self.auth.has_key("password"):
+        if "password" in self.auth:
             self.push(Pass(auth["password"]), "PASS")
 
         self.push(User(
