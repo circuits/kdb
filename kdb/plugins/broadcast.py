@@ -36,5 +36,5 @@ class Broadcast(BasePlugin):
             if message[0] == self.prefix:
                 self.push(
                         Message(source, target,
-                            "%s, %s" % (self("getNick"),
+                            "%s, %s" % (self.env.bot.auth["nick"],
                                 message[1:])), "message", self.channel)

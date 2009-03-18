@@ -24,15 +24,15 @@ class Drone(BasePlugin):
     def __init__(self, *args, **kwargs):
         super(Drone, self).__init__(*args, **kwargs)
 
-        if not self("getNick") gethostname():
+        if self.env.bot.auth["nick"] != gethostname():
             self.push(Nick(gethostname()), "NICK")
 
     @handler("connected")
     def onCONNECTED(self):
-        if not self("getNick") gethostname():
+        if self.env.bot.auth["nick"] != gethostname():
             self.push(Nick(gethostname()), "NICK")
 
     @handler("nicksollision")
     def onNICKCOLLISION(self):
-        if not self("getNick") gethostname():
+        if self.env.bot.auth["nick"] != gethostname():
             self.push(Nick(gethostname()), "NICK")

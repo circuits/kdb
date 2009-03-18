@@ -82,7 +82,7 @@ class GTalk(BasePlugin):
                 self._client.Roster.Authorize(user)
                 reply = "Authorized."
             else:
-                e = Message(str(user), self("getNick"), text)
+                e = Message(str(user), self.env.bot.auth["nick"], text)
                 reply = self.send(e, "message", self.channel)
                 self.env.log.debug("Reply: %s" % reply)
 
