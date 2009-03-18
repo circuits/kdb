@@ -49,7 +49,7 @@ class Stats(BasePlugin):
         Syntax; INSPECT
         """
 
-        code = inspect(self.env.manager)
+        code = inspect(self.root)
         lang = "Plain Text"
         data = {"code": code, "lang": lang, "submit": "Submit"}
         url = "http://codepad.org/"
@@ -67,7 +67,7 @@ class Stats(BasePlugin):
         Syntax; GRAPH
         """
 
-        code = graph(self.env.manager)
+        code = graph(self.root)
         lang = "Plain Text"
         data = {"code": code, "lang": lang, "submit": "Submit"}
         url = "http://codepad.org/"
@@ -86,7 +86,7 @@ class Stats(BasePlugin):
         """
 
         filename = path.join(self.env.path, "kdb.png")
-        dotgraph(self.env.manager, filename)
+        dotgraph(self.root, filename)
 
         return "Ok. Stored in --> %s" % filename
 
