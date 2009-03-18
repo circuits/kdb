@@ -72,7 +72,7 @@ class Irc(BasePlugin):
     def onJOIN(self, nick, channel):
         nick = nick.lower()
 
-        if nick == self("getNick").lower():
+        if nick == self.env.bot.auth["nick"].lower():
             return
 
         if self._history.has_key(nick):

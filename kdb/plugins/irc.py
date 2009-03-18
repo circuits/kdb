@@ -50,12 +50,16 @@ class Irc(BasePlugin):
         Syntax: IRCINFO
         """
 
+        auth = self.env.bot.auth.get
+
         msg = "I am %s on the %s IRC Network connected to " \
                 "%s running version %s" % ("%s!%s@%s" % (
-                    self("getNick"), self("getIdent"),
-                    self("getHost")),
-                    self("getNetwork"), self("getServer"),
-                    self("getServerVersion"))
+                    auth("nick"),
+                    auth("ident"),
+                    auth("host")),
+                    auth("network", "unknown"),
+                    auth("server"),
+                    auth("serverVersion", "unknown"))
 
         return msg
 

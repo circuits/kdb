@@ -41,7 +41,7 @@ class CtcpReplies(BasePlugin):
             response = ("TIME", time.asctime())
         elif type.lower() == "finger":
             response = ("FINGER",
-                    "%s - %s" % (self("getNick"), self("getName")))
+                    "%s - %s" % (self.env.bot.auth["nick"]))
         elif type.lower() == "version":
             response = ("VERSION",
                     "%s - v%s (%s)" % (

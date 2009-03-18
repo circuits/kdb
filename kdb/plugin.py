@@ -200,7 +200,7 @@ class BasePlugin(Component):
     def isAddressed(self, source, target, message):
         addressed = False
 
-        nick = self("getNick")
+        nick = self.env.bot.auth["nick"]
         if nick is None:
             return False, target, message
 

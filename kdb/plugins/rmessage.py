@@ -48,7 +48,7 @@ class RMessage(BasePlugin):
 
         self._rlog.push(message)
 
-        ourself = self("getNick")
+        ourself = self.env.bot.auth["nick"]
 
         if not (target is None or target == ourself):
             message = "<%s> %s" % (source, message)
