@@ -1,7 +1,13 @@
 <%inherit file="base.html"/>
 
 <div id="input">
+    <form method="POST" action="/message">
+        <input type="text" name="message">
+    </form>
 </div>
 
-<div id="reply">
+<div id="output">
+    <div id="response">
+        <pre></pre>
+    </div>
 </div>
