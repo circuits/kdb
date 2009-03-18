@@ -12,6 +12,7 @@ __version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from os import path
+from cgi import escape
 from os.path import dirname, abspath
 
 import mako
@@ -20,6 +21,7 @@ from mako.lookup import TemplateLookup
 from circuits import handler, Event
 from circuits.net.protocols import irc
 from circuits.app.log import Debug as LogDebug
+from circuits.tools import graph, dotgraph, inspect
 from circuits.web import Server, Controller, dispatchers, loggers
 
 import kdb
@@ -56,6 +58,9 @@ class Root(Controller):
     def index(self):
         return render(self.tpl)
 
+    def graph(self):
+        return escape(graph(self.env.root))
+
     def message(self, message):
         ourself = self.env.bot.auth["nick"]
 
@@ -69,6 +74,7 @@ class Root(Controller):
 
         r = irc.strip(r, True)
         r = r.replace("\n", "<br>")
+        r = escape(r)
 
         return r
 
