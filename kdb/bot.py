@@ -85,13 +85,12 @@ class Bot(Component):
         if "password" in self.auth:
             self.push(Pass(auth["password"]), "PASS")
 
-        self.push(User(
-                self.auth.get("ident", systemName),
-                self.auth.get("host", "localhost"),
-                self.auth.get("server", "localhost"),
-                self.auth.get("name", systemDesc)), "USER")
+        auth = self.auth.get
 
-        self.push(Nick(self.auth.get("nick", systemName)), "NICK")
+        self.push(User(
+            auth("ident"), auth("host"), auth("server"), auth("name")), "USER")
+
+        self.push(Nick(auth("nick")), "NICK")
 
     def disconnected(self):
         s = 60
