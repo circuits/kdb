@@ -61,7 +61,7 @@ class Stats(BasePlugin):
         return msg
 
     def cmdGRAPH(self, source):
-        """Display graph structure of system
+        """Display graph structure of the system
 
         Syntax; GRAPH
         """
