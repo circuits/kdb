@@ -13,13 +13,14 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import os
 import time
+from os import path
 from urllib import urlopen, urlencode
 
 from circuits import handler
 from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
 
-from circuits.tools import graph, inspect
+from circuits.tools import graph, dotgraph, inspect
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -77,6 +78,17 @@ class Stats(BasePlugin):
             msg = "Error %d" % r.code
 
         return msg
+
+    def cmdDOTGRAPH(self, source):
+        """Display visual graph structure of the system (using pydot)
+
+        Syntax; DOTGRAPH
+        """
+
+        filename = path.join(self.env.path, "kdb.png")
+        dotgraph(self.env.manager, filename)
+
+        return "Ok. Stored in --> %s" % filename
 
     def cmdEVENTS(self, source):
         """Display number of events processed
