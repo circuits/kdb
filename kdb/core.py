@@ -80,7 +80,8 @@ class Core(Component):
         self.manager += self.eventcounter
 
     def registered(self, component, manager):
-        self.env.loadPlugins()
+        if component == self:
+            self.env.loadPlugins()
 
     @handler("signal", target="*")
     def signal(self, signal, track):
