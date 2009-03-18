@@ -86,6 +86,6 @@ class Web(BasePlugin):
 
         self += (
                 Server(8000, docroot=docroot)
-                + loggers.Logger()
+                + loggers.Logger(logger=self.env.log)
                 + Root(self.env)
                 )
