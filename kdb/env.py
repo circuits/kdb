@@ -43,7 +43,7 @@ from __init__ import __name__ as systemName
 class SystemEnvironment(Environment):
 
     version = 1
-    name = systemName
+    envname = systemName
 
     def created(self):
         for section in defaults.CONFIG:
@@ -51,7 +51,7 @@ class SystemEnvironment(Environment):
                 self.config.add_section(section)
             for option, value in defaults.CONFIG[section].iteritems():
                 if type(value) == str:
-                    value = value % {"name": self.name}
+                    value = value % {"name": self.envname}
                 self.config.set(section, option, value)
         self.send(config.Save(), "save", "config")
 
