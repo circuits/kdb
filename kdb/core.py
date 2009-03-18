@@ -51,7 +51,7 @@ class ErrorHandler(Component):
             self.push(LogDebug(args[2]), "debug", log)
 
             if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
-                if self.core._running:
+                if self.core.running:
                     self.push(Stop(), "stop", self.core.channel)
 
 class EventCounter(Component):
