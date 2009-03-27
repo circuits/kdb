@@ -67,8 +67,7 @@ class Stats(BasePlugin):
         Syntax; GRAPH
         """
 
-        filename = path.join(self.env.path, "kdb.png")
-        code = graph(self.root, filename)
+        code = graph(self.root, "kdb")
 
         lang = "Plain Text"
         data = {"code": code, "lang": lang, "submit": "Submit"}
@@ -76,9 +75,9 @@ class Stats(BasePlugin):
         r = urlopen(url, urlencode(data))
 
         if r.code == 200:
-            msg = "Ok. Stored: %s Pasted: %s" % (filename, r.url)
+            msg = "Ok visual graph in environment. Pasted: %s" % r.url
         else:
-            msg = "Ok. Stored: %s Pasted: Error %d" % (filename, r.code)
+            msg = "Ok visual graph in environment. Pasted: Error %d" % r.code
 
         return msg
 
