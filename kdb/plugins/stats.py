@@ -20,7 +20,7 @@ from circuits import handler
 from pymills.utils import MemoryStats
 from pymills.misc import bytes, duration, buildAverage
 
-from circuits.tools import graph, dotgraph, inspect
+from circuits.tools import graph, inspect
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -67,28 +67,21 @@ class Stats(BasePlugin):
         Syntax; GRAPH
         """
 
-        code = graph(self.root)
+        filename = path.join(self.env.path, "kdb.png")
+        code = graph(self.root, filename)
+
         lang = "Plain Text"
         data = {"code": code, "lang": lang, "submit": "Submit"}
         url = "http://codepad.org/"
         r = urlopen(url, urlencode(data))
+
         if r.code == 200:
-            msg = "Ok. Pasted -> %s" % r.url
+            msg = "Ok. Stored: %s Pasted: %s" % (filename, r.url)
         else:
-            msg = "Error %d" % r.code
+            msg = "Ok. Stored: %s Pasted: Error %d" % (filename, r.code)
 
         return msg
 
-    def cmdDOTGRAPH(self, source):
-        """Display visual graph structure of the system (using pydot)
-
-        Syntax; DOTGRAPH
-        """
-
-        filename = path.join(self.env.path, "kdb.png")
-        dotgraph(self.root, filename)
-
-        return "Ok. Stored in --> %s" % filename
 
     def cmdEVENTS(self, source):
         """Display number of events processed
