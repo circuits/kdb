@@ -85,7 +85,6 @@ class Core(Component):
 
     @handler("signal", target="*")
     def signal(self, signal, track):
-        print "Got signal: ", signal
         if signal == SIGHUP:
             self.rehash()
         elif signal in (SIGINT, SIGTERM):
