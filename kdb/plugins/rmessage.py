@@ -4,7 +4,7 @@
 
 """RMessage
 
-This plugin listens for xmlrpc.message events and
+This plugin listens for remote message events and
 sends a Message Event into the system and returning
 any replies generated.
 """
@@ -23,11 +23,11 @@ class RMessage(BasePlugin):
     """RMessage plugin
 
     This doesn't have any user commands available.
-    This plugin listens for xmlrpc.message events and
+    This plugin listens for remote message events and
     sends a Message Event into the system and returning
     any replies generated.
 
-    Depends on: xmlrpc
+    Depends on: remote
     """
 
     def __init__(self, env):
