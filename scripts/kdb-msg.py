@@ -5,7 +5,7 @@ import sys
 import optparse
 from socket import gethostname
 
-from kdb.plugins.xmlrpc import send
+from kdb.plugins.remote import send
 from kdb import __version__ as systemVersion
 
 USAGE = "%prog [options] target message"
@@ -25,7 +25,7 @@ def parse_options():
     parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
     parser.add_option("-u", "--url",
-            action="store", default="http://localhost:8080/", dest="url",
+            action="store", default="http://localhost:8000/rpc/", dest="url",
             help="Specify url to send message to (XML-RPC)")
 
     opts, args = parser.parse_args()
@@ -54,7 +54,7 @@ def main():
     user = os.environ.get("USER", None)
     hostname = gethostname()
     source = "%s@%s" % (user, hostname)
-    print send(url, "message", source, target, message)
+    print send(url, "remote.message", source, target, message)
 
 ###
 ### Entry Point
