@@ -20,8 +20,8 @@ from mako.lookup import TemplateLookup
 
 from circuits import handler, Event
 from circuits.net.protocols import irc
+from circuits.tools import graph, inspect
 from circuits.app.log import Debug as LogDebug
-from circuits.tools import graph, dotgraph, inspect
 from circuits.web import Server, Controller, dispatchers, loggers
 
 import kdb
