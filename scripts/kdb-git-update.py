@@ -16,7 +16,7 @@ done
 """
 
 __desc__ = "Notify KDB of GIT Updates"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "James Mills"
 __email__ = "%s <prologic@shortcircuit.net.au>" % __author__
 __url__ = "http://shortcircuit.net.au/~prologic/"
@@ -27,7 +27,7 @@ import re
 import optparse
 from popen2 import popen4 as popen
 
-from kdb.plugins.xmlrpc import send
+from kdb.plugins.remote import send
 
 USAGE = "%prog [options] <commit> <branch>"
 VERSION = "%prog v" + __version__
@@ -53,9 +53,12 @@ def parse_options():
             action="store", dest="project",
             help="Set the project name")
     parser.add_option("-u", "--url",
-            action="store", default="http://localhost:8080",
+            action="store", default="http://localhost:8000/rpc/",
             dest="url",
-            help="Set XML_RPC URL (default: http://localhost:8080)")
+            help="Set XML_RPC URL (default: http://localhost:8000/rpc/)")
+    parser.add_option("-c", "--channel",
+            action="store", default=None, dest="channel",
+            help="Set Remote Channel (Default: None)")
 
     opts, args = parser.parse_args()
 
@@ -142,7 +145,8 @@ def main():
     commit = args[0]
     branch = args[1]
 
-    print send(opts.url, buildMessage(opts.project, commit, branch))
+    message = buildMessage(opts.project, commit, branch)
+    print send(opts.url, "remote.scmupdate", opts.channel, message)
 
 if __name__ == "__main__":
     main()
