@@ -43,9 +43,8 @@ class RMessage(BasePlugin):
 
         return ["Last 5 remote messages:"] + list(self._rlog)
 
-    @handler("xmlrpc.message")
-    def xmlrpc_message(self, source="anonymous", target=None, message=""):
-
+    @handler("message", target="remote")
+    def remote_message(self, source="anonymous", target=None, message=""):
         self._rlog.push(message)
 
         ourself = self.env.bot.auth["nick"]
