@@ -43,10 +43,10 @@ class Help(BasePlugin):
         commands = []
         for plugin in plugins:
             if plugin in self.env.plugins:
-                o = self.env.plugins[plugin]
-                commands.extend([x[0][3:].lower() for x in getmembers(
-                    o, lambda x: ismethod(x) and
-                    callable(x) and x.__name__.startswith("cmd"))])
+                for o in self.env.plugins[plugin]:
+                    commands.extend([x[0][3:].lower() for x in getmembers(
+                        o, lambda x: ismethod(x) and
+                        callable(x) and x.__name__.startswith("cmd"))])
 
         if not s == "*":
             msg = "Available commands for %s: %s" % (
