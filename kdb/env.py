@@ -16,6 +16,7 @@ from collections import defaultdict
 from inspect import getmembers, isclass
 
 from pymills.utils import safe__import__
+from pymills.datatypes import CaselessDict
 
 from circuits import Debugger
 from circuits.tools import kill
@@ -67,7 +68,7 @@ class SystemEnvironment(Environment):
         self.debug = self.config.getboolean("logging", "debug", False)
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
-        self.plugins = defaultdict(set)
+        self.plugins = CaselessDict()
 
         self.errors = 0
         self.events = 0
@@ -117,6 +118,8 @@ class SystemEnvironment(Environment):
                 instance.register(self.manager)
                 msg = "Registered Component: %s" % instance
                 self.push(LogInfo(msg), "info", self.log)
+                if name not in self.plugins:
+                    self.plugins[name] = set()
                 self.plugins[name].add(instance)
 
             msg = "Loaded plugin: %s" % plugin
