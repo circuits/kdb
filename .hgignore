@@ -4,6 +4,7 @@ syntax: glob
 *.pyo
 build
 dist
+darkmyst
 test
 .coverage
 docs/.build
