@@ -48,7 +48,7 @@ class ErrorHandler(Component):
 
             log = self.env.log.channel
             self.push(LogException("ERROR: %s" % value), "exception", log)
-            self.push(LogDebug(args[2]), "debug", log)
+            self.push(LogDebug("".join(traceback)), "debug", log)
 
             if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
                 if self.core.running:
