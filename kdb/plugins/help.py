@@ -74,14 +74,19 @@ class Help(BasePlugin):
         su = s.upper()
 
         if sl in self.env.plugins:
-            msg = self.env.plugins[sl].__doc__
+            for plugin in self.env.plugins[sl]:
+                if plugin.__class__.__name__.lower() == sl:
+                    msg = plugin.__doc__
         else:
-            for plugin in self.env.plugins.values():
-                if hasattr(plugin, "cmd%s" % su):
-                    msg = getattr(
-                            getattr(plugin, "cmd%s" % su),
-                            "__doc__") or \
-                                    "No help available for '%s'. To get a list of commands, type: commands %s" % (s, plugin.__name__.lower())
+            for modules in self.env.plugins.values():
+                for plugin in modules:
+                    if hasattr(plugin, "cmd%s" % su):
+                        msg = getattr(
+                                getattr(plugin, "cmd%s" % su),
+                                "__doc__") or "No help available for '%s'. " + \
+                                "To get a list of commands, " + \
+                                "type: commands %s" % (
+                                        s, plugin.__name__.lower())
                     break
 
         if msg is None:
