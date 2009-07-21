@@ -40,14 +40,14 @@ class ErrorHandler(Component):
         self.env = env
         self.core = core
 
-    def error(self, *args, **kwargs):
+    def exception(self, *args, **kwargs):
         if len(args) == 3 and issubclass(args[0], BaseException):
             type, value, traceback = args
 
             self.env.errors += 1
 
             log = self.env.log.channel
-            self.push(LogException("ERROR: %s" % args[1]), "exception", log)
+            self.push(LogException("ERROR: %s" % value), "exception", log)
             self.push(LogDebug(args[2]), "debug", log)
 
             if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
