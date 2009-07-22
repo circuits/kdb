@@ -139,7 +139,7 @@ class Travian(BasePlugin):
                 population += player.population
                 if not alliance:
                     alliance = player.alliance
-            yield "%s with %d vilalges (%d), a member of '%s'" % (
+            yield "%s with %d villages (%d), a member of '%s'" % (
                     name, len(villages), population, alliance)
             for i, village in enumerate(villages):
                 yield "Village #%d: %s" % (i, village)
