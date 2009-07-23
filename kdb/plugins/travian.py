@@ -63,7 +63,7 @@ class World(Base):
     table = "x_world"
 
     def players(self, name):
-        SQL = "SELECT * FROM %s WHERE player=?" % self.table
+        SQL = "SELECT * FROM %s WHERE player LIKE ?" % self.table
         rows = self.db.do(SQL, name)
         if rows:
             if len(rows) == 1:
@@ -72,7 +72,16 @@ class World(Base):
                 return (row for row in rows)
 
     def villages(self, name):
-        SQL = "SELECT * FROM %s WHERE village=?" % self.table
+        SQL = "SELECT * FROM %s WHERE village LIKE ?" % self.table
+        rows = self.db.do(SQL, name)
+        if rows:
+            if len(rows) == 1:
+                return rows[0]
+            else:
+                return (row for row in rows)
+
+    def alliances(self, name):
+        SQL = "SELECT * FROM %s WHERE alliance LIKE ?" % self.table
         rows = self.db.do(SQL, name)
         if rows:
             if len(rows) == 1:
@@ -145,3 +154,31 @@ class Travian(BasePlugin):
                 yield "Village #%d: %s" % (i, village)
         else:
             yield "No players found by that name"
+
+    def cmdALLIANCES(self, source, name):
+        """Display information about alliances.
+
+        Syntax: ALLIANCES <name>
+        """
+
+        alliances = self.world.alliances(name)
+        if alliances:
+            if type(alliances) is types.GeneratorType:
+                alliances = list(alliances)
+                villages = len(alliances)
+            else:
+                alliances = [alliances]
+                villages = 1
+
+            population = 0
+            members = set()
+
+            for alliance in alliances:
+                population += alliance.population
+                members.add(alliance.player)
+
+            yield "Alliance '%s': population=%d members=%d villages=%d" % (
+                    name, population, len(members), villages)
+        else:
+            yield "No alliances found by that name"
+
