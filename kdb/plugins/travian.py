@@ -155,10 +155,10 @@ class Travian(BasePlugin):
         else:
             yield "No players found by that name"
 
-    def cmdALLIANCES(self, source, name):
-        """Display information about alliances.
+    def cmdALLIANCE(self, source, name):
+        """Display information about an alliance.
 
-        Syntax: ALLIANCES <name>
+        Syntax: ALLIANCE <name>
         """
 
         alliances = self.world.alliances(name)
@@ -180,5 +180,5 @@ class Travian(BasePlugin):
             yield "Alliance '%s': population=%d members=%d villages=%d" % (
                     name, population, len(members), villages)
         else:
-            yield "No alliances found by that name"
+            yield "No alliance found by that name"
 
