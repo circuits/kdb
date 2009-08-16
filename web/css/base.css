@@ -118,42 +118,9 @@ a:focus, a:hover, a:active {
  */
 
 #response {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    clear: both;
     overflow: auto;
-}
-
-/*
- * Navigation
- */
-
-#navbar {
-    color: rgb(0, 0, 0);
-    background-color: transparent;
-    font-family: arial, helvetica, sans-serif;
-    white-space: nowrap;
-    list-style-type: none;
-    margin-top: 20px;
-}
-
-#navbar ul {
-    background: none;
-}
-
-#navbar li {
-    display: inline;
-    border: 1px solid rgb(70, 100, 70);
-    background: none rgb(255, 255, 240);
-}
-
-#navbar a {
-    padding: 2px;
-    margin: 0px;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    border: none;
-}
-
-#navbar a:hover {
-    background: rgb(100, 100, 100);
 }
 
 /*
