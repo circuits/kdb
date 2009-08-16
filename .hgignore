@@ -5,6 +5,7 @@ syntax: glob
 build
 dist
 darkmyst
+au
 test
 .coverage
 docs/.build
