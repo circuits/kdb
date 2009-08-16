@@ -7,6 +7,7 @@ dist
 darkmyst
 au
 test
+log
 .coverage
 docs/.build
 kdb.egg-info
