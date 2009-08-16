@@ -22,15 +22,15 @@ from circuits import handler, Event
 from circuits.net.protocols import irc
 from circuits.tools import graph, inspect
 from circuits.app.log import Debug as LogDebug
-from circuits.web import Server, Controller, dispatchers, loggers
+from circuits.web import Server, Controller, Static, Logger
 
 import kdb
 from kdb.plugin import BasePlugin
 
-docroot = abspath(path.join(dirname(__file__), "../../web"))
+DOCROOT = abspath(path.join(dirname(__file__), "../../web"))
 
 templates = TemplateLookup(
-    directories=[path.join(docroot, "tpl")],
+    directories=[path.join(DOCROOT, "tpl")],
     module_directory="/tmp",
     output_encoding="utf-8")
 
@@ -90,8 +90,12 @@ class Web(BasePlugin):
     def __init__(self, env):
         super(Web, self).__init__(env)
 
+        self.bind = self.env.config.get("web", "bind", "0.0.0.0:8000")
+        self.docroot = self.env.config.get("web", "docroot", DOCROOT)
+
         self += (
-                Server(8000, docroot=docroot)
-                + loggers.Logger(logger=self.env.log)
+                Server(self.bind)
+                + Static(docroot=self.docroot)
+                + Logger(logger=self.env.log)
                 + Root(self.env)
                 )
