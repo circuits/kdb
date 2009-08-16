@@ -58,9 +58,6 @@ class Root(Controller):
     def index(self):
         return render(self.tpl)
 
-    def graph(self):
-        return escape(graph(self.env.root))
-
     def message(self, message):
         ourself = self.env.bot.auth["nick"]
 
