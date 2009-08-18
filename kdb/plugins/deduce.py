@@ -23,7 +23,7 @@ from kdb.plugin import BasePlugin
 class Deduce(BasePlugin):
     "Deductive Logic"
 
-    def __init__(self, env)
+    def __init__(self, env):
         super(Deduce, self).__init__(env)
 
         self.reason = []
