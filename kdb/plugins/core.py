@@ -17,7 +17,7 @@ from kdb.plugin import BasePlugin
 class Core(BasePlugin):
     "Core and Plugin Management"
 
-    def cmdREHASH(self, source):
+    def cmdREHASH(self, source, target):
         """Reload environment
 
         Syntax: RELOAD
@@ -27,7 +27,7 @@ class Core(BasePlugin):
         msg = "Environment reloaded"
         return msg
 
-    def cmdPLUGINS(self, source):
+    def cmdPLUGINS(self, source, target):
         """List loaded plugins
 
         Syntax: PLUGINS
@@ -37,7 +37,7 @@ class Core(BasePlugin):
         msg = "Plugins loaded: %s" % ", ".join(plugins)
         return msg
 
-    def cmdLOAD(self, source, plugin):
+    def cmdLOAD(self, source, target, plugin):
         """Load a plugin
 
         Syntax: LOAD <plugin>
@@ -45,7 +45,7 @@ class Core(BasePlugin):
 
         return self.env.loadPlugin(plugin)
 
-    def cmdRELOAD(self, source, plugin):
+    def cmdRELOAD(self, source, target, plugin):
         """Reload an already loaded plugin
 
         Syntax: RELOAD <plugin>
@@ -57,7 +57,7 @@ class Core(BasePlugin):
         yield self.env.unloadPlugin(plugin)
         yield self.env.loadPlugin(plugin)
 
-    def cmdUNLOAD(self, source, plugin):
+    def cmdUNLOAD(self, source, target, plugin):
         """Unload an already loaded plugin
 
         Note: You cannot unload the "core" plugin.

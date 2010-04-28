@@ -25,7 +25,7 @@ class Help(BasePlugin):
     See: commands help
     """
 
-    def cmdCOMMANDS(self, source, s=None):
+    def cmdCOMMANDS(self, source, target, s=None):
         """Display a list of commands for 'plugin'.
         
         Syntax: COMMANDS <plugin>
@@ -59,7 +59,7 @@ class Help(BasePlugin):
 
         return msg
 
-    def cmdHELP(self, source, s=None):
+    def cmdHELP(self, source, target, s=None):
         """Display help for the given command or plugin.
         
         Syntax: HELP <s>
@@ -102,7 +102,7 @@ class Help(BasePlugin):
 
         return msg
 
-    def cmdINFO(self, source, plugin):
+    def cmdINFO(self, source, target, plugin):
         """Display info for the given plugin.
         
         Syntax: INFO plugin

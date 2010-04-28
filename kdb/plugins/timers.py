@@ -29,7 +29,7 @@ class Timers(BasePlugin):
     def timer(self, target, message):
         self.push(Message(target, message), "PRIVMSG")
 
-    def cmdTIMER(self, source, length, message="Hello World"):
+    def cmdTIMER(self, source, target, length, message="Hello World"):
         """Create a new time with the given length and message
         
         Syntax: TIMER <length> [message]

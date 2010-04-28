@@ -26,7 +26,7 @@ class Weather(BasePlugin):
     See: help weather
     """
 
-    def cmdWEATHER(self, source, station="YBBN"):
+    def cmdWEATHER(self, source, target, station="YBBN"):
         """Display weather for the given station
         
         This looks up the weather information from http://weather.noaa.gov/

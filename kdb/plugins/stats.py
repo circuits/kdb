@@ -43,7 +43,7 @@ class Stats(BasePlugin):
 
         self.stime = time.time()
 
-    def cmdINSPECT(self, source):
+    def cmdINSPECT(self, source, target):
         """Display an inspection report of the system
 
         Syntax; INSPECT
@@ -61,7 +61,7 @@ class Stats(BasePlugin):
 
         return msg
 
-    def cmdGRAPH(self, source):
+    def cmdGRAPH(self, source, target):
         """Display graph structure of the system
 
         Syntax; GRAPH
@@ -82,7 +82,7 @@ class Stats(BasePlugin):
         return msg
 
 
-    def cmdEVENTS(self, source):
+    def cmdEVENTS(self, source, target):
         """Display number of events processed
 
         Syntax; EVENTS
@@ -90,7 +90,7 @@ class Stats(BasePlugin):
 
         return "Events: %d" % self.env.events
 
-    def cmdERRORS(self, source):
+    def cmdERRORS(self, source, target):
         """Display number of errors that have occured
         
         Syntax: ERRORS
@@ -102,7 +102,7 @@ class Stats(BasePlugin):
             msg = "Errors: %d" % self.env.errors
         return msg
 
-    def cmdUPTIME(self, source):
+    def cmdUPTIME(self, source, target):
         """Display current uptime and cpu usage
         
         Syntax: UPTIME
@@ -116,7 +116,7 @@ class Stats(BasePlugin):
                 uptime + (cpu, rate))
         return msg
 
-    def cmdCSTATS(self, source):
+    def cmdCSTATS(self, source, target):
         """Display command usage stats
 
         Syntax: CSTATS
@@ -135,7 +135,7 @@ class Stats(BasePlugin):
         return msg
 
 
-    def cmdNSTATS(self, source):
+    def cmdNSTATS(self, source, target):
         """Display current network stats
         
         Syntax: NSTATS
@@ -148,7 +148,7 @@ class Stats(BasePlugin):
 
         return msg
 
-    def cmdVERSION(self, source):
+    def cmdVERSION(self, source, target):
         """Display version information
         
         Syntax: VERSION
@@ -163,7 +163,7 @@ class Stats(BasePlugin):
                 kdb.__url__)
         return msg
 
-    def cmdMSTATS(self, source):
+    def cmdMSTATS(self, source, target):
         """Display current memory stats
         
         Syntax: MSTATS

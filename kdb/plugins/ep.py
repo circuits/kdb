@@ -21,7 +21,7 @@ class Ep(BasePlugin):
     """
     data = ""
 
-    def cmdEp(self, source, tvshow):
+    def cmdEP(self, source, target, tvshow):
         m = re.search(r'([^,]+)(?:, ?(\d{1,3}x\d{1,3}))?',tvshow)
         if not m:
             msg = 'Usage: .ep <show>[, <season>x<episode>]'

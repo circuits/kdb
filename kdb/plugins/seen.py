@@ -49,7 +49,7 @@ class Seen(BasePlugin):
     def onNOTICE(self, source, target, message):
         pass
 
-    def cmdSEEN(self, source, nick):
+    def cmdSEEN(self, source, target, nick):
         """Query and display last seen information for the
         given nick.
         

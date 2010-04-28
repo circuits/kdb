@@ -11,59 +11,12 @@ configuration and terminate the system.
 """
 
 from signal import SIGINT, SIGHUP, SIGTERM
+from traceback import extract_tb, format_list
 
 from circuits import handler
+from circuits.app.log import Log
 from circuits.net.protocols.irc import Quit
 from circuits import handler, Event, Component
-from circuits.app.log import (
-        Debug as LogDebug,
-        Exception as LogException)
-
-###
-### Events
-###
-
-class Start(Event):
-    """Start(Event) -> Start Event"""
-
-class Run(Event):
-    """Run(Event) -> Run Event"""
-
-class Stop(Event):
-    """Stop(Event) -> Stop Event"""
-
-class ErrorHandler(Component):
-
-    def __init__(self, env, core, *args, **kwargs):
-        super(ErrorHandler, self).__init__(*args, **kwargs)
-
-        self.env = env
-        self.core = core
-
-    def exception(self, *args, **kwargs):
-        if len(args) == 3 and issubclass(args[0], BaseException):
-            type, value, traceback = args
-
-            self.env.errors += 1
-
-            log = self.env.log.channel
-            self.push(LogException("ERROR: %s" % value), "exception", log)
-            self.push(LogDebug("".join(traceback)), "debug", log)
-
-            if self.env.debug and type not in (SystemExit, KeyboardInterrupt):
-                if self.core.running:
-                    self.push(Stop(), "stop", self.core.channel)
-
-class EventCounter(Component):
-
-    def __init__(self, env, *args, **kwargs):
-        super(EventCounter, self).__init__(*args, **kwargs)
-
-        self.env = env
-
-    @handler(filter=True)
-    def onEVENT(self, *args, **kwargs):
-        self.env.events += 1
 
 class Core(Component):
 
@@ -73,11 +26,6 @@ class Core(Component):
         super(Core, self).__init__()
 
         self.env = env
-
-        self.errorhandler = ErrorHandler(self.env, self)
-        self.eventcounter = EventCounter(self.env)
-        self.manager += self.errorhandler
-        self.manager += self.eventcounter
 
     def registered(self, component, manager):
         if component == self:
@@ -93,7 +41,6 @@ class Core(Component):
     def stop(self):
         self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
         self.env.unloadPlugins()
-        raise SystemExit, 0
 
     def rehash(self):
         self.env.reload()

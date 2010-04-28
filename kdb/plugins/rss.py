@@ -132,7 +132,7 @@ class RSS(BasePlugin):
                         self.push(Message(f.target, line), "PRIVMSG")
                     f.reset()
 
-    def cmdRADD(self, source, url, interval="60"):
+    def cmdRADD(self, source, target, url, interval="60"):
         """Add a new RSS feed to be checked at the given interval.
         Intervan is in minutes.
         
@@ -157,7 +157,7 @@ class RSS(BasePlugin):
 
         return f.getItems()
 
-    def cmdRDEL(self, source, n):
+    def cmdRDEL(self, source, target, n):
         """Delete an RSS feed.
         
         Syntax: RDEL <n>
@@ -181,7 +181,7 @@ class RSS(BasePlugin):
 
         return msg
 
-    def cmdREAD(self, source, n):
+    def cmdREAD(self, source, target, n):
         """Read an RSS feed.
         
         Syntax: READ <n>
@@ -206,7 +206,7 @@ class RSS(BasePlugin):
 
         return msg
 
-    def cmdRLIST(self, source):
+    def cmdRLIST(self, source, target):
         """List all active RSS feeds.
         
         Syntax: RLIST

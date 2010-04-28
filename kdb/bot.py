@@ -12,10 +12,10 @@ of the TCPClient and IRC Components.
 
 import socket
 
+from circuits.app.log import Log
 from circuits import Event, Component, Timer
-from circuits.app.log import Info as LogInfo
 from circuits.net.sockets import TCPClient, Connect
-from circuits.net.protocols.irc import IRC, Pass, User, Nick
+from circuits.net.protocols.irc import IRC, PASS, USER, NICK
 
 from kdb import __name__ as systemName
 from kdb import __description__ as systemDesc
@@ -83,16 +83,20 @@ class Bot(Component):
     
     def connected(self, host, port):
         if "password" in self.auth:
-            self.push(Pass(auth["password"]), "PASS")
+            self.push(PASS(auth["password"]))
 
         auth = self.auth.get
 
-        self.push(User(
-            auth("ident"), auth("host"), auth("server"), auth("name")), "USER")
+        ident = auth("ident")
+        host = auth("host")
+        server = auth("server")
+        name = auth("name")
+        self.push(USER(ident, host, server, name))
 
-        self.push(Nick(auth("nick")), "NICK")
+        nick = auth("nick")
+        self.push(NICK(nick))
 
     def disconnected(self):
         s = 60
-        self.push(LogInfo("Disconnected. Reconnecting in %ds" % s), "info", "log")
+        self.push(Log("info", "Disconnected. Reconnecting in %ds" % s))
         self += Timer(s, Reconnect(), "reconnect", self)

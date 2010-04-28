@@ -27,7 +27,7 @@ class Spell(BasePlugin):
         self.language = DEFAULT_LANGUAGE
         self.d = d = enchant.request_dict(self.language)
 
-    def cmdSPELL(self, source, word):
+    def cmdSPELL(self, source, target, word):
         """Check the spelling of the given word
         
         Syntax: SPELL <word>

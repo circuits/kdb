@@ -20,7 +20,7 @@ class IMDB(BasePlugin):
     """
     data = ""
 
-    def cmdIMDB(self, source, movie):
+    def cmdIMDB(self, source, target, movie):
         """Resolve the given hostname/ip
         
         Syntax: IMDB <movie>
