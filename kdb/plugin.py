@@ -112,7 +112,7 @@ class BasePlugin(Component):
                 source, target, message)
 
         if addressed:
-            r = self.processCommand(target, message)
+            r = self.processCommand(source, target, message)
             if r is not None:
                 if "@" in source:
                     return r
@@ -133,7 +133,7 @@ class BasePlugin(Component):
                 source, target, message)
 
         if addressed:
-            r = self.processCommand(target, message)
+            r = self.processCommand(source, target, message)
             if r is not None:
                 if type(target) == tuple:
                     target = target[0]
@@ -151,7 +151,7 @@ class BasePlugin(Component):
             command, message)), "NOTICE")
         self.push(Notice(source, "Expected: %s" % " ".join(args)), "NOTICE")
 
-    def processCommand(self, source, message):
+    def processCommand(self, source, target, message):
         tokens = message.split(" ")
         command = tokens[0].lower()
         tokens = tokens[1:]
@@ -164,31 +164,52 @@ class BasePlugin(Component):
                     cmdHandler)
             args.remove("self")
             args.remove("source")
+            args.remove("target")
+
+            s = None
+            q = None
+            newtokens = []
+            for i, tok in enumerate(tokens):
+                if not s and tok[0] in "\"'":
+                    s = i
+                    q = tok[0]
+                elif s is not None and tok[-1] == q:
+                    newtok = " ".join(tokens[s:(i + 1)]).strip(q)
+                    newtokens.append(newtok)
+                    s = None
+                    q = None
+                else:
+                    newtokens.append(tok)
+            if s:
+                newtokens.append(" ".join(tokens[s:]))
+
+            tokens = newtokens[:]
 
             if len(args) == len(tokens):
                 if len(args) == 0:
-                    r =  cmdHandler(source)
+                    r =  cmdHandler(source, target)
                 else:
-                    r =  cmdHandler(source, *tokens)
+                    r =  cmdHandler(source, target, *tokens)
             else:
                 if len(tokens) > len(args):
                     if vargs is None:
                         if len(args) > 0:
                             factor = len(tokens) - len(args) + 1
-                            r =  cmdHandler(source, *backMerge(tokens, factor))
+                            r =  cmdHandler(source, target,
+                                    *backMerge(tokens, factor))
                         else:
                             self.syntaxError(
-                                    source, command, tokens,
+                                    source, target, command, tokens,
                                     [x for x in args + [vargs]
                                         if x is not None])
                     else:
-                        r =  cmdHandler(source, *tokens)
+                        r =  cmdHandler(source, target, *tokens)
                 elif default is not None and len(args) == (
                         len(tokens) + len(default)):
-                    r =  cmdHandler(source, *(tokens + list(default)))
+                    r =  cmdHandler(source, target, *(tokens + list(default)))
                 else:
                     self.syntaxError(
-                            source, command, tokens,
+                            source, target, command, tokens,
                             [x for x in args + [vargs]
                                 if x is not None])
 

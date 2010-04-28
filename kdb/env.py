@@ -23,12 +23,7 @@ from circuits.tools import kill
 from circuits.app import config
 from circuits.app.env import Environment
 
-from circuits.app.log import (
-        Info as LogInfo,
-        Debug as LogDebug,
-        Error as LogError,
-        Warning as LogWarning,
-        Exception as LogException)
+from circuits.app.log import Log
 
 import defaults
 from bot import Bot
@@ -46,6 +41,12 @@ class SystemEnvironment(Environment):
     version = 1
     envname = systemName
 
+    def __init__(self, *args, **kwargs):
+        super(SystemEnvironment, self).__init__(*args, **kwargs)
+
+        self.events = 0
+        self.errors = 0
+
     def created(self):
         for section in defaults.CONFIG:
             if not self.config.has_section(section):
@@ -54,28 +55,24 @@ class SystemEnvironment(Environment):
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
-        self.send(config.Save(), "save", "config")
+        self.push(config.Save(), "save", "config")
 
         self.db = Databases(self)
         self.manager += self.db
-        self.send(CreateDatabases(), "create", "db")
+        self.push(CreateDatabases(), "create", "db")
 
     def loaded(self):
         self.db = Databases(self)
         self.manager += self.db
-        self.send(LoadDatabases(), "load", "db")
+        self.push(LoadDatabases(), "load", "db")
 
-        self.debug = self.config.getboolean("logging", "debug", False)
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
         self.plugins = CaselessDict()
 
-        self.errors = 0
-        self.events = 0
         self.sTime = time()
 
-        if self.debug:
-            self.manager += Debugger(events=self.verbose, logger=self.log)
+        self.manager += Debugger(events=self.verbose)#, logger=self.log)
 
         self.bot = Bot(self)
         self.manager += self.bot
@@ -90,7 +87,7 @@ class SystemEnvironment(Environment):
 
         if plugin in self.plugins:
             msg = "Not loading plugin '%s' - Already loaded!" % plugin
-            self.push(LogWarning(msg), "warning", self.log)
+            self.push(Log("warning", msg))
             return msg
 
         try:
@@ -100,9 +97,9 @@ class SystemEnvironment(Environment):
                     reload(sys.modules[fqplugin])
                 except Exception, e:
                     msg = "Problem reloading plugin '%s'" % plugin
-                    self.push(LogError(msg), "error", self.log)
-                    self.push(LogException(e), "exception", self.log)
-                    self.push(LogDebug(format_exc()), "debug", self.log)
+                    self.push(Log("error", msg))
+                    self.push(Log("error", e))
+                    self.push(Log("debug", format_exc()))
                     return msg
 
             moduleName = "plugins.%s" % plugin
@@ -117,19 +114,19 @@ class SystemEnvironment(Environment):
                 instance = Plugin(self)
                 instance.register(self.manager)
                 msg = "Registered Component: %s" % instance
-                self.push(LogInfo(msg), "info", self.log)
+                self.push(Log("info", msg))
                 if name not in self.plugins:
                     self.plugins[name] = set()
                 self.plugins[name].add(instance)
 
             msg = "Loaded plugin: %s" % plugin
-            self.push(LogInfo(msg), "info", self.log)
+            self.push(Log("info", msg))
             return msg
         except Exception, e:
             msg = "Problem loading plugin '%s'" % plugin
-            self.push(LogError(msg), "error", self.log)
-            self.push(LogException(e), "exception", self.log)
-            self.push(LogDebug(format_exc()), "debug", self.log)
+            self.push(Log("error", msg))
+            self.push(Log("error", e))
+            self.push(Log("debug", format_exc()))
             return msg
 
     def unloadPlugin(self, plugin):
@@ -143,18 +140,18 @@ class SystemEnvironment(Environment):
             for instance in instances:
                 kill(instance)
                 msg = "Unregistered Component: %s" % instance
-                self.push(LogInfo(msg), "info", self.log)
+                self.push(Log("info", msg))
                 if hasattr(instance, "cleanup"):
                     instance.cleanup()
                     msg = "Cleaned up Component: %s" % instance
-                    self.push(LogDebug(msg), "debug", self.log)
+                    self.push(Log("debug", msg))
             del self.plugins[plugin]
 
             msg = "Unloaded plugin: %s" % plugin
         else:
             msg = "Not unloading plugin '%s' - Not loaded!" % plugin
 
-        self.push(LogInfo(msg), "info", self.log)
+        self.push(Log("info", msg))
         return msg
 
     def loadPlugins(self):

@@ -69,7 +69,7 @@ class Semnet(BasePlugin):
         pickle.dump((self.relations, self.entities), fp)
         fp.close()
 
-    def cmdSEMNET(self, source):
+    def cmdSEMNET(self, source, target):
         """Display the current Semantic Network
         
         Syntax: SEMNET
@@ -81,15 +81,15 @@ class Semnet(BasePlugin):
                 ]
         return msg
 
-    def cmdE(self, source, name):
+    def cmdE(self, source, target, name):
         """Synonym, of ENTITY
         
         See: ENTITY
         """
 
-        return self.cmdENTITY(source, name)
+        return self.cmdENTITY(source, target, name)
 
-    def cmdENTITY(self, source, name):
+    def cmdENTITY(self, source, target, name):
         """Create a new entity
         
         Syntax: ENTITY <name>
@@ -103,15 +103,15 @@ class Semnet(BasePlugin):
                     "I already know something about %s" % name,
                     tostr(self.entities[name])]
 
-    def cmdD(self, source, name):
+    def cmdD(self, source, target, name):
         """Synonym, of DELETE
         
         See: DELETE
         """
 
-        return self.cmdDELETE(source, name)
+        return self.cmdDELETE(source, target, name)
 
-    def cmdDELETE(self, source, name):
+    def cmdDELETE(self, source, target, name):
         """Delete an existing entity
         
         Syntax: DELETE <name>
@@ -123,17 +123,17 @@ class Semnet(BasePlugin):
         else:
             return "I don't know anything about %s" % name
 
-    def cmdR(self, source, name, transitive="yes",
+    def cmdR(self, source, target, name, transitive="yes",
             opposite=None):
         """Synonym, of RELATION
         
         See: RELATION
         """
 
-        return self.cmdRELATION(source, name, transitive,
+        return self.cmdRELATION(source, target, name, transitive,
                 opposite)
 
-    def cmdRELATION(self, source, name, transitive="yes",
+    def cmdRELATION(self, source, target, name, transitive="yes",
             opposite=None):
         """Create a new relationship
         

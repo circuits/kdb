@@ -23,7 +23,7 @@ class Eval(BasePlugin):
     See: help eval
     """
 
-    def cmdEVAL(self, source, s):
+    def cmdEVAL(self, source, target, s):
         """Evaluates the given expression and displays the result.
 
         Syntax: EVAL <expr>
@@ -35,3 +35,17 @@ class Eval(BasePlugin):
             msg = ["ERROR: (%s) %s" % (e.__class__.__name__, e)]
 
         return msg
+
+    def cmdSUM(self, source, target, s, sep=None):
+        """Sum a list of numbers
+
+        Syntax: SUM <list> [<separator>]
+        """
+
+        try:
+            if sep:
+                return sum([int(x.strip()) for x in s.split(sep)])
+            else:
+                return sum([int(x.strip()) for x in s.split()])
+        except Exception, error:
+            return "ERROR: %s" % error

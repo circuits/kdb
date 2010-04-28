@@ -35,7 +35,7 @@ class RMessage(BasePlugin):
 
         self._rlog = Stack(5)
 
-    def cmdRLOG(self, source):
+    def cmdRLOG(self, source, target):
         """View Remote Log
 
         Syntax: RLOG

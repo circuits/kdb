@@ -23,7 +23,7 @@ from kdb.plugin import BasePlugin, CommandHandler
 
 class GreetingsCommands(CommandHandler):
 
-    def cmdADD(self, source, greeting):
+    def cmdADD(self, source, target, greeting):
         if not self.parent.hasGreeting(greeting):
             self.parent.addGreeting(greeting)
             return "Okay, added greeting '%s'" % greeting
@@ -85,6 +85,6 @@ class Irc(BasePlugin):
 
         self._history[nick] = time()
 
-    def cmdGREETINGS(self, source, command, *args, **kwargs):
+    def cmdGREETINGS(self, source, target, command, *args, **kwargs):
         return GreetingsCommands(self)(command,
-                source, *args, **kwargs)
+                source, target, *args, **kwargs)

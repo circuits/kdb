@@ -18,7 +18,7 @@ import marshal
 
 import aiml
 
-from circuits.net.protocols.irc import Message, Notice
+from circuits.net.protocols.irc import PRIVMSG, NOTICE
 
 from kdb.plugin import BasePlugin
 
@@ -36,7 +36,7 @@ class Ai(BasePlugin):
         cwd = os.getcwd()
         os.chdir(os.path.join(self.env.path, "aiml"))
         self.k.bootstrap(
-                learnFiles="kdb.xml",
+                learnFiles="startup.xml",
                 commands="bootstrap")
         self.k.setPredicate("secure", "no")
         os.chdir(cwd)
@@ -65,7 +65,7 @@ class Ai(BasePlugin):
         marshal.dump(session, fd)
         fd.close()
 
-    def cmdPUBAI(self, source, option):
+    def cmdPUBAI(self, source, target, option):
         """Turn public AI on or off.
         
         Syntax: PUBAI ON|OFF
@@ -105,7 +105,7 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.push(Message(target, sentence), "PRIVMSG")
+                    self.push(PRIVMSG(target, sentence))
                 return reply
 
     def notice(self, source, target, message):
@@ -122,5 +122,5 @@ class Ai(BasePlugin):
 
             if reply:
                 for sentence in reply.split("\n\n"):
-                    self.push(Notice(target, sentence), "NOTICE")
+                    self.push(NOTICE(target, sentence))
                 return reply

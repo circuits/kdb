@@ -20,7 +20,7 @@ class Google(BasePlugin):
 
     data = ""
 
-    def cmdGoogle(self, source, search):
+    def cmdGoogle(self, source, target, search):
         m = re.search(r"(?:-(?:d|r)(\d{1,}) )?(.+)",search,re.IGNORECASE)
         if not m:
             msg = 'Usage: .google [-d<results> ]<search terms>'

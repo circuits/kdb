@@ -23,15 +23,15 @@ class DNSTools(BasePlugin):
     See: commands dnstools
     """
 
-    def cmdRESOLVE(self, source, host):
+    def cmdRESOLVE(self, source, target, host):
         """Synonym, of HOST
         
         See: HOST
         """
 
-        return self.cmdHOST(source, host)
+        return self.cmdHOST(source, target, host)
 
-    def cmdHOST(self, source, host):
+    def cmdHOST(self, source, target, host):
         """Resolve the given hostname/ip
         
         Syntax: HOST <hostname/ip>

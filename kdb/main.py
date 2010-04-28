@@ -16,12 +16,11 @@ from time import sleep
 
 from circuits import handler, Event, Component, Manager, Debugger
 
+from circuits.app import Daemon
 from circuits.app.env import (
         Load as LoadEnvironment,
         Create as CreateEnvironment,
         Upgrade as UpgradeEnvironment)
-
-from pymills.utils import writePID, daemonize
 
 from core import Core
 from env import SystemEnvironment
@@ -110,9 +109,9 @@ class Startup(Component):
         if not self.command == "init":
             if not os.path.exists(self.env.path):
                 raise Error("Environment path %s does not exist!" % self.env)
-            self.send(LoadEnvironment(), "load", self.env.channel)
+            self.push(LoadEnvironment(), "load", self.env.channel)
 
-        self.send(Command(), self.command, self.channel)
+        self.push(Command(), self.command, self.channel)
 
     def start(self):
         """start(self) -> None
@@ -125,12 +124,8 @@ class Startup(Component):
         """
 
         if self.opts.daemon:
-            daemonize(path=self.env.path)
-
-        pidfile = self.env.config.get("general", "pidfile")
-        if not os.path.isabs(pidfile):
-            pidfile = os.path.join(self.env.path, pidfile)
-        writePID(pidfile)
+            pidfile = self.env.config.get("general", "pidfile", "kdb.pid")
+            self.manager += Daemon(pidfile=pidfile)
 
         self.manager += Core(self.env)
         self.unregister()
@@ -159,9 +154,9 @@ class Startup(Component):
         system then starting it again.
         """
 
-        self.send(Command(), "stop", self.channel)
+        self.push(Command(), "stop", self.channel)
         sleep(1)
-        self.send(Command(), "start", self.channel)
+        self.push(Command(), "start", self.channel)
 
     def rehash(self):
         """rehash(self) -> None
@@ -191,7 +186,7 @@ class Startup(Component):
         if os.path.exists(self.env.path):
             raise Error("Environment path %s already exists!" % self.env.path)
 
-        self.send(CreateEnvironment(), "create", self.env.channel)
+        self.push(CreateEnvironment(), "create", self.env.channel)
 
     def upgrade(self):
         """upgrade() -> None
@@ -204,7 +199,7 @@ class Startup(Component):
         if not os.path.exists(self.env.path):
             raise Error("Environment path %s does not exist!" % self.env.path)
 
-        self.send(UpgradeEnvironment(), "upgrade", self.env.channel)
+        self.push(UpgradeEnvironment(), "upgrade", self.env.channel)
 
 ###
 ### Main

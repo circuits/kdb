@@ -18,7 +18,7 @@ from kdb.plugin import BasePlugin, CommandHandler
 
 class ChannelsCommands(CommandHandler):
 
-    def cmdADD(self, source, channel):
+    def cmdADD(self, source, target, channel):
         if channel not in self.parent.channels:
             self.parent.channels.append(channel)
             return "Okay, added %s to startup " \
@@ -27,7 +27,7 @@ class ChannelsCommands(CommandHandler):
             return "%s is already in my startup " \
                     "join list" % channel
 
-    def cmdDEL(self, source, channel):
+    def cmdDEL(self, source, target, channel):
         if channel not in self.parent.channels:
             return "%s isn't in my startup join list" % channel
         else:
@@ -35,7 +35,7 @@ class ChannelsCommands(CommandHandler):
             return "Okay, removed %s from my " \
                     "startup join list" % channel
 
-    def cmdLIST(self, source):
+    def cmdLIST(self, source, target):
         return "I'm configured to join %s " \
                 "at startup" % ", ".join(self.parent.channels)
 
@@ -61,7 +61,7 @@ class Channels(BasePlugin):
         for channel in self.mychannels:
             self.push(Join(channel), "JOIN")
 
-    def cmdJOIN(self, source, channel):
+    def cmdJOIN(self, source, target, channel):
         """Join the specified channel
         
         Syntax: JOIN <channel>
@@ -71,7 +71,7 @@ class Channels(BasePlugin):
 
         return "Okay"
 
-    def cmdPART(self, source, channel, message="Leaving"):
+    def cmdPART(self, source, target, channel, message="Leaving"):
         """Leave the specified channel
         
         Syntax: PART <channel> [<message>]
@@ -81,8 +81,9 @@ class Channels(BasePlugin):
 
         return "Okay"
 
-    def cmdCHANNELS(self, source, command, *args, **kwargs):
+    def cmdCHANNELS(self, source, target, command, *args, **kwargs):
         self.env.log.debug(source)
+        self.env.log.debug(target)
         self.env.log.debug(command)
         return ChannelsCommands(self)(command,
-                source, *args, **kwargs)
+                source, target, *args, **kwargs)

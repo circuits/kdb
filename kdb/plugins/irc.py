@@ -34,7 +34,7 @@ class Irc(BasePlugin):
         elif numeric == 433:
             self.push(Event(), "nicksollision", self.channel)
 
-    def cmdJUMP(self, source, server, port=6667, ssl=False):
+    def cmdJUMP(self, source, target, server, port=6667, ssl=False):
         """Connect to another server.
 
         Syntax: JUMP <server> [<port>] [<ssl>]
@@ -43,7 +43,7 @@ class Irc(BasePlugin):
         self.push(Quit("Reconnecting to %s:%s" % (server, port)), "QUIT")
         self.push(Connect(host, port, ssl), "connect")
 
-    def cmdIRCINFO(self, source):
+    def cmdIRCINFO(self, source, target):
         """Display current IRC information such as server,
         network, current nick, etc.
 
@@ -63,7 +63,7 @@ class Irc(BasePlugin):
 
         return msg
 
-    def cmdQUIT(self, source, message="Bye! Bye!"):
+    def cmdQUIT(self, source, target, message="Bye! Bye!"):
         """Quit from the current server
 
         Syntax: QUIT [<message>]
@@ -73,18 +73,18 @@ class Irc(BasePlugin):
 
         return "Okay"
 
-    def cmdDIE(self, source, message="Terminating! Bye!"):
+    def cmdDIE(self, source, target, message="Terminating! Bye!"):
         """Quit and Terminate
 
         Syntax: DIE [<message>]
         """
 
-        self.cmdQUIT(source, message)
+        self.cmdQUIT(source, target, message)
         self.push(Event(), "stop", "core")
 
         return "Terminating"
 
-    def cmdNICK(self, source, nick):
+    def cmdNICK(self, source, target, nick):
         """Change current nickname
 
         Syntax: NICK <newnick>
