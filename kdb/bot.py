@@ -74,9 +74,8 @@ class Bot(Component):
         client = TCPClient(self.bind, channel=self.channel)
         self += (client + irc)
 
-    def registered(self, component, manager):
-        if component == self:
-            self.push(Connect(self.host, self.port, self.ssl), "connect")
+    def ready(self, component):
+        self.push(Connect(self.host, self.port, self.ssl), "connect")
 
     def reconnect(self):
         self.push(Connect(self.host, self.port, self.ssl), "connect")
