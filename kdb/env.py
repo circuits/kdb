@@ -52,11 +52,10 @@ class SystemEnvironment(Environment):
         self.push(config.Save(), "save", "config")
 
     def loaded(self):
-        self.dbm = DatabaseManager(self.config.get("db"),
-            echo=(self.config.get("debug") and self.config.get("verbose")),
-        ).register(self)
-
         self.verbose = self.config.getboolean("logging", "verbose", False)
+
+        db = self.config.get("db", "uri", "sqlite://")
+        self.dbm = DatabaseManager(db, echo=self.verbose).register(self)
 
         self.plugins = CaselessDict()
 
