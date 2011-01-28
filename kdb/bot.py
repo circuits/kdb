@@ -17,9 +17,6 @@ from circuits import Event, Component, Timer
 from circuits.net.sockets import TCPClient, Connect
 from circuits.net.protocols.irc import IRC, PASS, USER, NICK
 
-from kdb import __name__ as systemName
-from kdb import __description__ as systemDesc
-
 ###
 ### Events
 ###
@@ -63,9 +60,10 @@ class Bot(Component):
         self.auth = {
                 "host": socket.gethostname(),
                 "server": self.host,
-                "nick": self.env.config.get("bot", "nick", systemName),
-                "ident": self.env.config.get("bot", "ident", systemName),
-                "name": self.env.config.get("bot", "name", systemDesc)
+                "nick": self.env.config.get("bot", "nick", "kdb"),
+                "ident": self.env.config.get("bot", "ident", "kdb"),
+                "name": self.env.config.get("bot", "name",
+                    "Knowledge (IRC) Database Bot")
         }
         if self.env.config.has_option("server", "password"):
             self.auth["password"] = self.env.config.get("server", "password")

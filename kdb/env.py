@@ -25,21 +25,15 @@ from circuits.app.env import Environment
 
 from circuits.app.log import Log
 
-import defaults
 from bot import Bot
 from plugin import BasePlugin
-
-from db import (
-        Databases,
-        Load as LoadDatabases,
-        Create as CreateDatabases)
-
-from __init__ import __name__ as systemName
+from dbm import DatabaseManager
+from default_config import CONFIG, PLUGINS
 
 class SystemEnvironment(Environment):
 
     version = 1
-    envname = systemName
+    envname = "kdb"
 
     def __init__(self, *args, **kwargs):
         super(SystemEnvironment, self).__init__(*args, **kwargs)
@@ -48,23 +42,19 @@ class SystemEnvironment(Environment):
         self.errors = 0
 
     def created(self):
-        for section in defaults.CONFIG:
+        for section in CONFIG:
             if not self.config.has_section(section):
                 self.config.add_section(section)
-            for option, value in defaults.CONFIG[section].iteritems():
+            for option, value in CONFIG[section].iteritems():
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
         self.push(config.Save(), "save", "config")
 
-        self.db = Databases(self)
-        self.manager += self.db
-        self.push(CreateDatabases(), "create", "db")
-
     def loaded(self):
-        self.db = Databases(self)
-        self.manager += self.db
-        self.push(LoadDatabases(), "load", "db")
+        self.dbm = DatabaseManager(self.config.get("db"),
+            echo=(self.config.get("debug") and self.config.get("verbose")),
+        ).register(self)
 
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
@@ -72,10 +62,9 @@ class SystemEnvironment(Environment):
 
         self.sTime = time()
 
-        self.manager += Debugger(events=self.verbose)#, logger=self.log)
+        Debugger(events=self.verbose, logger=self.log).register(self)
 
-        self.bot = Bot(self)
-        self.manager += self.bot
+        self.bot = Bot(self).register(self)
 
     def loadPlugin(self, plugin):
         """E.loadPlugin(plugin) -> None
@@ -163,7 +152,7 @@ class SystemEnvironment(Environment):
         may override existing plugins already loaded.
         """
 
-        plugins = list(defaults.PLUGINS)
+        plugins = list(PLUGINS)
 
         if self.config.has_section("plugins"):
             for name, value in self.config.items("plugins"):
