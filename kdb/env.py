@@ -72,7 +72,7 @@ class SystemEnvironment(Environment):
 
         self.sTime = time()
 
-        self.manager += Debugger(events=self.verbose)#, logger=self.log)
+        self.manager += Debugger(events=self.verbose, logger=self.log)
 
         self.bot = Bot(self)
         self.manager += self.bot
