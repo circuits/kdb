@@ -2,11 +2,10 @@
 # Date:     11th September 2008
 # Author:   James Mills, prologic at shortcircuit dot net dot au
 
-"""main - Main Module
+"""Main Module
 
 This is the main module. Everything starts from here
-after the command-line options have been parsed and
-passed to here by the cli module.
+after the command-line options have been parsed.
 """
 
 import os
