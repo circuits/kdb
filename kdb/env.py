@@ -35,8 +35,8 @@ class SystemEnvironment(Environment):
     version = 1
     envname = "kdb"
 
-    def __init__(self, *args, **kwargs):
-        super(SystemEnvironment, self).__init__(*args, **kwargs)
+    def __init__(self, path, envname=envname):
+        super(SystemEnvironment, self).__init__(path, envname)
 
         self.events = 0
         self.errors = 0
