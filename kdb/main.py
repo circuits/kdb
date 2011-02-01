@@ -22,10 +22,9 @@ from circuits.app.env import (
         Create as CreateEnvironment,
         Upgrade as UpgradeEnvironment)
 
-from core import Core
-from env import SystemEnvironment
-from __init__ import __name__ as systemName
-from __init__ import __version__ as systemVersion
+import kdb
+from kdb.core import Core
+from kdb.env import SystemEnvironment
 
 USAGE = """"%prog [options] <path> <command>
 
@@ -36,7 +35,7 @@ Commands:
   init     Create a new empty environment for %prog.
   upgrade  Upgrade an existing environment."""
 
-VERSION = "%prog v" + systemVersion
+VERSION = "%prog v" + kdb.__version__
 
 ###
 ### Functions
@@ -94,7 +93,7 @@ class Startup(Component):
         self.opts = opts
         self.command = command
 
-        self.env = SystemEnvironment(path, systemName)
+        self.env = SystemEnvironment(path)
 
     def __tick__(self):
         if self.command in ("stop", "restart", "rehash", "init", "upgrade"):
