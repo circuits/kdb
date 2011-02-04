@@ -49,9 +49,14 @@ def parse_options():
 
     parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
-    parser.add_option("-d", "--daemon",
+    parser.add_option("", "--daemon",
             action="store_true", default=False, dest="daemon",
             help="Enable daemon mode")
+
+    parser.add_option("-d", "--debug",
+            action="store_true",
+            default=False, dest="debug",
+            help="Enable debug mode")
 
     opts, args = parser.parse_args()
 
@@ -219,7 +224,10 @@ def main():
     path = args[0]
     command = args[1].lower()
 
-    (Manager() + Debugger(events=False) + Startup(path, opts, command)).run()
+    (Manager()
+            + Debugger(events=opts.debug)
+            + Startup(path, opts, command)
+    ).run()
 
 ###
 ### Entry Point
