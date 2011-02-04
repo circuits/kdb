@@ -9,6 +9,7 @@ easier access by other parts of the system including plugins.
 Every plugin is passed an instnace of this environment.
 """
 
+import os
 import sys
 from time import time
 from traceback import format_exc
@@ -54,8 +55,9 @@ class SystemEnvironment(Environment):
     def loaded(self):
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
-        db = self.config.get("db", "uri", "sqlite://")
-        self.dbm = DatabaseManager(db, echo=self.verbose).register(self)
+        path = os.path.join(self.path, "db", "%s.db" % self.envname)
+        uri = self.config.get("db", "uri", "sqlite:///%s" % path)
+        self.dbm = DatabaseManager(uri, echo=self.verbose).register(self)
 
         self.plugins = CaselessDict()
 
