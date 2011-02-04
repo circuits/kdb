@@ -41,8 +41,8 @@ class DatabaseManager(BaseComponent):
             )
         )
 
-    @handler("started", priority=1.0, target="*")
-    def _on_started(self, component, mode):
+    @handler("registered")
+    def _on_registered(self, component, manager):
         self.metadata.create_all(self.engine)
         self.push(DatabaseLoaded())
 

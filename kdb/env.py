@@ -27,6 +27,7 @@ from circuits.app.env import Environment
 from circuits.app.log import Log
 
 from bot import Bot
+from kdb import schema
 from plugin import BasePlugin
 from dbm import DatabaseManager
 from default_config import CONFIG, PLUGINS
@@ -174,3 +175,13 @@ class SystemEnvironment(Environment):
 
         for plugin in self.plugins.copy():
             self.unloadPlugin(plugin)
+
+    def databaseloaded(self):
+        tables = self.dbm.engine.table_names()
+        for Table, rows in schema.DATA:
+            if Table.__tablename__ not in tables:
+                self.dbm.session.begin()
+                for row in rows:
+                    self.dbm.session.add(Table(*row))
+                self.dbm.session.commit()
+

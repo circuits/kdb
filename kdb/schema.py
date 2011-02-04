@@ -11,7 +11,7 @@ from hashlib import md5
 
 from sqlalchemy import Boolean, Column, Integer, PickleType, Sequence, String
 
-from dbm import Base
+from kdb.dbm import Base
 
 version = 1
 
@@ -78,12 +78,9 @@ DATA = (
         ("admin", md5("admin").hexdigest()),
     )),
     (Permission, (
-        ("anonymous",     "LOG_VIEW"),
-        ("anonymous",     "STATUS_VIEW"),
-        ("anonymous",     "SEARCH_VIEW"),
-        ("authenticated", "LOAD_PLUGIN"),
-        ("authenticated", "UNLOAD_PLUGIN"),
-        ("admin",         "KDB_ADMIN"),
+        ("anonymous",     "BOT_VIEW"),
+        ("authenticated", "BOT_EDIT"),
+        ("admin",         "BOT_ADMIN"),
     )),
     (System, (
         ("schema_version", str(version)),
