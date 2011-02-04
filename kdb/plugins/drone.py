@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 from socket import gethostname
 
 from circuits import handler
-from circuits.net.protocols.irc ipmort Nick
+from circuits.net.protocols.irc import Nick
 
 from kdb.plugin import BasePlugin
 
