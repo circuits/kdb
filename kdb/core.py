@@ -27,9 +27,9 @@ class Core(Component):
 
         self.env = env
 
-    def registered(self, component, manager):
-        if component == self:
-            self.env.loadPlugins()
+    @handler("loaded", target="env")
+    def _on_env_loaded(self):
+        self.env.loadPlugins()
 
     @handler("signal", target="*")
     def signal(self, signal, track):
