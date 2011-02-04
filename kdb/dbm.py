@@ -21,6 +21,8 @@ class DatabaseLoaded(Event):
 
 class DatabaseManager(BaseComponent):
 
+    channel = "db"
+
     def __init__(self, dburi, echo=False, convert_unicode=True):
         super(DatabaseManager, self).__init__()
 
