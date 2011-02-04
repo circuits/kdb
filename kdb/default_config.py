@@ -11,17 +11,20 @@ when no environment has been created.
 
 CONFIG = {
         "server": {
-            "address": "irc.freenode.net",
+            "host": "irc.freenode.net",
             "port": 6667
         },
         "bot": {
             "nick": "kdb",
             "ident": "kdb",
-            "name": "Knowledge Database Bot"
+            "name": "Knowledge Database Bot",
+            "channels": "#circuits",
         }
 }
 
 PLUGINS = (
         "core",
-        "help"
+        "help",
+        "irc",
+        "channels",
 )
