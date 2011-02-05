@@ -154,13 +154,16 @@ class Stats(BasePlugin):
         Syntax: VERSION
         """
 
+        me == self.env.bot.auth["nick"]
+        name = self.env.config.get("bot", "name", "Unknown")
+
         msg = "%s [ %s ] v%s by %s - %s - %s" % (
-                kdb.__name__,
-                kdb.__description__,
+                me,
+                name,
                 kdb.__version__,
-                kdb.__author_email__,
-                kdb.__copyright__,
-                kdb.__url__)
+                kdb.__author__,
+                "CopyRight (C) 2004-2011",
+                "http://bitbucket.org/prologic/kdb/")
         return msg
 
     def cmdMSTATS(self, source, target):
