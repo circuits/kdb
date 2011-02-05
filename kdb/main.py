@@ -131,7 +131,6 @@ class Startup(Component):
             self.manager += Daemon(pidfile=pidfile)
 
         self.manager += Core(self.env)
-        #self.unregister()
 
     def stop(self):
         """stop(self) -> None
