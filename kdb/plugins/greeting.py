@@ -69,13 +69,13 @@ class Irc(BasePlugin):
         self._greetings.append(greeting)
     
     @handler("join")
-    def onJOIN(self, nick, channel):
-        nick = nick.lower()
+    def onJOIN(self, source, channel):
+        nick = source[0].lower()
 
         if nick == self.env.bot.auth["nick"].lower():
             return
 
-        if self._history.has_key(nick):
+        if nick in self._history:
             if (time() - self._history[nick]) > (60*60*24*3):
                 msg = "Welcome back %s :)" % nick
                 self.push(Message(channel, msg), "PRIVMSG")
