@@ -49,7 +49,7 @@ def parse_options():
 
     parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
-    parser.add_option("", "--daemon",
+    parser.add_option("--daemon",
             action="store_true", default=False, dest="daemon",
             help="Enable daemon mode")
 
