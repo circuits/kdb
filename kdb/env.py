@@ -21,8 +21,8 @@ from pymills.datatypes import CaselessDict
 
 from circuits import Debugger
 from circuits.tools import kill
-from circuits.app import config
 from circuits.app.env import Environment
+from circuits.app.config import SaveConfig
 
 from circuits.app.log import Log
 
@@ -51,7 +51,7 @@ class SystemEnvironment(Environment):
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
-        self.push(config.Save(), "save", "config")
+        self.push(SaveConfig(), target=self.config)
 
     def loaded(self):
         self.verbose = self.config.getboolean("logging", "verbose", False)
