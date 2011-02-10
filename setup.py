@@ -67,7 +67,10 @@ setup(
     [console_scripts]
     kdb = kdb.main:main
     """,
-    install_requires=("circuits",),
+    install_requires=(
+        "circuits",
+        "pymills",
+    ),
     setup_requires=("hgtools",),
     use_hg_version={"increment": "0.01"},
 )
