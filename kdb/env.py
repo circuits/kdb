@@ -54,7 +54,7 @@ class SystemEnvironment(Environment):
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
-        self.push(SaveConfig(), target=self.config)
+        self.push(SaveConfig(), "save", self.config)
 
     def loaded(self):
         self.verbose = self.config.getboolean("logging", "verbose", False)
