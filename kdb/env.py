@@ -44,6 +44,9 @@ class SystemEnvironment(Environment):
         self.errors = 0
 
     def created(self):
+        db_path = os.path.join(self.path, "db")
+        os.mkdir(db_path)
+
         for section in CONFIG:
             if not self.config.has_section(section):
                 self.config.add_section(section)
