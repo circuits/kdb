@@ -12,7 +12,7 @@ when no environment has been created.
 CONFIG = {
         "server": {
             "host": "irc.freenode.net",
-            "port": 6667
+            "port": "6667",
         },
         "bot": {
             "nick": "kdb",
