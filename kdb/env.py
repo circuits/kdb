@@ -22,7 +22,7 @@ from pymills.datatypes import CaselessDict
 from circuits import Debugger
 from circuits.tools import kill
 from circuits.app.env import Environment
-from circuits.app.config import Save as SaveConfig
+from circuits.app.config import SaveConfig
 
 from circuits.app.log import Log
 
