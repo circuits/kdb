@@ -22,7 +22,7 @@ from pymills.datatypes import CaselessDict
 from circuits import Debugger
 from circuits.tools import kill
 from circuits.app.env import Environment
-from circuits.app.config import SaveConfig
+from circuits.app.config import Save as SaveConfig
 
 from circuits.app.log import Log
 
@@ -56,9 +56,9 @@ class SystemEnvironment(Environment):
     def loaded(self):
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
-        path = os.path.join(self.path, "db", "%s.db" % self.envname)
-        uri = self.config.get("db", "uri", "sqlite:///%s" % path)
-        self.dbm = DatabaseManager(uri, echo=self.verbose).register(self)
+        #path = os.path.join(self.path, "db", "%s.db" % self.envname)
+        #uri = self.config.get("db", "uri", "sqlite:///%s" % path)
+        #self.dbm = DatabaseManager(uri, echo=self.verbose).register(self)
 
         self.plugins = CaselessDict()
 
