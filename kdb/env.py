@@ -43,7 +43,7 @@ class SystemEnvironment(Environment):
         self.events = 0
         self.errors = 0
 
-    def created(self):
+    def create(self):
         for section in CONFIG:
             if not self.config.has_section(section):
                 self.config.add_section(section)
