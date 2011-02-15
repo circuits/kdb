@@ -104,7 +104,7 @@ class Startup(BaseComponent):
     def _on_start(self):
         if self.opts.daemon:
             pidfile = self.env.config.get("general", "pidfile", "kdb.pid")
-            self.manager += Daemon(pidfile=pidfile)
+            Daemon(pidfile, self.env.path).register(self)
 
         Core(self.env).register(self)
 
