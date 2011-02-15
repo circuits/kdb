@@ -19,10 +19,10 @@ from inspect import getmembers, isclass
 from pymills.utils import safe__import__
 from pymills.datatypes import CaselessDict
 
-from circuits import Debugger
 from circuits.tools import kill
-from circuits.app.env import Environment
+from circuits import handler, Debugger
 from circuits.app.config import SaveConfig
+from circuits.app.env import BaseEnvironment
 
 from circuits.app.log import Log
 
@@ -32,18 +32,19 @@ from plugin import BasePlugin
 from dbm import DatabaseManager
 from default_config import CONFIG, PLUGINS
 
-class SystemEnvironment(Environment):
+class Environment(BaseEnvironment):
 
     version = 1
     envname = "kdb"
 
     def __init__(self, path, envname=envname):
-        super(SystemEnvironment, self).__init__(path, envname)
+        super(Environment, self).__init__(path, envname)
 
         self.events = 0
         self.errors = 0
 
-    def create(self):
+    @handler("environment_created")
+    def _on_environment_created(self, *args):
         for section in CONFIG:
             if not self.config.has_section(section):
                 self.config.add_section(section)
@@ -53,7 +54,8 @@ class SystemEnvironment(Environment):
                 self.config.set(section, option, value)
         self.push(SaveConfig(), target=self.config)
 
-    def loaded(self):
+    @handler("environment_loaded")
+    def _on_environment_loaded(self, *args):
         self.verbose = self.config.getboolean("logging", "verbose", False)
 
         #path = os.path.join(self.path, "db", "%s.db" % self.envname)

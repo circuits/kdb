@@ -2,28 +2,24 @@
 # Date:     11th September 2008
 # Author:   James Mills, prologic at shortcircuit dot net dot au
 
-"""Main Module
+"""Main Module"""
 
-This is the main module. Everything starts from here
-after the command-line options have been parsed.
-"""
 
 import os
 import signal
 import optparse
 from time import sleep
 
-from circuits import handler, Event, Component, Manager, Debugger
+from circuits import handler, Event, BaseComponent, Debugger
 
 from circuits.app import Daemon
-from circuits.app.env import (
-        Load as LoadEnvironment,
-        Create as CreateEnvironment,
-        Upgrade as UpgradeEnvironment)
+from circuits.app import UpgradeEnvironment
+from circuits.app import CreateEnvironment, LoadEnvironment
 
 import kdb
 from kdb.core import Core
-from kdb.env import SystemEnvironment
+from kdb.env import Environment
+
 
 USAGE = """"%prog [options] <path> <command>
 
@@ -36,17 +32,8 @@ Commands:
 
 VERSION = "%prog v" + kdb.__version__
 
-###
-### Functions
-###
 
 def parse_options():
-    """parse_options() -> opts, args
-
-    Parse any command-line options given returning both
-    the parsed options and arguments.
-    """
-
     parser = optparse.OptionParser(usage=USAGE, version=VERSION)
 
     parser.add_option("--daemon",
@@ -66,27 +53,16 @@ def parse_options():
 
     return opts, args
 
-###
-### Errors
-###
 
-class Error(Exception): pass
+class Error(Exception):
+    """Error Exception"""
 
-###
-### Events
-###
 
 class Command(Event):
-    """Command(Event) -> Command Event
+    """Command Event"""
 
-    args: command
-    """
 
-###
-### Components
-###
-
-class Startup(Component):
+class Startup(BaseComponent):
 
     channel = "startup"
 
@@ -97,140 +73,84 @@ class Startup(Component):
         self.opts = opts
         self.command = command
 
-        self.env = SystemEnvironment(path)
+        self.env = Environment(path).register(self)
 
     def __tick__(self):
-        if self.command in ("stop", "restart", "rehash", "init", "upgrade"):
-            if len(self.manager) == 0:
-                raise SystemExit, 0
+        if not self.command == "start" and not self:
+            self.stop()
 
-    def registered(self, component, manager):
-        manager += self.env
+    @handler("environment_loaded", target="env")
+    def _on_environment_loaded(self, *args):
+        self.push(Command(), self.command, self)
 
-    @handler("started", target="*")
-    def started(self, component, mode):
+    @handler("exception")
+    def _on_exception(self, *args):
+        raise SystemExit(-1)
+
+    @handler("started")
+    def _on_started(self, component, mode):
         if not self.command == "init":
             if not os.path.exists(self.env.path):
-                raise Error("Environment path %s does not exist!" % self.env)
-            self.push(LoadEnvironment(), "load", self.env.channel)
+                raise Error("Environment does not exist!")
+            else:
+                self.push(LoadEnvironment(), target=self.env)
+        else:
+            if os.path.exists(self.env.path):
+                raise Error("Environment already exists!")
+            else:
+                self.push(Command(), self.command, self)
 
-        self.push(Command(), self.command, self.channel)
-
-    def start(self):
-        """start(self) -> None
-
-        Start the system. Daemonize if self.opts.daemon == True
-        or if daemon = True is found in the configuration file
-        under the [general] section.
-        Write the PID of this process to the environment path
-        and start the core.
-        """
-
+    @handler("start")
+    def _on_start(self):
         if self.opts.daemon:
             pidfile = self.env.config.get("general", "pidfile", "kdb.pid")
             self.manager += Daemon(pidfile=pidfile)
 
-        self.manager += Core(self.env)
+        Core(self.env).register(self)
 
-    def stop(self):
-        """stop(self) -> None
-
-        Stop the system by sending the KILL signal to the
-        pid found in the environment. If an error occurs
-        while trying to do this, the error is printed and
-        exitcode 1 is returned.
-        """
-
+    @handler("stop")
+    def _on_stop(self):
         pidfile = self.env.config.get("general", "pidfile")
         if not os.path.isabs(pidfile):
             pidfile = os.path.join(self.env.path, pidfile)
 
-        with open(pidfile, "r") as f:
-            pid = int(f.read().strip())
-            os.kill(pid, signal.SIGTERM)
+        f = open(pidfile, "r")
+        pid = int(f.read().strip())
+        f.close()
 
-    def restart(self):
-        """restart(self) -> None
+        os.kill(pid, signal.SIGTERM)
 
-        Attempt a restart of the system by first stopping the
-        system then starting it again.
-        """
-
+    @handler("restart")
+    def _on_restart(self):
         self.push(Command(), "stop", self.channel)
         sleep(1)
         self.push(Command(), "start", self.channel)
 
-    def rehash(self):
-        """rehash(self) -> None
-
-        Rehash the system by sending the SIGUP signal to the
-        pid found in the environment. If an error occurs while
-        trying to do this, the error is printed and exitcode 1
-        is returned.
-        """
-
+    @handler("rehash")
+    def _on_rehash(self):
         pidfile = self.env.config.get("general", "pidfile")
         if not os.path.isabs(pidfile):
             pidfile = os.path.join(self.env.path, pidfile)
 
-        with open(pidfile, "r") as f:
-            pid = int(f.read())
-            os.kill(pid, signal.SIGHUP)
+        f = open(pidfile, "r")
+        pid = int(f.read())
+        f.close()
 
-    def init(self):
-        """init(self) -> None
+        os.kill(pid, signal.SIGHUP)
 
-        Initialize (create) a new environment. Check that
-        the path doesn't already exist, printing an error
-        and returning an exitcode of 1 if it does.
-        """
+    @handler("init")
+    def _on_init(self):
+        self.push(CreateEnvironment(), target=self.env)
 
-        if os.path.exists(self.env.path):
-            raise Error("Environment path %s already exists!" % self.env.path)
+    @handler("upgrade")
+    def _on_upgrade(self):
+        self.push(UpgradeEnvironment(), target=self.env)
 
-        self.push(CreateEnvironment(), "create", self.env.channel)
-
-    def upgrade(self):
-        """upgrade() -> None
-
-        Upgrade the environment. Check if the path exists,
-        printing an error and returning an exitcode of 1 if
-        it doesn't exist.
-        """
-
-        if not os.path.exists(self.env.path):
-            raise Error("Environment path %s does not exist!" % self.env.path)
-
-        self.push(UpgradeEnvironment(), "upgrade", self.env.channel)
-
-###
-### Main
-###
 
 def main():
-    """main() -> None
-
-    Parse all command-line arguments and options
-    determine what command to run. The environment
-    path must be the first argument specified.
-    If no valid command is given as the second
-    argument, an error is printed and the system
-    is terminated with an error code of 1.
-    """
-
     opts, args = parse_options()
+    (Startup(args[0], opts, args[1]) + Debugger(events=opts.debug)).run()
 
-    path = args[0]
-    command = args[1].lower()
-
-    (Manager()
-            + Debugger(events=opts.debug)
-            + Startup(path, opts, command)
-    ).run()
-
-###
-### Entry Point
-###
 
 if __name__ == "__main__":
     main()

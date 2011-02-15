@@ -13,12 +13,11 @@ configuration and terminate the system.
 from signal import SIGINT, SIGHUP, SIGTERM
 from traceback import extract_tb, format_list
 
-from circuits import handler
 from circuits.app.log import Log
 from circuits.net.protocols.irc import Quit
-from circuits import handler, Event, Component
+from circuits import handler, BaseComponent, Event
 
-class Core(Component):
+class Core(BaseComponent):
 
     channel = "core"
 
@@ -27,20 +26,14 @@ class Core(Component):
 
         self.env = env
 
-    @handler("loaded", target="env")
-    def _on_env_loaded(self):
-        self.env.loadPlugins()
+    @handler("registered")
+    def _on_registered(self, component, manager):
+        if component == self:
+            self.env.loadPlugins()
 
     @handler("signal", target="*")
     def signal(self, signal, track):
         if signal == SIGHUP:
-            self.rehash()
+            self.push(LoadConfig(), target=self.env.config)
         elif signal in (SIGINT, SIGTERM):
-            self.stop()
-
-    def stop(self):
-        self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
-        self.env.unloadPlugins()
-
-    def rehash(self):
-        self.env.reload()
+            self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
