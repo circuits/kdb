@@ -15,7 +15,7 @@ from traceback import extract_tb, format_list
 
 from circuits.app.log import Log
 from circuits.net.protocols.irc import Quit
-from circuits import handler, BaseComponent, Event
+from circuits import handler, BaseComponent
 
 class Core(BaseComponent):
 
@@ -37,3 +37,7 @@ class Core(BaseComponent):
             self.push(LoadConfig(), target=self.env.config)
         elif signal in (SIGINT, SIGTERM):
             self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
+
+    @handler("terminate")
+    def _on_terminate(self):
+        raise SystemExit(0)

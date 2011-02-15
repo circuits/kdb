@@ -24,6 +24,9 @@ from circuits.net.protocols.irc import IRC, PASS, USER, NICK
 class Reconnect(Event):
     "Reconnect Event"
 
+class Terminate(Event):
+    """Terminate Event"""
+
 ###
 ### Components
 ###
@@ -51,6 +54,8 @@ class Bot(Component):
         super(Bot, self).__init__()
 
         self.env = env
+
+        self.terminate = False
 
         self.host = self.env.config.get("server", "host", "0.0.0.0")
         self.port = self.env.config.getint("server", "port", 80)
@@ -94,6 +99,12 @@ class Bot(Component):
         self.push(NICK(nick))
 
     def disconnected(self):
+        if self.terminate:
+            raise SystemExit(0)
+
         s = 60
         self.push(Log("info", "Disconnected. Reconnecting in %ds" % s))
-        self += Timer(s, Reconnect(), "reconnect", self)
+        Timer(s, Reconnect(), "reconnect", self).register(self)
+
+    def terminate(self):
+        self.terminate = True

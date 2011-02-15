@@ -17,6 +17,7 @@ from circuits import Event
 from circuits.net.sockets import Connect
 from circuits.net.protocols.irc import Quit, Nick
 
+from kdb.bot import Terminate
 from kdb.plugin import BasePlugin
 
 class Irc(BasePlugin):
@@ -80,7 +81,7 @@ class Irc(BasePlugin):
         """
 
         self.cmdQUIT(source, target, message)
-        self.push(Event(), "stop", "core")
+        self.push(Terminate(), target=self.env.bot)
 
         return "Terminating"
 
