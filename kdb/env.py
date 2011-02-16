@@ -30,7 +30,7 @@ from bot import Bot
 from kdb import schema
 from plugin import BasePlugin
 from dbm import DatabaseManager
-from default_config import CONFIG, PLUGINS
+from default_config import CONFIG
 
 class Environment(BaseEnvironment):
 
@@ -156,17 +156,11 @@ class Environment(BaseEnvironment):
         may override existing plugins already loaded.
         """
 
-        plugins = list(PLUGINS)
-
         if self.config.has_section("plugins"):
             for name, value in self.config.items("plugins"):
                 plugin, _ = name.split(".")
                 if value.lower() == "enabled":
-                    if plugin not in plugins:
-                        plugins.append(plugin)
-
-        for plugin in plugins:
-            self.loadPlugin(plugin)
+                    self.loadPlugin(plugin)
 
     def unloadPlugins(self):
         """E.unloadPlugins() -> None
