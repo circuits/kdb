@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+from glob import glob
 
 try:
     from setuptools import setup, find_packages
@@ -63,6 +64,7 @@ setup(
     keywords="Knowledge Database IRC Bot Framework",
     platforms="POSIX",
     packages=find_packages("."),
+    scripts=glob("scripts/*"),
     entry_points="""
     [console_scripts]
     kdb = kdb.main:main
