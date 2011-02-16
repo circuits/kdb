@@ -11,20 +11,28 @@ when no environment has been created.
 
 CONFIG = {
         "server": {
-            "host": "irc.freenode.net",
-            "port": 6667
+            "host":         "irc.freenode.net",
+            "port":         6667
         },
         "bot": {
-            "nick": "kdb",
-            "ident": "kdb",
-            "name": "Knowledge Database Bot",
-            "channels": "#circuits",
-        }
+            "nick":         "kdb",
+            "ident":        "kdb",
+            "name":         "Knowledge Database Bot",
+            "channels":     "#circuits",
+        },
+        "plugins": {
+            "broadcast.*":  "enabled",
+            "channels.*":   "enabled",
+            "core.*":       "enabled",
+            "ctcp.*":       "enabled",
+            "dnstools.*":   "enabled",
+            "eval.*":       "enabled",
+            "google.*":     "enabled",
+            "greeting.*":   "enabled",
+            "help.*":       "enabled",
+            "irc.*":        "enabled",
+            "stats.*":      "enabled",
+            "swatch.*":     "enabled",
+            "timers.*":     "enabled",
+        },
 }
-
-PLUGINS = (
-        "core",
-        "help",
-        "irc",
-        "channels",
-)
