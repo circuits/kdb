@@ -52,7 +52,7 @@ class Environment(BaseEnvironment):
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
-        self.push(SaveConfig(), target=self.config)
+        self.push(SaveConfig(), "save", self.config)
 
     @handler("environment_loaded")
     def _on_environment_loaded(self, *args):
