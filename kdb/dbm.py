@@ -13,6 +13,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from circuits import handler, BaseComponent, Event
 
+import schema
+
 metadata = MetaData()
 Base = declarative_base(metadata=metadata)
 
@@ -21,12 +23,8 @@ class DatabaseLoaded(Event):
 
 class DatabaseManager(BaseComponent):
 
-    channel = "db"
-
     def __init__(self, dburi, echo=False, convert_unicode=True):
         super(DatabaseManager, self).__init__()
-
-        self.metadata = metadata
 
         self.engine = create_engine(dburi,
             echo=echo,
@@ -43,8 +41,15 @@ class DatabaseManager(BaseComponent):
 
     @handler("registered")
     def _on_registered(self, component, manager):
-        self.metadata.create_all(self.engine)
-        self.push(DatabaseLoaded())
+        if component == self:
+            tables = self.engine.table_names()
+            for Table, data in schema.DATA:
+                if Table.__tablename__ not in tables:
+                    Table.__table__.create(self.engine)
+                    for row in data:
+                        self.session.add(Table(*row))
+                    self.session.commit()
+            metadata.create_all(self.engine)
 
     @handler("stopped", target="*")
     def _on_stopped(self, component):
