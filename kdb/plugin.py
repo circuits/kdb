@@ -214,7 +214,7 @@ class BasePlugin(Component):
                                 if x is not None])
 
         if r:
-            self.fire(Command(command, tokens), "PostCommand")
+            self.fire(Command.create("PostCommand", command, tokens))
 
         return r
 
