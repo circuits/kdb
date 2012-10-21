@@ -21,7 +21,7 @@ import feedparser
 from pymills.utils import notags, decodeHTML
 
 from circuits import Event, Timer
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
@@ -129,7 +129,7 @@ class RSS(BasePlugin):
             for f in self.entities[entity]:
                 if f.next < time():
                     for line in f.getItems():
-                        self.push(Message(f.target, line), "PRIVMSG")
+                        self.fire(PRIVMSG(f.target, line))
                     f.reset()
 
     def cmdRADD(self, source, target, url, interval="60"):

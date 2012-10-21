@@ -9,30 +9,27 @@ easier access by other parts of the system including plugins.
 Every plugin is passed an instnace of this environment.
 """
 
-import os
 import sys
 from time import time
 from traceback import format_exc
-from collections import defaultdict
 from inspect import getmembers, isclass
 
 from pymills.utils import safe__import__
 from pymills.datatypes import CaselessDict
 
+from circuits.app import env
 from circuits.tools import kill
+from circuits.app import config
 from circuits import handler, Debugger
-from circuits.app.config import SaveConfig
-from circuits.app.env import BaseEnvironment
 
 from circuits.app.log import Log
 
 from bot import Bot
-from kdb import schema
 from plugin import BasePlugin
-from dbm import DatabaseManager
 from default_config import CONFIG
 
-class Environment(BaseEnvironment):
+
+class Environment(env.Environment):
 
     version = 1
     envname = "kdb"
@@ -43,8 +40,8 @@ class Environment(BaseEnvironment):
         self.events = 0
         self.errors = 0
 
-    @handler("environment_created")
-    def _on_environment_created(self, *args):
+    @handler("create")
+    def _on_create(self, *args):
         for section in CONFIG:
             if not self.config.has_section(section):
                 self.config.add_section(section)
@@ -52,15 +49,11 @@ class Environment(BaseEnvironment):
                 if type(value) == str:
                     value = value % {"name": self.envname}
                 self.config.set(section, option, value)
-        self.push(SaveConfig(), "save", self.config)
+        self.fire(config.Save(), self.config)
 
-    @handler("environment_loaded")
-    def _on_environment_loaded(self, *args):
+    @handler("ready")
+    def _on_ready(self):
         self.verbose = self.config.getboolean("logging", "verbose", False)
-
-        #path = os.path.join(self.path, "db", "%s.db" % self.envname)
-        #uri = self.config.get("db", "uri", "sqlite:///%s" % path)
-        #self.dbm = DatabaseManager(uri, echo=self.verbose).register(self)
 
         self.plugins = CaselessDict()
 
@@ -80,19 +73,19 @@ class Environment(BaseEnvironment):
 
         if plugin in self.plugins:
             msg = "Not loading plugin '%s' - Already loaded!" % plugin
-            self.push(Log("warning", msg))
+            self.fire(Log("warning", msg))
             return msg
 
         try:
             fqplugin = "%s.plugins.%s" % (__package__, plugin)
-            if sys.modules.has_key(fqplugin):
+            if fqplugin in sys.modules:
                 try:
                     reload(sys.modules[fqplugin])
                 except Exception, e:
                     msg = "Problem reloading plugin '%s'" % plugin
-                    self.push(Log("error", msg))
-                    self.push(Log("error", e))
-                    self.push(Log("debug", format_exc()))
+                    self.fire(Log("error", msg))
+                    self.fire(Log("error", e))
+                    self.fire(Log("debug", format_exc()))
                     return msg
 
             moduleName = "plugins.%s" % plugin
@@ -105,21 +98,21 @@ class Environment(BaseEnvironment):
 
             for name, Plugin in plugins:
                 instance = Plugin(self)
-                instance.register(self.manager)
+                instance.register(self.bot)
                 msg = "Registered Component: %s" % instance
-                self.push(Log("info", msg))
+                self.fire(Log("info", msg))
                 if name not in self.plugins:
                     self.plugins[name] = set()
                 self.plugins[name].add(instance)
 
             msg = "Loaded plugin: %s" % plugin
-            self.push(Log("info", msg))
+            self.fire(Log("info", msg))
             return msg
         except Exception, e:
             msg = "Problem loading plugin '%s'" % plugin
-            self.push(Log("error", msg))
-            self.push(Log("error", e))
-            self.push(Log("debug", format_exc()))
+            self.fire(Log("error", msg))
+            self.fire(Log("error", e))
+            self.fire(Log("debug", format_exc()))
             return msg
 
     def unloadPlugin(self, plugin):
@@ -133,18 +126,18 @@ class Environment(BaseEnvironment):
             for instance in instances:
                 kill(instance)
                 msg = "Unregistered Component: %s" % instance
-                self.push(Log("info", msg))
+                self.fire(Log("info", msg))
                 if hasattr(instance, "cleanup"):
                     instance.cleanup()
                     msg = "Cleaned up Component: %s" % instance
-                    self.push(Log("debug", msg))
+                    self.fire(Log("debug", msg))
             del self.plugins[plugin]
 
             msg = "Unloaded plugin: %s" % plugin
         else:
             msg = "Not unloading plugin '%s' - Not loaded!" % plugin
 
-        self.push(Log("info", msg))
+        self.fire(Log("info", msg))
         return msg
 
     def loadPlugins(self):
@@ -171,13 +164,3 @@ class Environment(BaseEnvironment):
 
         for plugin in self.plugins.copy():
             self.unloadPlugin(plugin)
-
-    def databaseloaded(self):
-        tables = self.dbm.engine.table_names()
-        for Table, rows in schema.DATA:
-            if Table.__tablename__ not in tables:
-                self.dbm.session.begin()
-                for row in rows:
-                    self.dbm.session.add(Table(*row))
-                self.dbm.session.commit()
-

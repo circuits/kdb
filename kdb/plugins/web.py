@@ -61,7 +61,7 @@ class Root(Controller):
         ourself = self.env.bot.auth["nick"]
 
         e = irc.Message("anonymous", ourself, message)
-        r = self.push(e, target=self.env.bot)
+        r = self.fire(e, self.env.bot)
 
         if not r:
             r = "No response"

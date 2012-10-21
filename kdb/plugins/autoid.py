@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import re
 
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
@@ -63,6 +63,5 @@ class AutoID(BasePlugin):
                                 password = self.env.config.get(
                                         "autoid", "password")
 
-                                self.push(
-                                        Message(nickserv, command % password),
-                                        "PRIVMSG")
+                                self.fire(
+                                        PRIVMSG(nickserv, command % password))

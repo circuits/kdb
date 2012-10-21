@@ -20,7 +20,7 @@ from time import sleep
 
 import xmpp
 
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
@@ -82,8 +82,8 @@ class GTalk(BasePlugin):
                 self._client.Roster.Authorize(user)
                 reply = "Authorized."
             else:
-                e = Message(str(user), self.env.bot.auth["nick"], text)
-                reply = self.send(e, "message", self.channel)
+                e = PRIVMSG(str(user), self.env.bot.auth["nick"], text)
+                reply = self.fire(e)
                 self.env.log.debug("Reply: %s" % reply)
 
             if type(reply) == list:

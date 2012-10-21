@@ -31,12 +31,12 @@ class Core(BaseComponent):
         if component == self:
             self.env.loadPlugins()
 
-    @handler("signal", target="*")
+    @handler("signal", channel="*")
     def signal(self, signal, track):
         if signal == SIGHUP:
-            self.push(LoadConfig(), target=self.env.config)
+            self.fire(LoadConfig(), self.env.config)
         elif signal in (SIGINT, SIGTERM):
-            self.push(Quit("Received SIGTERM, terminating..."), self.env.bot)
+            self.fire(Quit("Received SIGTERM, terminating..."), self.env.bot)
 
     @handler("terminate")
     def _on_terminate(self):

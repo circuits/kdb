@@ -13,7 +13,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 import time
 
-from circuits.net.protocols.irc import Ctcp
+from circuits.net.protocols.irc import CTCPREPLY
 
 import kdb
 from kdb.plugin import BasePlugin
@@ -52,4 +52,4 @@ class CtcpReplies(BasePlugin):
             response = None
 
         if response is not None:
-            self.push(Ctcp(source, *response), "CTCPREPLY")
+            self.fire(CTCPREPLY(source, *response))

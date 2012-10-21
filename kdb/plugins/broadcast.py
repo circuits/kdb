@@ -34,7 +34,7 @@ class Broadcast(BasePlugin):
 
         if not addressed and len(message) > 0:
             if message[0] == self.prefix:
-                self.push(
+                self.fire(
                         Message(source, target,
                             "%s, %s" % (self.env.bot.auth["nick"],
-                                message[1:])), "message", self.channel)
+                                message[1:])))

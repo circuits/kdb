@@ -15,7 +15,7 @@ from time import sleep
 
 from circuits import Event
 from circuits.net.sockets import Connect
-from circuits.net.protocols.irc import Quit, Nick
+from circuits.net.protocols.irc import QUIT, NICK
 
 from kdb.bot import Terminate
 from kdb.plugin import BasePlugin
@@ -31,9 +31,9 @@ class Irc(BasePlugin):
 
     def numeric(self, source, target, numeric, arg, message):
         if numeric == 1:
-            self.push(Event(), "joinchannels", self.channel)
+            self.fire(Event.create("joinchannels"))
         elif numeric == 433:
-            self.push(Event(), "nicksollision", self.channel)
+            self.fire(Event.create("nicksollision"))
 
     def cmdJUMP(self, source, target, server, port=6667, ssl=False):
         """Connect to another server.
@@ -41,8 +41,8 @@ class Irc(BasePlugin):
         Syntax: JUMP <server> [<port>] [<ssl>]
         """
 
-        self.push(Quit("Reconnecting to %s:%s" % (server, port)), "QUIT")
-        self.push(Connect(host, port, ssl), "connect")
+        self.fire(QUIT("Reconnecting to %s:%s" % (server, port)))
+        self.fire(Connect(host, port, ssl), "connect")
 
     def cmdIRCINFO(self, source, target):
         """Display current IRC information such as server,
@@ -70,7 +70,7 @@ class Irc(BasePlugin):
         Syntax: QUIT [<message>]
         """
 
-        self.push(Quit(message), "QUIT")
+        self.fire(QUIT(message))
 
         return "Okay"
 
@@ -81,7 +81,7 @@ class Irc(BasePlugin):
         """
 
         self.cmdQUIT(source, target, message)
-        self.push(Terminate(), target=self.env.bot)
+        self.fire(Terminate(), self.env.bot)
 
         return "Terminating"
 
@@ -91,6 +91,6 @@ class Irc(BasePlugin):
         Syntax: NICK <newnick>
         """
 
-        self.push(Nick(nick), "NICK")
+        self.fire(NICK(nick))
 
         return "Okay"
