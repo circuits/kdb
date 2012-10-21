@@ -28,7 +28,7 @@ class Drone(BasePlugin):
             self.fire(NICK(gethostname()))
 
     @handler("connected")
-    def onCONNECTED(self):
+    def onCONNECTED(self, *args):
         if self.env.bot.auth["nick"] != gethostname():
             self.fire(NICK(gethostname()))
 
