@@ -30,7 +30,7 @@ class GreetingsCommands(CommandHandler):
         else:
             return "'%s' is already one of my greetings!" % greeting
 
-class Irc(BasePlugin):
+class Greeting(BasePlugin):
 
     """Greeting plugin
 
@@ -42,7 +42,7 @@ class Irc(BasePlugin):
     """
 
     def __init__(self, *args, **kwargs):
-        super(Irc, self).__init__(*args, **kwargs)
+        super(Greeting, self).__init__(*args, **kwargs)
 
         self._history = {}
 
