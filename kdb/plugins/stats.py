@@ -191,6 +191,6 @@ class Stats(BasePlugin):
     def onREAD(self, line):
         self.tin += len(line) + 2
 
-    @handler("send", filter=True, channel="bot")
-    def onSEND(self, data):
+    @handler("write", filter=True, channel="bot")
+    def onWRITE(self, data):
         self.tout += len(data)
