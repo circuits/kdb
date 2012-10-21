@@ -14,6 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from kdb.plugin import BasePlugin
 
+
 class Core(BasePlugin):
     "Core and Plugin Management"
 
@@ -52,10 +53,10 @@ class Core(BasePlugin):
         """
 
         if plugin not in self.env.plugins:
-            msg = "ERROR: Plugin '%s' is not loaded" % plugin
-
-        yield self.env.unloadPlugin(plugin)
-        yield self.env.loadPlugin(plugin)
+            yield "ERROR: Plugin '%s' is not loaded" % plugin
+        else:
+            yield self.env.unloadPlugin(plugin)
+            yield self.env.loadPlugin(plugin)
 
     def cmdUNLOAD(self, source, target, plugin):
         """Unload an already loaded plugin
