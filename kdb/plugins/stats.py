@@ -154,7 +154,7 @@ class Stats(BasePlugin):
         Syntax: VERSION
         """
 
-        me == self.env.bot.auth["nick"]
+        me = self.env.bot.auth["nick"]
         name = self.env.config.get("bot", "name", "Unknown")
 
         msg = "%s [ %s ] v%s by %s - %s - %s" % (
