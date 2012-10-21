@@ -181,7 +181,7 @@ class Stats(BasePlugin):
 
         return msg
 
-    @handler("PostCommand", filter=True)
+    @handler("post_command", filter=True)
     def onPOSTCOMMAND(self, command, tokens):
         if not self.commands.has_key(command):
             self.commands[command] = 0
