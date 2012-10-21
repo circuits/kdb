@@ -12,8 +12,9 @@ any replies generated.
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+from collections import deque
+
 from circuits import handler
-from pymills.datatypes import Stack
 from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
@@ -33,7 +34,7 @@ class RMessage(BasePlugin):
     def __init__(self, env):
         super(RMessage, self).__init__(env)
 
-        self._rlog = Stack(5)
+        self._rlog = deque([], 5)
 
     def cmdRLOG(self, source, target):
         """View Remote Log
@@ -45,7 +46,7 @@ class RMessage(BasePlugin):
 
     @handler("message", channel="remote")
     def remote_message(self, source="anonymous", target=None, message=""):
-        self._rlog.push(message)
+        self._rlog.append(message)
 
         ourself = self.env.bot.auth["nick"]
 
@@ -57,6 +58,6 @@ class RMessage(BasePlugin):
             if target is None:
                 target = ourself
 
-            r = self.fire(PRIVMSG(source, target, message)
+            r = self.fire(PRIVMSG(source, target, message))
             reply = r or ""
             return reply.strip()
