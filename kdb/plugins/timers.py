@@ -13,21 +13,16 @@ __version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import handler, Event, Timer
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
-class Message(Event):
-    """Message Event
-
-    args: target, message
-    """
 
 class Timers(BasePlugin):
     "Timers"
 
     def timer(self, target, message):
-        self.push(Message(target, message), "PRIVMSG")
+        self.fire(PRIVMSG(target, message))
 
     def cmdTIMER(self, source, target, length, message="Hello World"):
         """Create a new time with the given length and message
@@ -40,6 +35,6 @@ class Timers(BasePlugin):
         except ValueError:
             return  "Invalid length specified"
 
-        self += Timer(length, Message(source, message), "timer", self)
+        self += Timer(length, PRIVMSG(source, message), "timer", self)
 
         return "Okay timer set"

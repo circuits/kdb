@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 from socket import gethostname
 
 from circuits import handler
-from circuits.net.protocols.irc import Nick
+from circuits.net.protocols.irc import NICK
 
 from kdb.plugin import BasePlugin
 
@@ -25,14 +25,14 @@ class Drone(BasePlugin):
         super(Drone, self).__init__(*args, **kwargs)
 
         if self.env.bot.auth["nick"] != gethostname():
-            self.push(Nick(gethostname()), "NICK")
+            self.fire(NICK(gethostname()))
 
     @handler("connected")
     def onCONNECTED(self):
         if self.env.bot.auth["nick"] != gethostname():
-            self.push(Nick(gethostname()), "NICK")
+            self.fire(NICK(gethostname()))
 
     @handler("nicksollision")
     def onNICKCOLLISION(self):
         if self.env.bot.auth["nick"] != gethostname():
-            self.push(Nick(gethostname()), "NICK")
+            self.fire(NICK(gethostname()))

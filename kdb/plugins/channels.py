@@ -12,7 +12,7 @@ __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import handler
-from circuits.net.protocols.irc import Join, Part
+from circuits.net.protocols.irc import JOIN, PART
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -59,7 +59,7 @@ class Channels(BasePlugin):
 
     def joinchannels(self):
         for channel in self.mychannels:
-            self.push(Join(channel), "JOIN")
+            self.fire(JOIN(channel))
 
     def cmdJOIN(self, source, target, channel):
         """Join the specified channel
@@ -67,7 +67,7 @@ class Channels(BasePlugin):
         Syntax: JOIN <channel>
         """
 
-        self.push(Join(channel), "JOIN")
+        self.fire(JOIN(channel))
 
         return "Okay"
 
@@ -77,7 +77,7 @@ class Channels(BasePlugin):
         Syntax: PART <channel> [<message>]
         """
 
-        self.push(Part(channel, message), "PART")
+        self.fire(PART(channel, message))
 
         return "Okay"
 

@@ -11,7 +11,7 @@ plugins. Plugins should sub-class BasePlugin.
 import types
 import inspect
 
-from circuits.net.protocols.irc import Message, Notice
+from circuits.net.protocols.irc import PRIVMSG, NOTICE
 from circuits import handler, Event, Component
 
 from pymills.misc import backMerge
@@ -121,9 +121,9 @@ class BasePlugin(Component):
                         target = target[0]
                     if type(r) == list or type(r) is types.GeneratorType:
                         for line in r:
-                            self.push(Message(target, line), "PRIVMSG")
+                            self.fire(PRIVMSG(target, line))
                     else:
-                        self.push(Message(target, r), "PRIVMSG")
+                        self.fire(PRIVMSG(target, r))
                 return r
 
     @handler("notice", filter=True)
@@ -139,17 +139,17 @@ class BasePlugin(Component):
                     target = target[0]
                 if type(r) == list or type(r) is types.GeneratorType:
                     for line in r:
-                        self.push(Notice(target, line), "NOTICE")
+                        self.fire(NOTICE(target, line))
                 else:
-                    self.push(Notice(target, r), "NOTICE")
+                    self.fire(NOTICE(target, r))
 
     def unknownCommand(self, source, command):
-        self.push(Notice(target, "Unknown command: %s" % command), "NOTICE")
+        self.fire(NOTICE(target, "Unknown command: %s" % command))
 
     def syntaxError(self, source, command, message, args):
-        self.push(Notice(source, "Syntax error (%s): %s" % (
-            command, message)), "NOTICE")
-        self.push(Notice(source, "Expected: %s" % " ".join(args)), "NOTICE")
+        self.fire(NOTICE(source, "Syntax error (%s): %s" % (
+            command, message)))
+        self.fire(NOTICE(source, "Expected: %s" % " ".join(args)))
 
     def processCommand(self, source, target, message):
         tokens = message.split(" ")
@@ -214,7 +214,7 @@ class BasePlugin(Component):
                                 if x is not None])
 
         if r:
-            self.push(Command(command, tokens), "PostCommand")
+            self.fire(Command(command, tokens), "PostCommand")
 
         return r
 

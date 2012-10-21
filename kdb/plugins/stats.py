@@ -187,10 +187,10 @@ class Stats(BasePlugin):
             self.commands[command] = 0
         self.commands[command] += 1
 
-    @handler("read", filter=True, target="bot")
+    @handler("read", filter=True, channel="bot")
     def onREAD(self, line):
         self.tin += len(line) + 2
 
-    @handler("send", filter=True, target="bot")
+    @handler("send", filter=True, channel="bot")
     def onSEND(self, data):
         self.tout += len(data)

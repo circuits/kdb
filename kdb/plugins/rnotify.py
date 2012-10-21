@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 from cPickle import loads
 
 from circuits import handler
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
@@ -32,7 +32,7 @@ class Notify(BasePlugin):
     Depends on: remote
     """
 
-    @handler("scmupdate", target="remote")
+    @handler("scmupdate", channel="remote")
     def remote_scmupdate(self, channel, data):
         channel = channel or self.env.config.get("remote", "channel", None)
 
@@ -49,22 +49,22 @@ class Notify(BasePlugin):
                 d["files"] = " ".join(files)
 
             msg = SCM_UPDATE_TPL % d
-            self.push(Message(channel, msg), "PRIVMSG")
+            self.fire(PRIVMSG(channel, msg))
 
             return "Message sent to %s" % channel
         else:
             return "Message not received. Remote Channel not configured."
 
-    @handler("notify", target="remote")
+    @handler("notify", channel="remote")
     def remote_notify(self, source="unknown", channel=None, message=""):
         channel = channel or self.env.config.get("remote", "channel", None)
 
         if channel is not None:
 
-            self.push(Message(channel, "Message from %s:" % source), "PRIVMSG")
+            self.fire(PRIVMSG(channel, "Message from %s:" % source))
 
             for line in message.split("\n"):
-                self.push(Message(channel, line), "PRIVMSG")
+                self.fire(PRIVMSG(channel, line))
 
             return "Message sent to %s" % channel
         else:

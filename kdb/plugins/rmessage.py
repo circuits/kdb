@@ -14,7 +14,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 from circuits import handler
 from pymills.datatypes import Stack
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin
 
@@ -43,7 +43,7 @@ class RMessage(BasePlugin):
 
         return ["Last 5 remote messages:"] + list(self._rlog)
 
-    @handler("message", target="remote")
+    @handler("message", channel="remote")
     def remote_message(self, source="anonymous", target=None, message=""):
         self._rlog.push(message)
 
@@ -51,14 +51,12 @@ class RMessage(BasePlugin):
 
         if not (target is None or target == ourself):
             message = "<%s> %s" % (source, message)
-            e = Message(target, message)
-            self.push(e, "PRIVMSG")
+            self.fire(PRIVMSG(target, message))
             return "Message to %s" % target
         else:
             if target is None:
                 target = ourself
 
-            e = Message(source, target, message)
-            r = self.send(e, "message")
+            r = self.fire(PRIVMSG(source, target, message)
             reply = r or ""
             return reply.strip()

@@ -17,7 +17,7 @@ import marshal
 from time import time
 
 from circuits import handler, Event
-from circuits.net.protocols.irc import Message
+from circuits.net.protocols.irc import PRIVMSG
 
 from kdb.plugin import BasePlugin, CommandHandler
 
@@ -78,10 +78,10 @@ class Irc(BasePlugin):
         if nick in self._history:
             if (time() - self._history[nick]) > (60*60*24*3):
                 msg = "Welcome back %s :)" % nick
-                self.push(Message(channel, msg), "PRIVMSG")
+                self.fire(PRIVMSG(channel, msg))
         else:
             msg = "Hello there %s, Welcome to %s" % (nick, channel)
-            self.push(Message(channel, msg), "PRIVMSG")
+            self.fire(PRIVMSG(channel, msg))
 
         self._history[nick] = time()
 

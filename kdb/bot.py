@@ -78,14 +78,14 @@ class Bot(Component):
         self += (client + irc)
 
     def ready(self, component):
-        self.push(Connect(self.host, self.port, self.ssl), "connect")
+        self.fire(Connect(self.host, self.port, self.ssl))
 
     def reconnect(self):
-        self.push(Connect(self.host, self.port, self.ssl), "connect")
+        self.fire(Connect(self.host, self.port, self.ssl))
     
-    def connected(self, host, port):
+    def connected(self, host, port=None):
         if "password" in self.auth:
-            self.push(PASS(auth["password"]))
+            self.fire(PASS(auth["password"]))
 
         auth = self.auth.get
 
@@ -93,17 +93,17 @@ class Bot(Component):
         host = auth("host")
         server = auth("server")
         name = auth("name")
-        self.push(USER(ident, host, server, name))
+        self.fire(USER(ident, host, server, name))
 
         nick = auth("nick")
-        self.push(NICK(nick))
+        self.fire(NICK(nick))
 
     def disconnected(self):
         if self.terminate:
             raise SystemExit(0)
 
         s = 60
-        self.push(Log("info", "Disconnected. Reconnecting in %ds" % s))
+        self.fire(Log("info", "Disconnected. Reconnecting in %ds" % s))
         Timer(s, Reconnect(), "reconnect", self).register(self)
 
     def terminate(self):
