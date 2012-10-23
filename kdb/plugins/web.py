@@ -18,9 +18,7 @@ from os.path import dirname, abspath
 import mako
 from mako.lookup import TemplateLookup
 
-from circuits import handler, Event
 from circuits.net.protocols import irc
-from circuits.tools import graph, inspect
 from circuits.web import Server, Controller, Static, Logger
 
 import kdb
@@ -37,6 +35,7 @@ DEFAULTS = {
         "software": "kdb/%s" % kdb.__version__
 }
 
+
 def render(name, **d):
     try:
         d.update(DEFAULTS)
@@ -44,6 +43,7 @@ def render(name, **d):
         return tpl.render(**d)
     except:
         return mako.exceptions.html_error_template().render()
+
 
 class Root(Controller):
 
@@ -58,21 +58,28 @@ class Root(Controller):
         return render(self.tpl)
 
     def message(self, message):
+        import pdb; pdb.set_trace()
+
         ourself = self.env.bot.auth["nick"]
 
-        e = irc.Message("anonymous", ourself, message)
-        r = self.fire(e, self.env.bot)
+        event = irc.Message("@anonymous", ourself, message)
+        value = self.fire(event, self.env.bot.channel)
+        for _ in self.wait(event.name):
+            yield _
 
-        if not r:
-            r = "No response"
-        elif type(r) is list:
-            r = "\n".join(r)
+        import pdb; pdb.set_trace()
 
-        r = irc.strip(r, True)
-        r = r.replace("\n", "<br>")
-        r = escape(r)
+        if not value:
+            response = "No response"
+        elif type(value) is list:
+            response = "\n".join(value)
 
-        return r
+        response = irc.strip(response, True)
+        response = response.replace("\n", "<br>")
+        response = escape(response)
+
+        yield response
+
 
 class Web(BasePlugin):
 
@@ -95,3 +102,4 @@ class Web(BasePlugin):
                 + Logger(logger=self.env.log)
                 + Root(self.env)
                 )
+
