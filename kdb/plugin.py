@@ -114,7 +114,7 @@ class BasePlugin(Component):
         if addressed:
             r = self.processCommand(source, target, message)
             if r is not None:
-                if "@" in source:
+                if "@anonymous" in source:
                     return r
                 else:
                     if type(target) == tuple:
