@@ -5,10 +5,10 @@
 """Main Module"""
 
 
-import os
 import signal
 import optparse
 from time import sleep
+from os import path, kill
 
 from circuits import handler, Event, BaseComponent, Debugger
 
@@ -85,12 +85,12 @@ class Startup(BaseComponent):
     @handler("started")
     def _on_started(self, component):
         if not self.command == "init":
-            if not os.path.exists(self.env.path):
+            if not path.exists(self.env.path):
                 raise Error("Environment does not exist!")
             else:
                 self.fire(env.Load())
         else:
-            if os.path.exists(self.env.path):
+            if path.exists(self.env.path):
                 raise Error("Environment already exists!")
             else:
                 self.fire(Command(), self.command, self)
@@ -99,21 +99,21 @@ class Startup(BaseComponent):
     def _on_start(self):
         if self.opts.daemon:
             pidfile = self.env.config.get("general", "pidfile", "kdb.pid")
-            Daemon(pidfile, self.env.path).register(self)
+            Daemon(pidfile, path.abspath(self.env.path)).register(self)
 
         Core(self.env).register(self)
 
     @handler("stop")
     def _on_stop(self):
         pidfile = self.env.config.get("general", "pidfile")
-        if not os.path.isabs(pidfile):
-            pidfile = os.path.join(self.env.path, pidfile)
+        if not path.isabs(pidfile):
+            pidfile = path.join(self.env.path, pidfile)
 
         f = open(pidfile, "r")
         pid = int(f.read().strip())
         f.close()
 
-        os.kill(pid, signal.SIGTERM)
+        kill(pid, signal.SIGTERM)
 
     @handler("restart")
     def _on_restart(self):
@@ -124,14 +124,14 @@ class Startup(BaseComponent):
     @handler("rehash")
     def _on_rehash(self):
         pidfile = self.env.config.get("general", "pidfile")
-        if not os.path.isabs(pidfile):
-            pidfile = os.path.join(self.env.path, pidfile)
+        if not path.isabs(pidfile):
+            pidfile = path.join(self.env.path, pidfile)
 
         f = open(pidfile, "r")
         pid = int(f.read())
         f.close()
 
-        os.kill(pid, signal.SIGHUP)
+        kill(pid, signal.SIGHUP)
 
     @handler("init")
     def _on_init(self):
