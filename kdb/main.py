@@ -82,10 +82,6 @@ class Startup(BaseComponent):
     def _on_environment_ready(self):
         self.fire(Command.create(self.command))
 
-    @handler("error")
-    def _on_error(self, *args):
-        raise SystemExit(-1)
-
     @handler("started")
     def _on_started(self, component):
         if not self.command == "init":
