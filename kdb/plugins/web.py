@@ -58,16 +58,10 @@ class Root(Controller):
         return render(self.tpl)
 
     def message(self, message):
-        import pdb; pdb.set_trace()
-
         ourself = self.env.bot.auth["nick"]
 
         event = irc.Message("@anonymous", ourself, message)
-        value = self.fire(event, self.env.bot.channel)
-        for _ in self.wait(event.name):
-            yield _
-
-        import pdb; pdb.set_trace()
+        value = yield self.call(event, self.env.bot)
 
         if not value:
             response = "No response"
