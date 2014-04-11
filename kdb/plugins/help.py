@@ -1,6 +1,7 @@
-# Module:   help
+# Plugin:   help
 # Date:     30th June 2006
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """Help Messages
 
@@ -9,15 +10,130 @@ of other plugins. It retrieves the __doc__ of the
 specified command.
 """
 
+
 __version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from inspect import ismethod, getmembers, getmodule
 
-from kdb.plugin import BasePlugin
+from itertools import chain
+from inspect import getmodule
+
+
+from circuits import Component
+
+from funcy import first
+
+
+from ..plugin import BasePlugin
+
+
+def format_msg(msg):
+    return (
+        msg.strip()
+        .replace("\t\t", "\t")
+        .replace("\t", "   ")
+        .split("\n")
+    )
+
+
+def get_plugin_help(plugin):
+    return getattr(plugin, "__doc__", None)
+
+
+def get_command_help(plugin, command):
+    method = getattr(plugin, command, None)
+    if method is not None:
+        return getattr(method, "__doc__", None)
+
+
+class Commands(Component):
+
+    channel = "commands"
+
+    def commands(self, source, target, args):
+        """Display a list of commands for a given plugin or all plugins.
+
+        Syntax: COMMANDS [<plugin>]
+        """
+
+        plugins = self.parent.bot.plugins
+        commands = self.parent.bot.commands
+
+        if not args:
+            return "All available commands: {0:s}".format(
+                " ".join(chain(*commands.values()))
+            )
+
+        q = first(args.split(" ", 1))
+
+        if q not in plugins:
+            return "No commands for {0:s} or {0:s} is not loaded".format(q)
+
+        return "Available commands for {0:s}: {1:s}".format(
+            q, " ".join(commands[q])
+        )
+
+    def help(self, source, target, args):
+        """Display help for the given command or plugin.
+
+        Syntax: HELP [<command>] | [<plugin>]
+        """
+
+        plugins = self.parent.bot.plugins
+        command = self.parent.bot.command
+
+        if not args:
+            q = "help"
+        else:
+            q = first(args.split(" ", 1))
+
+        if q in plugins:
+            msg = get_plugin_help(plugins[q])
+        elif q in command:
+            msg = get_command_help(command[q], q)
+        else:
+            msg = None
+
+        if msg is None:
+            msg = (
+                "No help available for: {0:s}. "
+                "To get a list of plugins, type: plugins"
+            ).format(q)
+
+        return format_msg(msg)
+
+    def info(self, source, target, args):
+        """Display info for the given plugin.
+
+        Syntax: INFO <plugin>
+        """
+
+        plugins = self.parent.bot.plugins
+
+        if not args:
+            return "No plugin specified."
+
+        name = first(args.split(" ", 1)).lower()
+
+        if name in plugins:
+            m = getmodule(plugins[name])
+            description = m.__dict__.get("__doc__", name)
+            description = description.split("\n", 1)[0]
+            version = m.__dict__.get("__version__", "Unknown")
+            author = m.__dict__.get("__author__", "Unknown")
+            msg = "{0:s} - {1:s} v{2:s} by {3:s}".format(
+                name, description, version, author
+            )
+        else:
+            msg = (
+                "No info available for: {0:s}. "
+                "To get a list of plugins, type: plugins"
+            ).format(name)
+
+        return format_msg(msg)
+
 
 class Help(BasePlugin):
-
     """Help plugin
 
     Provides commands to display helpful infomration about
@@ -25,109 +141,7 @@ class Help(BasePlugin):
     See: commands help
     """
 
-    def cmdCOMMANDS(self, source, target, s=None):
-        """Display a list of commands for 'plugin'.
-        
-        Syntax: COMMANDS <plugin>
-        """
+    def init(self, *args, **kwargs):
+        super(Help, self).init(*args, **kwargs)
 
-        msg = None
-
-        if s is None:
-            plugins = ["help"]
-        elif s == "*":
-            plugins = [x.lower() for x in self.env.plugins.keys()]
-        else:
-            plugins = [s.lower()]
-
-        commands = []
-        for plugin in plugins:
-            if plugin in self.env.plugins:
-                for o in self.env.plugins[plugin]:
-                    commands.extend([x[0][3:].lower() for x in getmembers(
-                        o, lambda x: ismethod(x) and
-                        callable(x) and x.__name__.startswith("cmd"))])
-
-        if not s == "*":
-            msg = "Available commands for %s: %s" % (
-                plugin, " ".join(commands))
-        else:
-            msg = "All available commands: %s" % " ".join(commands)
-
-        if msg is None:
-            msg = ["No commands for %s or %s is not loaded" % s]
-
-        return msg
-
-    def cmdHELP(self, source, target, s=None):
-        """Display help for the given command or plugin.
-        
-        Syntax: HELP <s>
-        """
-
-        msg = None
-
-        if s is None:
-            s = "help"
-
-        sl = s.lower()
-        su = s.upper()
-
-        if sl in self.env.plugins:
-            for plugin in self.env.plugins[sl]:
-                if plugin.__class__.__name__.lower() == sl:
-                    msg = plugin.__doc__
-        else:
-            for modules in self.env.plugins.values():
-                for plugin in modules:
-                    if hasattr(plugin, "cmd%s" % su):
-                        msg = getattr(
-                                getattr(plugin, "cmd%s" % su),
-                                "__doc__") or "No help available for '%s'. " + \
-                                "To get a list of commands, " + \
-                                "type: commands %s" % (
-                                        s, plugin.__name__.lower())
-                    break
-
-        if msg is None:
-            msg = "No help available for '%s'. To get a list of plugins, type: plugins" % s
-
-        msg = msg.strip()
-        msg = msg.replace("\t\t", "\t")
-        msg = msg.replace("\t", "   ")
-        msg = msg.split("\n")
-
-        if msg is None:
-            msg = ["ERROR: Can't find help for '%s'" % s]
-
-        return msg
-
-    def cmdINFO(self, source, target, plugin):
-        """Display info for the given plugin.
-        
-        Syntax: INFO plugin
-        """
-
-        msg = None
-
-        plugin = plugin.lower()
-
-        if plugin in self.env.plugins:
-            m = getmodule(self.env.plugins[plugin])
-            name = plugin
-            description = m.__dict__.get("__doc__", plugin)
-            description = description.split("\n", 1)[0]
-            version = m.__dict__.get("__version__", "Unknown")
-            author = m.__dict__.get("__author__", "Unknown")
-            msg = "%s - %s v%s by %s" % (
-                    name, description,
-                    version, author)
-
-        if msg is None:
-            msg = "No info available for '%s'. To get a list of plugins, type: plugins" % s
-
-        msg = msg.strip()
-        msg = msg.replace("\t", "   ")
-        msg = msg.split("\n")
-
-        return msg
+        Commands().register(self)

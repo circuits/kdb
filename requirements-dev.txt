@@ -1,0 +1,16 @@
+Mako==0.9.1
+funcy==0.10
+procname==0.3
+pymetar==0.19
+pymills==3.4.0
+simpleeval==0.8
+google-api-python-client==1.2
+
+# Development version of circuits
+-e hg+https://bitbucket.org/circuits/circuits#egg=circuits
+
+pudb==2013.5.1
+tox==1.6.1
+pytest==2.4.2
+pytest-cov==1.6
+pytest-sugar==0.2.2

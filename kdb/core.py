@@ -11,32 +11,47 @@ configuration and terminate the system.
 """
 
 from signal import SIGINT, SIGHUP, SIGTERM
-from traceback import extract_tb, format_list
 
-from circuits.app.log import Log
-from circuits.net.protocols.irc import Quit
-from circuits import handler, BaseComponent
+
+from circuits.protocols.irc import quit
+from circuits import handler, BaseComponent, Timer
+
+
+from .bot import Bot
+from .data import Data
+from .utils import log
+from .plugins import Plugins
+from .events import terminate
+
 
 class Core(BaseComponent):
 
     channel = "core"
 
-    def __init__(self, env):
-        super(Core, self).__init__()
+    def init(self, config):
+        self.config = config
 
-        self.env = env
+        self.data = Data()
 
-    @handler("registered")
-    def _on_registered(self, component, manager):
-        if component == self:
-            self.env.loadPlugins()
+        self.bot = Bot(self.config).register(self)
+
+        self.plugins = Plugins(
+            init_args=(self.bot, self.data, self.config)
+        ).register(self)
+
+        log("Loading plugins...")
+        for plugin in self.config["plugins"]:
+            self.plugins.load(plugin)
 
     @handler("signal", channel="*")
-    def signal(self, signal, track):
-        if signal == SIGHUP:
-            self.fire(LoadConfig(), self.env.config)
-        elif signal in (SIGINT, SIGTERM):
-            self.fire(Quit("Received SIGTERM, terminating..."), self.env.bot)
+    def signal(self, signo, stack):
+        if signo == SIGHUP:
+            self.config.reload_config()
+        elif signo in (SIGINT, SIGTERM):
+            self.bot.terminate = True
+            Timer(5, terminate()).register(self)
+            self.fire(quit("Received SIGTERM, terminating..."), self.bot)
+        return True
 
     @handler("terminate")
     def _on_terminate(self):

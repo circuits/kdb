@@ -1,6 +1,7 @@
-# Module:   autoid
-# Date:     03th July 2006
+# Plugin:   autoid
+# Date:     3rd July 2006
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """Automatic Identification
 
@@ -9,59 +10,68 @@ if it's nick is registered. The configuration is
 provided in the configuration file.
 """
 
+
 __version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import re
 
-from circuits.net.protocols.irc import PRIVMSG
+from re import match
 
-from kdb.plugin import BasePlugin
+
+from circuits import handler
+from circuits.protocols.irc import PRIVMSG
+
+
+from ..plugin import BasePlugin
+
 
 class AutoID(BasePlugin):
     "Automatic Identification"
 
-    def notice(self, event, source, target, message):
+    @handler("notice")
+    def _on_notice(self, event, source, target, message):
         """Automatically login to pircsrv
 
         The password is stored in the config file.
         The service nickname is stored in the config file.
         The login pattern is stored in the config file.
 
-        Example:
-        [autoid]
-        nickserv = pronick
-        pattern = .*registered nick.*login
-        command = LOGIN %s
-        password = semaj2891
+        Example::
+
+            [autoid]
+            nickserv = pronick
+            pattern = .*registered nick.*login
+            command = LOGIN {0:s}
+            password = password
         """
 
-        if self.env.config.has_section("autoid"):
+        if "autoid" not in self.config:
+            return
 
-            if self.env.config.has_option(
-                    "autoid", "nickserv"):
+        if "nickserv" not in self.config["autoid"]:
+            return
 
-                nickserv = self.env.config.get(
-                        "autoid", "nickserv")
+        nickserv = self.config["autoid"]["nickserv"]
 
-                if source[0].lower() == nickserv.lower():
+        if not source[0].lower() == nickserv.lower():
+            return
 
-                    if self.env.config.has_option(
-                            "autoid", "pattern"):
+        if "pattern" not in self.config["autoid"]:
+            return
 
-                        pattern = self.env.config.get(
-                                "autoid", "pattern")
+        pattern = self.config["autoid"]["pattern"]
 
-                        if re.match(pattern, message):
+        m = match(pattern, message)
+        if m is None:
+            return
 
-                            if self.env.config.has_option(
-                                    "autoid", "command"):
+        if "command" not in self.config["autoid"]:
+            return
 
-                                command = self.env.config.get(
-                                        "autoid", "command")
+        if "password" not in self.config["autoid"]:
+            return
 
-                                password = self.env.config.get(
-                                        "autoid", "password")
+        command = self.config["autoid"]["command"]
+        password = self.config["autoid"]["password"]
 
-                                self.fire(
-                                        PRIVMSG(nickserv, command % password))
+        self.fire(PRIVMSG(nickserv, command.format(password)))

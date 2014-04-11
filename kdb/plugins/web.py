@@ -1,38 +1,49 @@
-# Module:   web
+# Plugin:   web
 # Date:     18th March 2009
 # Author:   James Mills, prologic at shortcircuit dot net dot au
 
-"""Web
+
+"""Web Interface
 
 This plugin provides a Web Interface to the system allowing the system
 to be interacted with via a Web Browser.
 """
 
+
 __version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+
 from os import path
 from cgi import escape
+from traceback import format_exc
 from os.path import dirname, abspath
+
+
+from circuits.protocols.irc import strip
+from circuits.web import Server, Controller, Static
 
 import mako
 from mako.lookup import TemplateLookup
 
-from circuits.net.protocols import irc
-from circuits.web import Server, Controller, Static, Logger
 
 import kdb
-from kdb.plugin import BasePlugin
+from ..utils import log
+from ..events import cmd
+from ..bot import wrapvalue
+from ..plugin import BasePlugin
+
 
 DOCROOT = abspath(path.join(dirname(__file__), "../../web"))
 
 templates = TemplateLookup(
     directories=[path.join(DOCROOT, "tpl")],
     module_directory="/tmp",
-    output_encoding="utf-8")
+    output_encoding="utf-8"
+)
 
 DEFAULTS = {
-        "software": "kdb/%s" % kdb.__version__
+    "software": "kdb/%s" % kdb.__version__
 }
 
 
@@ -49,34 +60,35 @@ class Root(Controller):
 
     tpl = "index.html"
 
-    def __init__(self, env):
+    def __init__(self, bot, config):
         super(Root, self).__init__()
 
-        self.env = env
+        self.bot = bot
+        self.config = config
 
     def index(self):
         return render(self.tpl)
 
     def message(self, message):
-        ourself = self.env.bot.auth["nick"]
+        tokens = message.split(" ", 1)
+        command = tokens[0].encode("utf-8").lower()
+        args = (len(tokens) > 1 and tokens[1]) or ""
 
-        event = irc.Message("@anonymous", ourself, message)
-        value = yield self.call(event, self.env.bot)
+        if command not in self.bot.command:
+            yield log("Unknown Command: {0:s}", command)
+        else:
+            event = cmd.create(command, None, None, args)
 
-        if not value:
-            response = "No response"
-        elif type(value) is list:
-            response = "\n".join(value)
-
-        response = irc.strip(response, True)
-        response = response.replace("\n", "<br>")
-        response = escape(response)
-
-        yield response
+            try:
+                value = yield self.call(event, "commands")
+                for msg in wrapvalue(command, event, value.value):
+                    yield escape(strip(msg))
+            except Exception as error:
+                yield log("ERROR: {0:s}: ({1:s})", error, repr(message))
+                log(format_exc())
 
 
 class Web(BasePlugin):
-
     """Web Plugin
 
     This plugin provides no user commands. This plugin provides
@@ -84,16 +96,21 @@ class Web(BasePlugin):
     interacted with via a Web Browser.
     """
 
-    def __init__(self, env):
-        super(Web, self).__init__(env)
+    def init(self, *args, **kwargs):
+        super(Web, self).init(*args, **kwargs)
 
-        self.bind = self.env.config.get("web", "bind", "0.0.0.0:8000")
-        self.docroot = self.env.config.get("web", "docroot", DOCROOT)
+        self.bind = self.config.get(
+            "web", {}
+        ).get(
+            "bind", "0.0.0.0:8000"
+        )
 
-        self += (
-                Server(self.bind)
-                + Static(docroot=self.docroot)
-                + Logger(logger=self.env.log)
-                + Root(self.env)
-                )
+        self.docroot = self.config.get(
+            "web", {}
+        ).get(
+            "docroot", DOCROOT
+        )
 
+        Server(self.bind).register(self)
+        Static(docroot=self.docroot).register(self)
+        Root(self.bot, self.config).register(self)

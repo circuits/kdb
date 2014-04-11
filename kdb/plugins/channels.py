@@ -1,6 +1,7 @@
-# Module:   channels
-# Date:     03th July 2006
+# Plugin:   channels
+# Date:     3th July 2006
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """Channel Management
 
@@ -8,82 +9,155 @@ This plugin manages channels and what channels the bot
 joins automatically.
 """
 
+
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from circuits import handler
-from circuits.net.protocols.irc import JOIN, PART
 
-from kdb.plugin import BasePlugin, CommandHandler
+from circuits import handler, Component
+from circuits.protocols.irc import JOIN, PART
 
-class ChannelsCommands(CommandHandler):
+from funcy import first, second
 
-    def cmdADD(self, source, target, channel):
+
+from ..utils import log
+from ..events import cmd
+from ..plugin import BasePlugin
+
+
+DEFAULTS = ["#circuits"]
+
+
+class ChannelCommands(Component):
+
+    channel = "commands:channels"
+
+    def add(self, source, target, args):
+        """Add a channel to startup join list.
+
+        Syntax: ADD <channel>
+        """
+
+        if not args:
+            return "No channels specified."
+
+        channel = first(args.split(" ", 1))
+
         if channel not in self.parent.channels:
             self.parent.channels.append(channel)
-            return "Okay, added %s to startup " \
-                    "join list" % channel
-        else:
-            return "%s is already in my startup " \
-                    "join list" % channel
+            return "Added {0:s} to startup join list".format(channel)
+        return "{0:s} already in startup join list".format(channel)
 
-    def cmdDEL(self, source, target, channel):
-        if channel not in self.parent.channels:
-            return "%s isn't in my startup join list" % channel
-        else:
+    def remove(self, source, target, args):
+        """Remove a channel from startup join list.
+
+        Syntax: REMOVE <channel>
+        """
+
+        if not args:
+            return "No channels specified."
+
+        channel = first(args.split(" ", 1))
+
+        if channel in self.parent.channels:
             self.parent.channels.remove(channel)
-            return "Okay, removed %s from my " \
-                    "startup join list" % channel
+            return "{0:s} removed from startup join list".format(channel)
+        return "{0:s} not in join startup list".format(channel)
 
-    def cmdLIST(self, source, target):
-        return "I'm configured to join %s " \
-                "at startup" % ", ".join(self.parent.channels)
+    def list(self, source, target, args):
+        """List channels in startup join list.
+
+        Syntax: LIST
+        """
+
+        channels = self.parent.channels
+
+        return "Startup Join List: {0:s}".format(" ".join(channels))
+
+
+class Commands(Component):
+
+    channel = "commands"
+
+    def __init__(self, *args, **kwargs):
+        super(Commands, self).__init__(*args, **kwargs)
+
+        ChannelCommands().register(self)
+
+    def channels(self, source, target, args):
+        """Manage channel startup join list
+
+        Syntax: CHANNELS <sub-command>
+
+        See: COMMANDS channels
+        """
+
+        if not args:
+            yield "No command specified."
+
+        tokens = args.split(" ", 1)
+        command, args = first(tokens), (second(tokens) or "")
+
+        event = cmd.create(command, source, target, args)
+
+        try:
+            yield self.call(event, "commands:channels")
+        except Exception as error:
+            yield "ERROR: {0:s}".format(error)
+
+    def join(self, source, target, args):
+        """Join the specified channel.
+
+        Syntax: JOIN <channel>
+        """
+
+        if not args:
+            return "No channel specified."
+
+        channel = first(args.split(" ", 1))
+
+        if channel:
+            msg = log("Joining channel: {0:s}", channel)
+            self.fire(JOIN(channel), "bot")
+        else:
+            msg = log("No channel specified.")
+
+        return msg
+
+    def part(self, source, target, args):
+        """Leave the specified channel
+
+        Syntax: PART <channel> [<message>]
+        """
+
+        if not args:
+            return "No channel specified."
+
+        tokens = args.split(" ", 1)
+        channel, message = first(tokens), second(tokens) or "Leaving"
+
+        self.fire(PART(channel, message), "bot")
+
 
 class Channels(BasePlugin):
     "Channel Management"
 
-    def __init__(self, *args, **kwargs):
-        super(Channels, self).__init__(*args, **kwargs)
+    def init(self, *args, **kwargs):
+        super(Channels, self).init(*args, **kwargs)
 
-        s = self.env.config.get("bot", "channels", None)
-        if s:
-            self.mychannels = [x.strip() for x in s.split(",") if x.strip()]
-        else:
-            self.mychannels = []
+        self.channels = self.config.get("channels", DEFAULTS)
+
+        Commands().register(self)
+
+    @handler("numeric")
+    def _on_numeric(self, source, target, numeric, args, message):
+        if numeric == 1:
+            self.joinchannels()
 
     def cleanup(self):
-        self.env.config.set("bot", "channels", ",".join(self.mychannels))
-        fp = open(self.env.config.filename, "w")
-        self.env.config.write(fp)
-        fp.close()
+        self.config["channels"] = self.channels
+        self.config.save_config()
 
     def joinchannels(self):
-        for channel in self.mychannels:
+        for channel in self.channels:
             self.fire(JOIN(channel))
-
-    def cmdJOIN(self, source, target, channel):
-        """Join the specified channel
-        
-        Syntax: JOIN <channel>
-        """
-
-        self.fire(JOIN(channel))
-
-        return "Okay"
-
-    def cmdPART(self, source, target, channel, message="Leaving"):
-        """Leave the specified channel
-        
-        Syntax: PART <channel> [<message>]
-        """
-
-        self.fire(PART(channel, message))
-
-        return "Okay"
-
-    def cmdCHANNELS(self, source, target, command, *args, **kwargs):
-        self.env.log.debug(source)
-        self.env.log.debug(target)
-        self.env.log.debug(command)
-        return ChannelsCommands(self)(command,
-                source, target, *args, **kwargs)
