@@ -1,6 +1,7 @@
-# Module:   spell
+# Plugin:   spell
 # Date:     30th June 2006
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """Spell Checker
 
@@ -9,35 +10,54 @@ can be used to check the spelling of words and
 give suggestions for incorrectly spelled words.
 """
 
+
 __version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import enchant
 
-from kdb.plugin import BasePlugin
+from enchant import request_dict
+
+
+from circuits import Component
+
+
+from ..plugin import BasePlugin
+
 
 DEFAULT_LANGUAGE = "en_US"
+
+
+class Commands(Component):
+
+    channel = "commands"
+
+    def spell(self, source, target, args):
+        """Check the spelling of the given word.
+
+        Syntax: SPELL <word>
+        """
+
+        if not args:
+            return "No word specified."
+
+        word = args
+
+        if self.parent.dictionary.check(word):
+            msg = "{0:s} is spelled correctly.".format(word)
+        else:
+            suggestions = self.parent.dictionary.suggest(word)
+            msg = "{0:s} ? Try: {1:s}".format(word, " ".join(suggestions))
+
+        return msg
+
 
 class Spell(BasePlugin):
     "Spell Checker"
 
-    def __init__(self, *args, **kwargs):
-        super(Spell, self).__init__(*args, **kwargs)
+    def init(self, *args, **kwargs):
+        super(Spell, self).init(*args, **kwargs)
 
         self.language = DEFAULT_LANGUAGE
-        self.d = d = enchant.request_dict(self.language)
+        self.dictionary = request_dict(self.language)
 
-    def cmdSPELL(self, source, target, word):
-        """Check the spelling of the given word
-        
-        Syntax: SPELL <word>
-        """
-
-        if self.d.check(word):
-            msg = "%s is spelled correctly." % word
-        else:
-            suggestions = self.d.suggest(word)
-            msg = "%s ? Try -> %s" % (
-                    word, ", ".join(suggestions))
-
-        return msg
+        Commands().register(self)

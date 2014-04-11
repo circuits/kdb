@@ -1,6 +1,7 @@
-# Module:   core
-# Date:     09th May 2005
+# Plugin:   core
+# Date:     9th May 2005
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """Core and Plugin Management
 
@@ -9,56 +10,83 @@ kdb's core. You can load/unload plugins on the fly and
 rehash kdb forcing it to re-load it's environment.
 """
 
+
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-from kdb.plugin import BasePlugin
+
+from circuits import Component
+
+from funcy import first
 
 
-class Core(BasePlugin):
-    "Core and Plugin Management"
+from ..utils import log
+from ..plugin import BasePlugin
+from ..plugins import load, unload
 
-    def cmdREHASH(self, source, target):
+
+class Commands(Component):
+
+    channel = "commands"
+
+    def rehash(self, source, target, args):
         """Reload environment
 
         Syntax: RELOAD
         """
 
-        self.env.reload()
-        msg = "Environment reloaded"
-        return msg
+        self.parent.config.reload_config()
+        return log("Configuration reloaded.")
 
-    def cmdPLUGINS(self, source, target):
+    def plugins(self, source, target, args):
         """List loaded plugins
 
         Syntax: PLUGINS
         """
 
-        plugins = self.env.plugins.keys()
-        msg = "Plugins loaded: %s" % ", ".join(plugins)
-        return msg
+        plugins = self.parent.bot.plugins
 
-    def cmdLOAD(self, source, target, plugin):
+        return "Plugins: {0:s}".format(" ".join(plugins.keys()))
+
+    def load(self, source, target, args):
         """Load a plugin
 
         Syntax: LOAD <plugin>
         """
 
-        return self.env.loadPlugin(plugin)
+        if not args:
+            yield "No plugin specified."
 
-    def cmdRELOAD(self, source, target, plugin):
+        plugin = first(args.split(" ", 1))
+
+        plugins = self.parent.bot.plugins
+
+        if plugin in plugins:
+            yield log("Plugin {0:s} already loaded!", plugin)
+        else:
+            yield self.fire(load(plugin), "plugins")
+
+    def reload(self, source, target, args):
         """Reload an already loaded plugin
 
         Syntax: RELOAD <plugin>
         """
 
-        if plugin not in self.env.plugins:
-            yield "ERROR: Plugin '%s' is not loaded" % plugin
-        else:
-            yield self.env.unloadPlugin(plugin)
-            yield self.env.loadPlugin(plugin)
+        if not args:
+            yield "No plugin specified."
 
-    def cmdUNLOAD(self, source, target, plugin):
+        plugin = first(args.split(" ", 1))
+
+        plugins = self.parent.bot.plugins
+
+        if plugin not in plugins:
+            yield log("Plugin {0:s} is not loaded!", plugin)
+        else:
+            yield self.fire(unload(plugin), "plugins")
+            yield
+            yield self.fire(load(plugin), "plugins")
+
+    def unload(self, source, target, args):
         """Unload an already loaded plugin
 
         Note: You cannot unload the "core" plugin.
@@ -66,7 +94,25 @@ class Core(BasePlugin):
         Syntax: UNLOAD <plugin>
         """
 
-        if plugin == "core":
-            return "ERROR: Unloading the core plugin is disallowed."
+        if not args:
+            yield "No plugin specified."
 
-        return self.env.unloadPlugin(plugin)
+        plugin = first(args.split(" ", 1))
+
+        plugins = self.parent.bot.plugins
+
+        if plugin not in plugins:
+            yield log("Plugin {0:s} is not loaded!", plugin)
+        elif plugin == "core":
+            yield log("Core plugin cannot be unloaded!")
+        else:
+            yield self.fire(unload(plugin), "plugins")
+
+
+class Core(BasePlugin):
+    "Core and Plugin Management"
+
+    def init(self, *args, **kwargs):
+        super(Core, self).init(*args, **kwargs)
+
+        Commands().register(self)

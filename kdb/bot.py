@@ -10,82 +10,122 @@ Network and reacts to IRC Events. The Bot Component consists
 of the TCPClient and IRC Components.
 """
 
-import socket
 
-from circuits.app.log import Log
-from circuits import Event, Component, Timer
-from circuits.net.sockets import TCPClient, Connect
-from circuits.net.protocols.irc import IRC, PASS, USER, NICK
+from socket import gethostname
+from traceback import format_exc
 
-###
-### Events
-###
 
-class Reconnect(Event):
-    "Reconnect Event"
+from circuits.net.events import connect
+from circuits.net.sockets import TCPClient
+from circuits import handler, BaseComponent
+from circuits.protocols.irc import (
+    IRC, NICK, NOTICE, PASS, PRIVMSG, USER
+)
 
-class Terminate(Event):
-    """Terminate Event"""
+from cidict import cidict
 
-###
-### Components
-###
 
-class Bot(Component):
-    """Bot(env, port=6667, address="127.0.0.1") -> Bot Component
+import kdb
+from .utils import log
+from .events import cmd
+from .plugin import BasePlugin
 
-    Arguments:
-       env     - System Environment
-       port    - irc port to connect to
-       address - irc server to connect to
-       ssl     - If True, enable SSL Encryption
-       bind    - (address, port) to bind to
-       auth    - Authentication Dictionary
 
-    Call connect() to connect to the given irc server given by
-    port and address.
-    """
+def wrapvalue(command, event, value):
+    if value is None:
+        return []
+    return value if isinstance(value, list) else [value]
+
+
+class Bot(BaseComponent):
 
     channel = "bot"
 
-    def __init__(self, env):
-        "initializes x; see x.__class__.__doc__ for signature"
-
-        super(Bot, self).__init__()
-
-        self.env = env
+    def init(self, config):
+        self.config = config
 
         self.terminate = False
 
-        self.host = self.env.config.get("server", "host", "0.0.0.0")
-        self.port = self.env.config.getint("server", "port", 80)
-        self.ssl  = self.env.config.getboolean("server", "ssl", False)
-        self.bind = self.env.config.get("server", "bind", None)
+        self.host = self.config["host"]
+        self.port = self.config["port"]
 
         self.auth = {
-                "host": socket.gethostname(),
-                "server": self.host,
-                "nick": self.env.config.get("bot", "nick", "kdb"),
-                "ident": self.env.config.get("bot", "ident", "kdb"),
-                "name": self.env.config.get("bot", "name",
-                    "Knowledge (IRC) Database Bot")
+            "host": gethostname(),
+            "server": self.host,
+            "nick": self.config["nick"],
+            "ident": kdb.__name__,
+            "name": kdb.__description__,
         }
-        if self.env.config.has_option("server", "password"):
-            self.auth["password"] = self.env.config.get("server", "password")
 
-        irc = IRC(channel=self.channel)
-        client = TCPClient(self.bind, channel=self.channel)
-        self += (client + irc)
+        # command -> plugin
+        self.command = cidict()
 
-    def ready(self, component):
-        self.fire(Connect(self.host, self.port, self.ssl))
+        # plugin name -> commands
+        self.commands = cidict()
 
-    def reconnect(self):
-        self.fire(Connect(self.host, self.port, self.ssl))
-    
-    def connected(self, host, port=None):
+        # plugin name -> plugin
+        self.plugins = cidict()
+
+        TCPClient(channel=self.channel).register(self)
+        IRC(channel=self.channel).register(self)
+
+    def is_addressed(self, source, target, message):
+        nick = self.auth["nick"]
+        if nick is None:
+            return False, target, message
+
+        if target.lower() == nick.lower() or message.startswith(nick):
+            if message.startswith(nick):
+                message = message[len(nick):]
+            while len(message) > 0 and message[0] in [",", ":", " "]:
+                message = message[1:]
+
+            if target.lower() == nick.lower():
+                return True, source[0], message
+            else:
+                return True, target, message
+        else:
+            return False, target, message
+
+    @handler("registered", channel="*")
+    def _on_registered(self, component, manager):
+        if component.channel == "commands":
+            for event in component.events():
+                if event not in self.command:
+                    self.command[event] = component
+
+            if component.parent.name in self.commands:
+                events = self.commands[component.parent.name]
+                events = events.union(component.events())
+                self.commands[component.parent.name] = events
+            else:
+                self.commands[component.parent.name] = set(component.events())
+
+        if isinstance(component, BasePlugin):
+            if component.name not in self.plugins:
+                self.plugins[component.name] = component
+
+    @handler("unregistered", channel="*")
+    def _on_unregistered(self, component, manager):
+        if component.channel == "commands":
+            for event in component.events():
+                if event in self.command:
+                    del self.command[event]
+
+        if isinstance(component, BasePlugin):
+            if component.name in self.commands:
+                del self.commands[component.name]
+            if component.name in self.plugins:
+                del self.plugins[component.name]
+
+    @handler("ready")
+    def _on_ready(self, component):
+        self.fire(connect(self.host, self.port))
+
+    @handler("connected")
+    def _on_connected(self, host, port=None):
         if "password" in self.auth:
-            self.fire(PASS(auth["password"]))
+            self.fire(PASS(self.auth["password"]))
 
         auth = self.auth.get
 
@@ -98,13 +138,55 @@ class Bot(Component):
         nick = auth("nick")
         self.fire(NICK(nick))
 
-    def disconnected(self):
+    @handler("disconnected")
+    def _on_disconnected(self):
         if self.terminate:
             raise SystemExit(0)
 
-        s = 60
-        self.fire(Log("info", "Disconnected. Reconnecting in %ds" % s))
-        Timer(s, Reconnect(), "reconnect", self).register(self)
+        self.fire(connect(self.host, self.port))
 
-    def terminate(self):
+    @handler("terminate")
+    def _on_terminate(self):
         self.terminate = True
+
+    @handler("numeric")
+    def _on_numeric(self, source, target, numeric, args, message):
+        if numeric == 433:
+            self.auth["nick"] = newnick = "{0:s}_".format(self.auth["nick"])
+            self.fire(NICK(newnick))
+
+    @handler("message", "notice")
+    def _on_message_or_notice(self, event, source, target, message):
+        addressed, target, message = self.is_addressed(
+            source, target, message
+        )
+
+        Reply = PRIVMSG if event.name == "message" else NOTICE
+
+        if addressed:
+            tokens = message.split(" ", 1)
+            command = tokens[0].encode("utf-8").lower()
+            args = (len(tokens) > 1 and tokens[1]) or ""
+
+            if command not in self.command:
+                msg = log("Unknown Command: {0:s}", command)
+                self.fire(Reply(target, msg))
+            else:
+                event = cmd.create(command, source, target, args)
+
+                try:
+                    value = yield self.call(event, "commands")
+                    if value.errors:
+                        etype, evalue, etraceback = value.value
+                        msg = log(
+                            "ERROR: {0:s}: ({1:s})", evalue, repr(message)
+                        )
+                        log(format_exc())
+                        self.fire(Reply(target, msg))
+                    else:
+                        for msg in wrapvalue(command, event, value.value):
+                            self.fire(Reply(target, msg))
+                except Exception as error:
+                    msg = log("ERROR: {0:s}: ({1:s})", error, repr(message))
+                    log(format_exc())
+                    self.fire(Reply(target, msg))

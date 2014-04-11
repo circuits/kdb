@@ -1,49 +1,32 @@
 #!/usr/bin/env python
 
-import os
 from glob import glob
+from imp import new_module
+from os import getcwd, path
 
-try:
-    from setuptools import setup, find_packages
-    HAS_SETUPTOOLS = True
-except ImportError:
-    from distutils.core import setup
-    HAS_SETUPTOOLS = False
 
-if not HAS_SETUPTOOLS:
-    from distutils.util import convert_path
+from setuptools import setup, find_packages
 
-    def find_packages(where=".", exclude=()):
-        """Borrowed directly from setuptools"""
 
-        out = []
-        stack = [(convert_path(where), "")]
-        while stack:
-            where, prefix = stack.pop(0)
-            for name in os.listdir(where):
-                fn = os.path.join(where, name)
-                if ("." not in name and os.path.isdir(fn) and 
-                        os.path.isfile(os.path.join(fn, "__init__.py"))):
-                    out.append(prefix+name)
-                    stack.append((fn, prefix + name + "."))
+version = new_module("version")
 
-        from fnmatch import fnmatchcase
-        for pat in list(exclude) + ["ez_setup"]:
-            out = [item for item in out if not fnmatchcase(item, pat)]
+exec(
+    compile(
+        open(path.join(path.dirname(globals().get("__file__", path.join(getcwd(), "kdb"))), "kdb/version.py"), "r").read(),
+        "kdb/version.py",
+        "exec"
+    ),
+    version.__dict__
+)
 
-        return out
-
-path = os.path.abspath(os.path.dirname(__file__))
-try:
-    README = open(os.path.join(path, "README.rst")).read()
-    HISTORY = open(os.path.join(path, "HISTORY.rst")).read()
-except IOError:
-    README = HISTORY = ""
 
 setup(
     name="kdb",
+    version=version.version,
     description="Knowledge (IRC) Database Bot",
-    long_description="%s\n\n%s" % (README, HISTORY),
+    long_description="{0:s}\n\n{1:s}".format(
+        open("README.rst").read(), open("CHANGES.rst").read()
+    ),
     author="James Mills",
     author_email="James Mills, prologic at shortcircuit dot net dot au",
     url="http://bitbucket.org/prologic/kdb/",
@@ -64,15 +47,23 @@ setup(
     keywords="Knowledge Database IRC Bot Framework",
     platforms="POSIX",
     packages=find_packages("."),
-    scripts=glob("scripts/*"),
-    entry_points="""
-    [console_scripts]
-    kdb = kdb.main:main
-    """,
+    scripts=glob("bin/*"),
+    dependency_links=[
+        "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",
+    ],
+    setup_requires=[
+        "fabric",
+    ],
     install_requires=(
-        "circuits",
-        "pymills",
+        "procname==0.3",
+        "pymills==3.4.0",
+        "circuits==3.0.0.dev",
     ),
-    setup_requires=("hgtools",),
-    use_hg_version={"increment": "0.01"},
+    entry_points={
+        "console_scripts": [
+            "kdb=kdb.main:main",
+        ]
+    },
+    test_suite="tests.main.main",
+    zip_safe=True
 )

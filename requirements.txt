@@ -1,0 +1,12 @@
+Mako==0.9.1
+funcy==0.10
+cidict==0.1.1
+procname==0.3
+pymetar==0.19
+ttrdict==0.2.1
+pymills==3.4.0
+simpleeval==0.8
+google-api-python-client==1.2
+
+# Development version of circuits
+https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits

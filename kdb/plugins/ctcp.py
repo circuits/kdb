@@ -1,6 +1,7 @@
-# Module:   ctcp
+# Plugin:   ctcp
 # Date:     10th September 2007
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """CTCP
 
@@ -8,18 +9,23 @@ This plugin provides responses to IRC CTCP Events and
 responds to them appropiately.
 """
 
+
 __version__ = "0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
-import time
 
-from circuits.net.protocols.irc import CTCPREPLY
+from time import asctime
+
+
+from circuits import handler
+from circuits.protocols.irc import CTCPREPLY
+
 
 import kdb
-from kdb.plugin import BasePlugin
+from ..plugin import BasePlugin
 
-class CtcpReplies(BasePlugin):
 
+class CTCP(BasePlugin):
     """IRC CTCP Events Plugin
 
     This plugin provides responses to IRC CTCP Events and
@@ -28,7 +34,8 @@ class CtcpReplies(BasePlugin):
     NOTE: There are no commands for this plugin (yet).
     """
 
-    def ctcp(self, source, target, type, message):
+    @handler("ctcp")
+    def _on_ctcp(self, source, target, type, message):
         """CTCP Event Handler
 
         Handle IRC CTCP Events and respond to them
@@ -38,16 +45,15 @@ class CtcpReplies(BasePlugin):
         if type.lower() == "ping":
             response = ("PING", message)
         elif type.lower() == "time":
-            response = ("TIME", time.asctime())
-        elif type.lower() == "finger":
-            response = ("FINGER",
-                    "%s - %s" % (self.env.bot.auth["nick"]))
+            response = ("TIME", asctime())
         elif type.lower() == "version":
-            response = ("VERSION",
-                    "%s - v%s (%s)" % (
-                        kdb.__name__,
-                        kdb.__version__,
-                        kdb.__url__))
+            response = (
+                "VERSION", "{0:s} - v{1:s} ({2:s})".format(
+                    kdb.__name__,
+                    kdb.__version__,
+                    kdb.__url__
+                )
+            )
         else:
             response = None
 
