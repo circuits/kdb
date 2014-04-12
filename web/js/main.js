@@ -11,7 +11,7 @@ $(document).ready(function() {
     $("#input > form").submit(function() {
         var message = $("input:first").val();
         $("input:field").val("");
-        $("#response").load("/message", {"message": message});
+        $("#response > #content").load("/message", {"message": message});
         return false;
     });
 
