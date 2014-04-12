@@ -60,6 +60,9 @@ class Commands(Component):
         Syntax: IRCINFO
         """
 
+        if not self.parent.bot.transport.connected:
+            return "No IRC information available."
+
         auth = self.parent.bot.auth.get
 
         msg = (
@@ -78,6 +81,16 @@ class Commands(Component):
         )
 
         return msg
+
+    def status(self, source, target, args):
+        """Report IRC Status
+
+        Syntax: STATUS
+        """
+
+        if not self.parent.bot.transport.connected:
+            return "IRC: Offline"
+        return "IRC: Online"
 
     def quit(self, source, target, args):
         """Quit from the current server

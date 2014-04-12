@@ -13,14 +13,19 @@ __version__ = "0.0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
-from apiclient.discovery import build
+from json import loads
 
-from circuits import Component
 
-from funcy import first
+from circuits import task, Component
+
+from requests import get
 
 
 from ..plugin import BasePlugin
+
+
+def get_url(*args, **kwargs):
+    return get(*args, **kwargs)
 
 
 class Commands(Component):
@@ -30,11 +35,7 @@ class Commands(Component):
     def __init__(self, *args, **kwargs):
         super(Commands, self).__init__(*args, **kwargs)
 
-        self.service = build(
-            "customsearch",
-            "v1",
-            developerKey="AIzaSyBfx6wfwHf2Br_zFKqGsDzFKvm_XXJQLQQ"
-        )
+        self.url = "http://ajax.googleapis.com/ajax/services/search/web"
 
     def google(self, source, target, args):
         """Perform a google search and return the first result.
@@ -43,17 +44,34 @@ class Commands(Component):
         """
 
         if not args:
-            return "No search terms specified."
+            yield "No search terms specified."
 
         q = args
 
-        results = self.service.cse().list(
-            q=q, cx='017576662512468239146:omuauf_lfve',
-        ).execute()
+        value = yield self.call(
+            task(
+                get_url,
+                self.url,
+                params={"v": "1.0", "q": q}
+            ),
+            "workerthreads"
+        )
 
-        item = first(results.get("results", []))
+        response = value.value
+        response.raise_for_status()
+        data = loads(response.content)["responseData"]
 
-        return (item and item["link"]) or "No results found."
+        yield "Total results: {0:s}".format(
+            data["cursor"]["estimatedResultCount"]
+        )
+
+        hits = data["results"]
+        yield 'Top {0:d} hits:'.format(len(hits))
+        for i, hit in enumerate(hits):
+            yield " {0:d}. {1:s}".format((i + 1), hit["url"])
+        yield "For more results, see: {0:s}".format(
+            data["cursor"]["moreResultsUrl"]
+        )
 
 
 class Google(BasePlugin):
