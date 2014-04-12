@@ -18,7 +18,7 @@ from procname import setprocname
 
 
 from circuits.app import Daemon
-from circuits import Manager, Debugger
+from circuits import Debugger, Manager, Worker
 
 
 from .core import Core
@@ -31,6 +31,9 @@ def main():
     config = Config()
 
     manager = Manager()
+
+    Worker(channel="workerthreads").register(manager)
+    Worker(channel="workerprocesses").register(manager)
 
     if config.get("debug"):
         Debugger(

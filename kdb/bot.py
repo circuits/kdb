@@ -66,8 +66,8 @@ class Bot(BaseComponent):
         # plugin name -> plugin
         self.plugins = cidict()
 
-        TCPClient(channel=self.channel).register(self)
-        IRC(channel=self.channel).register(self)
+        self.transport = TCPClient(channel=self.channel).register(self)
+        self.protocol = IRC(channel=self.channel).register(self)
 
     def is_addressed(self, source, target, message):
         nick = self.auth["nick"]

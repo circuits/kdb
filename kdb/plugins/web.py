@@ -20,11 +20,14 @@ from traceback import format_exc
 from os.path import dirname, abspath
 
 
+from circuits import task, Component
 from circuits.protocols.irc import strip
 from circuits.web import Server, Controller, Static
 
 import mako
 from mako.lookup import TemplateLookup
+
+from requests import head
 
 
 import kdb
@@ -47,6 +50,10 @@ DEFAULTS = {
 }
 
 
+def check_url(url):
+    return head(url)
+
+
 def render(name, **d):
     try:
         d.update(DEFAULTS)
@@ -56,15 +63,29 @@ def render(name, **d):
         return mako.exceptions.html_error_template().render()
 
 
+class Commands(Component):
+
+    channel = "commands"
+
+    def status(self, source, target, args):
+        """Report Web Status
+
+        Syntax: STATUS
+        """
+
+        try:
+            url = self.parent.server.http.base
+            value = yield self.call(task(check_url, url), "workerthreads")
+            response = value.value
+            response.raise_for_status()
+            yield "Web: Online"
+        except Exception as error:
+            yield "Web: Offline ({0:s})".format(error)
+
+
 class Root(Controller):
 
     tpl = "index.html"
-
-    def __init__(self, bot, config):
-        super(Root, self).__init__()
-
-        self.bot = bot
-        self.config = config
 
     def index(self):
         return render(self.tpl)
@@ -74,7 +95,7 @@ class Root(Controller):
         command = tokens[0].encode("utf-8").lower()
         args = (len(tokens) > 1 and tokens[1]) or ""
 
-        if command not in self.bot.command:
+        if command not in self.parent.bot.command:
             yield log("Unknown Command: {0:s}", command)
         else:
             event = cmd.create(command, None, None, args)
@@ -111,6 +132,9 @@ class Web(BasePlugin):
             "docroot", DOCROOT
         )
 
-        Server(self.bind).register(self)
+        self.server = Server(self.bind).register(self)
+
         Static(docroot=self.docroot).register(self)
-        Root(self.bot, self.config).register(self)
+        Root().register(self)
+
+        Commands().register(self)
