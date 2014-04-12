@@ -42,6 +42,13 @@ class CTCP(BasePlugin):
         appropiately.
         """
 
+        addressed, target, message = self.bot.is_addressed(
+            source, target, message
+        )
+
+        if not addressed:
+            return
+
         if type.lower() == "ping":
             response = ("PING", message)
         elif type.lower() == "time":
@@ -58,4 +65,4 @@ class CTCP(BasePlugin):
             response = None
 
         if response is not None:
-            self.fire(CTCPREPLY(source, *response))
+            self.fire(CTCPREPLY(target, *response))
