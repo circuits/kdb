@@ -104,6 +104,7 @@ class Root(Controller):
                 value = yield self.call(event, "commands")
                 for msg in wrapvalue(command, event, value.value):
                     yield escape(strip(msg))
+                    yield "\n"
             except Exception as error:
                 yield log("ERROR: {0:s}: ({1:s})", error, repr(message))
                 log(format_exc())

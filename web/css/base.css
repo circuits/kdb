@@ -113,6 +113,27 @@ a:focus, a:hover, a:active {
     overflow: auto;
 }
 
+pre {
+    font-family: 'Consolas', 'Deja Vu Sans Mono',
+                 'Bitstream Vera Sans Mono', monospace;
+    margin: 1em 2em;
+    font-size: 0.95em;
+    letter-spacing: 0.015em;
+    line-height: 120%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+pre a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+
 /*
  * Response
  */
