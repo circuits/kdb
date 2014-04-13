@@ -226,12 +226,12 @@ class Commands(Component):
 
         if target in feeds:
             msg = ["RSS Feeds ({0:s}):".format(target)]
-            for i, f in enumerate(feeds[target]):
+            for i, feed in enumerate(feeds[target]):
                 msg.append((
-                    " {0:d}. {1:s} ({2:s})/{3:d}mins "
+                    " {0:d}. {1:s} ({2:s}) / {3:d}mins "
                     "(Next Update in {4:d}mins)").format(
-                        (i + 1), f.title, f.link,
-                        f.interval, int((f.next - time()) / 60)
+                        (i + 1), feed.title, feed.url,
+                        feed.interval, int((feed.next - time()) / 60)
                     )
                 )
         else:
