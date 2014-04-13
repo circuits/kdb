@@ -2,12 +2,9 @@ syntax: glob
 
 *.pyc
 *.pyo
-build
 dist
-darkmyst
-au
-test
-log
-.coverage
-docs/.build
-kdb.egg-info
+build
+coverage
+.coverage*
+docs/build
+*.egg-info
