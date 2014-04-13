@@ -68,7 +68,7 @@ class Commands(Component):
         hits = data["results"]
         yield 'Top {0:d} hits:'.format(len(hits))
         for i, hit in enumerate(hits):
-            yield " {0:d}. {1:s}".format((i + 1), hit["url"])
+            yield " {0:d}. {1:s}".format((i + 1), hit["unescapedUrl"])
         yield "For more results, see: {0:s}".format(
             data["cursor"]["moreResultsUrl"]
         )
