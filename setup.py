@@ -63,8 +63,16 @@ setup(
         "fabric",
     ],
     install_requires=(
+        "Mako==0.9.1",
+        "funcy==0.10",
+        "cidict==0.1.1",
         "procname==0.3",
+        "pymetar==0.19",
         "pymills==3.4.0",
+        "requests==2.2.1",
+        "attrdict==0.2.1",
+        "simpleeval==0.8",
+        "pyenchant==1.6.5",
         "circuits==3.0.0.dev",
     ),
     entry_points={
