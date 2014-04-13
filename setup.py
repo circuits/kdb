@@ -12,7 +12,15 @@ version = new_module("version")
 
 exec(
     compile(
-        open(path.join(path.dirname(globals().get("__file__", path.join(getcwd(), "kdb"))), "kdb/version.py"), "r").read(),
+        open(
+            path.join(
+                path.dirname(
+                    globals().get("__file__", path.join(getcwd(), "kdb"))
+                ),
+                "kdb/version.py"
+            ),
+            "r"
+        ).read(),
         "kdb/version.py",
         "exec"
     ),
@@ -49,7 +57,7 @@ setup(
     packages=find_packages("."),
     scripts=glob("bin/*"),
     dependency_links=[
-        "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",
+        "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",  # noqa
     ],
     setup_requires=[
         "fabric",
