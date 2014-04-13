@@ -232,7 +232,7 @@ class Stats(BasePlugin):
     def _on_event(self, event, *args, **kwargs):
         self.data["events"] += 1
 
-        if event.name in self.bot.command:
+        if event.channels == ("commands",) and event.name in self.bot.command:
             self.data["commands"][event.name] += 1
 
     @handler("read")
