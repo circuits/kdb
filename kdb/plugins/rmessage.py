@@ -1,6 +1,7 @@
-# Module:   rmessage
+# Plugin:   rmessage
 # Date:     24th September 2007
 # Author:   James Mills, prologic at shortcircuit dot net dot au
+
 
 """RMessage
 
@@ -9,18 +10,54 @@ sends a Message Event into the system and returning
 any replies generated.
 """
 
+
 __version__ = "0.0.3"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
+
 from collections import deque
 
-from circuits import handler
-from circuits.net.protocols.irc import PRIVMSG
 
-from kdb.plugin import BasePlugin
+from circuits import Component
+from circuits.protocols.irc import PRIVMSG
+
+
+from ..utils import log
+from ..plugin import BasePlugin
+
+
+class Commands(Component):
+
+    channel = "commands"
+
+    def rlog(self, source, target, args):
+        """Display Remote Message Logs
+
+        Syntax: rlog
+        """
+
+        data = self.parent.data
+
+        rmessages = data["rmessages"]
+
+        yield "Last 5 Remote Messages:"
+        for i, message in enumerate(rmessages):
+            yield " {0:d}: {1:s}".format((i + 1), message)
+
+
+class RPC(Component):
+
+    channel = "rpc"
+
+    def message(self, source, target, message):
+        self.parent.data["rmessages"].append(message)
+
+        message = "<{0:s}> {1:s}".format(source, message)
+        self.fire(PRIVMSG(target, message), "bot")
+        return log("Remote Message sent to {0:s}", target)
+
 
 class RMessage(BasePlugin):
-
     """RMessage plugin
 
     This doesn't have any user commands available.
@@ -28,36 +65,17 @@ class RMessage(BasePlugin):
     sends a Message Event into the system and returning
     any replies generated.
 
-    Depends on: remote
+    Depends on: xmlrpc
     """
 
-    def __init__(self, env):
-        super(RMessage, self).__init__(env)
+    def init(self, *args, **kwargs):
+        super(RMessage, self).init(*args, **kwargs)
 
-        self._rlog = deque([], 5)
+        self.data.init(
+            {
+                "rmessages": deque([], 5)
+            }
+        )
 
-    def cmdRLOG(self, source, target):
-        """View Remote Log
-
-        Syntax: RLOG
-        """
-
-        return ["Last 5 remote messages:"] + list(self._rlog)
-
-    @handler("message", channel="remote")
-    def remote_message(self, source="anonymous", target=None, message=""):
-        self._rlog.append(message)
-
-        ourself = self.env.bot.auth["nick"]
-
-        if not (target is None or target == ourself):
-            message = "<%s> %s" % (source, message)
-            self.fire(PRIVMSG(target, message))
-            return "Message to %s" % target
-        else:
-            if target is None:
-                target = ourself
-
-            r = self.fire(PRIVMSG(source, target, message))
-            reply = r or ""
-            return reply.strip()
+        RPC().register(self)
+        Commands().register(self)
