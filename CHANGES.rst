@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Fixed Dockerfile
 - Added Remote Plugin Plugin
 - Fixed sub-commands for Channels Plugin.
 - Fixed state management.
