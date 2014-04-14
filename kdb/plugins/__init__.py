@@ -59,17 +59,17 @@ class Plugins(Component):
         else:
             return self.plugins.get(name, None)
 
-    def load(self, name):
+    def load(self, name, package=__package__):
         if name in self.plugins:
             msg = log("Not loading already loaded plugin: {0:s}", name)
             return msg
 
         try:
-            fqplugin = "{0:s}.{1:s}".format(__package__, name)
+            fqplugin = "{0:s}.{1:s}".format(package, name)
             if fqplugin in sys.modules:
                 reload(sys.modules[fqplugin])
 
-            m = safe__import__(name, globals(), locals(), __package__)
+            m = safe__import__(name, globals(), locals(), package)
 
             p1 = lambda x: isclass(x) and issubclass(x, BasePlugin)
             p2 = lambda x: x is not BasePlugin

@@ -5,6 +5,8 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Added Remote Plugin Plugin
+- Fixed sub-commands for Channels Plugin.
 - Fixed state management.
 - Set a filename to save RSS Feeds to for the RSS Plugin in the default
   sample configuration file.
