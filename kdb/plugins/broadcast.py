@@ -45,7 +45,7 @@ class Broadcast(BasePlugin):
                         source,
                         target,
                         "{0:s}, {1:s}".format(
-                            self.bot.auth["nick"],
+                            self.data.state["nick"],
                             message[1:]
                         )
                     )

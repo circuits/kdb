@@ -162,7 +162,7 @@ class Commands(Component):
         Syntax: VERSION
         """
 
-        me = self.parent.bot.auth["nick"]
+        me = self.parent.data.state["nick"]
 
         msg = "{0:s} [ {1:s} ] v{2:s} by {3:s} - {4:s}".format(
             me,

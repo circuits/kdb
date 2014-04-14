@@ -33,7 +33,7 @@ class Core(BaseComponent):
 
         self.data = Data()
 
-        self.bot = Bot(self.config).register(self)
+        self.bot = Bot(self.data, self.config).register(self)
 
         self.plugins = Plugins(
             init_args=(self.bot, self.data, self.config)

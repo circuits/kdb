@@ -30,10 +30,10 @@ class Drone(BasePlugin):
     def init(self, *args, **kwargs):
         super(Drone, self).init(*args, **kwargs)
 
-        if self.bot.auth["nick"] != gethostname():
+        if self.data.state["nick"] != gethostname():
             self.fire(NICK(gethostname()))
 
     @handler("connected")
     def _on_connected(self, *args):
-        if self.bot.auth["nick"] != gethostname():
+        if self.data.state["nick"] != gethostname():
             self.fire(NICK(gethostname()))

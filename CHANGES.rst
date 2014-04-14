@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Fixed state management.
 - Set a filename to save RSS Feeds to for the RSS Plugin in the default
   sample configuration file.
 - Fixed sub-commands with the Channels Plugin.
