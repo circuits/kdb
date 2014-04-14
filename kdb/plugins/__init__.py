@@ -12,6 +12,7 @@ from __future__ import print_function
 
 
 import sys
+from traceback import format_exc
 from inspect import getmembers, isclass
 
 
@@ -95,6 +96,7 @@ class Plugins(Component):
                 name,
                 e
             )
+            log(format_exc())
             return msg
 
     def unload(self, name):
