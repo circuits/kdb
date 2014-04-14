@@ -7,7 +7,7 @@ MAINTAINER James Mills <prologic@shortcircuitnet.au>
 RUN prt-get depinst enchant
 
 # Install Source
-pip install hg+https://bitbucket.org/prologic/kdb#egg=kdb
+RUN pip install hg+https://bitbucket.org/prologic/kdb#egg=kdb
 
 # Expose Service
 EXPOSE 8000
