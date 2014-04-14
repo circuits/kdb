@@ -5,6 +5,8 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Set a filename to save RSS Feeds to for the RSS Plugin in the default
+  sample configuration file.
 - Fixed sub-commands with the Channels Plugin.
 - Fixed display of ``RLIST`` command in RSS Plugin.
 - Fixed counting usage statistics of commands.
