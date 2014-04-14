@@ -7,7 +7,7 @@ MAINTAINER James Mills <prologic@shortcircuitnet.au>
 RUN prt-get depinst enchant
 
 # Install Source
-RUN pip install --allow-external hg+https://bitbucket.org/prologic/kdb#egg=kdb
+RUN pip install --allow-all-external hg+https://bitbucket.org/prologic/kdb#egg=kdb
 
 # Expose Service
 EXPOSE 8000
