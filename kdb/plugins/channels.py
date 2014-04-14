@@ -97,6 +97,7 @@ class Commands(Component):
 
         tokens = args.split(" ", 1)
         command, args = first(tokens), (second(tokens) or "")
+        command = command.encode("utf-8")
 
         event = cmd.create(command, source, target, args)
 
