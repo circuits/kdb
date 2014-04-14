@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Fixed sub-commands with the Channels Plugin.
 - Fixed display of ``RLIST`` command in RSS Plugin.
 - Fixed counting usage statistics of commands.
 

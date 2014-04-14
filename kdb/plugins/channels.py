@@ -43,8 +43,8 @@ class ChannelCommands(Component):
 
         channel = first(args.split(" ", 1))
 
-        if channel not in self.parent.channels:
-            self.parent.channels.append(channel)
+        if channel not in self.parent.parent.channels:
+            self.parent.parent.channels.append(channel)
             return "Added {0:s} to startup join list".format(channel)
         return "{0:s} already in startup join list".format(channel)
 
@@ -59,8 +59,8 @@ class ChannelCommands(Component):
 
         channel = first(args.split(" ", 1))
 
-        if channel in self.parent.channels:
-            self.parent.channels.remove(channel)
+        if channel in self.parent.parent.channels:
+            self.parent.parent.channels.remove(channel)
             return "{0:s} removed from startup join list".format(channel)
         return "{0:s} not in join startup list".format(channel)
 
@@ -70,7 +70,7 @@ class ChannelCommands(Component):
         Syntax: LIST
         """
 
-        channels = self.parent.channels
+        channels = self.parent.parent.channels
 
         return "Startup Join List: {0:s}".format(" ".join(channels))
 
@@ -101,7 +101,7 @@ class Commands(Component):
         event = cmd.create(command, source, target, args)
 
         try:
-            yield self.call(event, "commands:channels")
+            yield (yield self.call(event, "commands:channels"))
         except Exception as error:
             yield "ERROR: {0:s}".format(error)
 
