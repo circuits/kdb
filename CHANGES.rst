@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Print a treceback on plugin load failure.
 - Use ``os.path.exists`` to check for ``--config`` file.
 - Fixed Dockerfile
 - Added Remote Plugin Plugin
