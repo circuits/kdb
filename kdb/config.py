@@ -16,7 +16,7 @@ configuration file override those given via command line options.
 
 from os import environ
 from warnings import warn
-from os.path import isfile
+from os.path import exists
 from ConfigParser import ConfigParser
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
@@ -127,7 +127,7 @@ class Config(reprconf.Config):
 
         if namespace.config is not None:
             filename = namespace.config
-            if isfile(filename):
+            if exists(filename):
                 config = reprconf.as_dict(str(filename))
                 for option, value in config.pop("globals", {}).items():
                     if option in namespace:
