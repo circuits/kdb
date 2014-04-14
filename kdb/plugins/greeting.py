@@ -136,7 +136,7 @@ class Greeting(BasePlugin):
 
         data = self.data["greeting"]
 
-        if nick == self.bot.auth["nick"].lower():
+        if nick == self.data.state["nick"].lower():
             return
 
         if nick in data["history"]:

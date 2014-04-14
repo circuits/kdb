@@ -63,20 +63,20 @@ class Commands(Component):
         if not self.parent.bot.transport.connected:
             return "No IRC information available."
 
-        auth = self.parent.bot.auth.get
+        state = self.parent.data.state.get
 
         msg = (
             "I am {0:s} on the {1:s} IRC Network. "
             "Connected to {2:s} "
             "Running version {3:s}".format(
                 "{0:s}!{1:s}@{2:s}".format(
-                    auth("nick"),
-                    auth("ident"),
-                    auth("host")
+                    state("nick"),
+                    state("ident"),
+                    state("host")
                 ),
-                auth("network", "Unknown"),
-                auth("server_host", "Unknown"),
-                auth("server_version", "Unknown"),
+                state("network", "Unknown"),
+                state("server_host", "Unknown"),
+                state("server_version", "Unknown"),
             )
         )
 
@@ -155,17 +155,17 @@ class IRC(BasePlugin):
                 "Welcome to the ([a-zA-Z0-9]*) Internet Relay Chat Network",
                 message
             )
-            self.bot.auth["network"] = (
+            self.data.state["network"] = (
                 m is not None and m.group(1)
             ) or "Unknown"
         elif numeric == 2:
             m = search("Your host is ([a-zA-Z.-]*)", message)
-            self.bot.auth["server_host"] = (
+            self.data.state["server_host"] = (
                 m is not None and m.group(1)
             ) or self.bot.host
 
             m = search("running version (.*)", message)
-            self.bot.auth["server_version"] = (
+            self.data.state["server_version"] = (
                 m is not None and m.group(1)
             ) or "unknown"
         elif numeric == 433:

@@ -41,7 +41,8 @@ class Bot(BaseComponent):
 
     channel = "bot"
 
-    def init(self, config):
+    def init(self, data, config):
+        self.data = data
         self.config = config
 
         self.terminate = False
@@ -66,11 +67,23 @@ class Bot(BaseComponent):
         # plugin name -> plugin
         self.plugins = cidict()
 
+        self.data.init(
+            {
+                "state": {
+                    "host": self.auth["host"],
+                    "server": self.auth["server"],
+                    "nick": self.auth["nick"],
+                    "ident": self.auth["ident"],
+                    "name": self.auth["name"],
+                }
+            }
+        )
+
         self.transport = TCPClient(channel=self.channel).register(self)
         self.protocol = IRC(channel=self.channel).register(self)
 
     def is_addressed(self, source, target, message):
-        nick = self.auth["nick"]
+        nick = self.data.state["nick"]
         if nick is None:
             return False, target, message
 
@@ -149,10 +162,16 @@ class Bot(BaseComponent):
     def _on_terminate(self):
         self.terminate = True
 
+    @handler("nick")
+    def _on_nick(self, source, newnick):
+        if source[0].lower() == self.data.state["nick"]:
+            self.data.state["nick"] = newnick
+
     @handler("numeric")
     def _on_numeric(self, source, target, numeric, args, message):
         if numeric == 433:
-            self.auth["nick"] = newnick = "{0:s}_".format(self.auth["nick"])
+            newnick = "{0:s}_".format(self.data.state["nick"])
+            self.data.state["nick"] = newnick
             self.fire(NICK(newnick))
 
     @handler("message", "notice")
