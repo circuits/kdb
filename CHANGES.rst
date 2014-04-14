@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Moved example config into ``etc/``
 - Print a treceback on plugin load failure.
 - Use ``os.path.exists`` to check for ``--config`` file.
 - Fixed Dockerfile
