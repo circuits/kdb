@@ -24,3 +24,10 @@ Links:
 You may install the latest `Development Version <http://bitbucket.org/prologic/kdb/get/tip.zip#egg=kdb-dev>`_ via::
     
     pip install kdb==dev
+
+kdb is now `Docker <https://docker.io>` ready andc an be run with::
+    
+    $ docker run -i -t -v $(pwd)/etc:/etc/kdb prologic/kdb --config=/etc/kdb/kdb.ini
+
+Be sure to edit ``etc/kdb.ini`` or change the above line to suit your needs
+mounting the configuration directory from another path on your host.
