@@ -6,8 +6,12 @@ MAINTAINER James Mills <prologic@shortcircuitnet.au>
 # Install dependencies
 RUN prt-get depinst enchant
 
-# Install Source
-RUN pip install --allow-all-external hg+https://bitbucket.org/prologic/kdb#egg=kdb
+# Add Source
+ADD . /usr/src/kdb
+
+# Build and Install
+RUN cd /usr/src/kdb && python setup.py install
+RUN cd /usr/src/kdb && cp -r etc /etc/kdb
 
 # Expose Service
 EXPOSE 8000

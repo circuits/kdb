@@ -73,6 +73,7 @@ setup(
         "attrdict==0.2.1",
         "simpleeval==0.8",
         "pyenchant==1.6.5",
+        "feedparser==5.1.3",
         "circuits==3.0.0.dev",
     ),
     entry_points={
