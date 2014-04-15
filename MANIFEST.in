@@ -1,3 +1,4 @@
-recursive-include scripts *.py
+include LICENSE *.rst
+recursive-include bin *
 recursive-include docs *
-include LICENSE Makefile
+recursive-include kdb/plugins/web *

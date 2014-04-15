@@ -31,16 +31,17 @@ from requests import head
 
 
 import kdb
-from ..utils import log
-from ..events import cmd
-from ..bot import wrapvalue
-from ..plugin import BasePlugin
+from kdb.utils import log
+from kdb.events import cmd
+from kdb.bot import wrapvalue
+from kdb.plugin import BasePlugin
 
 
-DOCROOT = abspath(path.join(dirname(__file__), "../../web"))
+BASE = abspath(dirname(__file__))
+DOCROOT = path.join(BASE, "static")
 
 templates = TemplateLookup(
-    directories=[path.join(DOCROOT, "tpl")],
+    directories=[path.join(DOCROOT, "templates")],
     module_directory="/tmp",
     output_encoding="utf-8"
 )
