@@ -5,6 +5,7 @@ Changes
 kdb 1.0.0.dev
 .............
 
+- Fixed missing ``html2text`` and ``aspell-en`` dependency.
 - Updated requirements and Dockerfile
 - Moved example config into ``etc/``
 - Print a treceback on plugin load failure.

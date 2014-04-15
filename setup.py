@@ -74,6 +74,7 @@ setup(
         "simpleeval==0.8",
         "pyenchant==1.6.5",
         "feedparser==5.1.3",
+        "html2text==2014.4.5",
         "circuits==3.0.0.dev",
     ),
     entry_points={

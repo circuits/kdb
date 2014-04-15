@@ -4,7 +4,7 @@ FROM prologic/crux-python
 MAINTAINER James Mills <prologic@shortcircuitnet.au>
 
 # Install dependencies
-RUN prt-get depinst enchant
+RUN prt-get depinst aspell-en enchant
 
 # Add Source
 ADD . /usr/src/kdb
