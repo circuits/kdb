@@ -20,6 +20,7 @@ Submodules
    kdb.plugins.help
    kdb.plugins.irc
    kdb.plugins.rmessage
+   kdb.plugins.rplugins
    kdb.plugins.rss
    kdb.plugins.spell
    kdb.plugins.stats
