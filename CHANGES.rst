@@ -2,8 +2,8 @@ Changes
 -------
 
 
-kdb 1.0.0.dev
-.............
+kdb 1.0.0 (*2014-04-16*)
+........................
 
 - Fixed missing ``html2text`` and ``aspell-en`` dependency.
 - Updated requirements and Dockerfile
