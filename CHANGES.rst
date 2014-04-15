@@ -5,6 +5,8 @@ Changes
 kdb 1.0.1.dev
 .............
 
+- Fixed Web Plugin proper and make package non ``zip_safe``.
+- Fixed templates path in Web Plugin.
 - Fixed the Web Plugin so it works if installed as a package and run
   separately.
 

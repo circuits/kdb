@@ -40,8 +40,11 @@ from kdb.plugin import BasePlugin
 BASE = abspath(dirname(__file__))
 DOCROOT = path.join(BASE, "static")
 
+print "BASE:", BASE
+print "DOCROOT:", DOCROOT
+
 templates = TemplateLookup(
-    directories=[path.join(DOCROOT, "templates")],
+    directories=[path.join(BASE, "templates")],
     module_directory="/tmp",
     output_encoding="utf-8"
 )
