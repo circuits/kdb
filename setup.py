@@ -55,6 +55,15 @@ setup(
     keywords="Knowledge Database IRC Bot Framework",
     platforms="POSIX",
     packages=find_packages("."),
+    package_data={
+        "kdb.plugins.web": [
+            "static/css/*",
+            "static/ico/*",
+            "static/js/*",
+            "templates/*",
+        ],
+    },
+    include_package_data=True,
     scripts=glob("bin/*"),
     dependency_links=[
         "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",  # noqa

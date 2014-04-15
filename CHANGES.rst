@@ -5,7 +5,8 @@ Changes
 kdb 1.0.1.dev
 .............
 
--
+- Fixed the Web Plugin so it works if installed as a package and run
+  separately.
 
 
 kdb 1.0.0 (*2014-04-16*)
