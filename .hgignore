@@ -1,8 +1,9 @@
 syntax: glob
 
+tmp
+dist
 *.pyc
 *.pyo
-dist
 build
 coverage
 .coverage*
