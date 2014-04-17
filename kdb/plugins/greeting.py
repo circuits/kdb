@@ -36,7 +36,7 @@ from ..plugin import BasePlugin
 DEFAULTS = [
     "Hello {0:s}",
     "Heya {0:s}",
-    "Hody {0:s}",
+    "Howdy {0:s}",
     "Hey {0:s}",
     "Hi {0:s}",
     "Yo {0:s}",

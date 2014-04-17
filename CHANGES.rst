@@ -5,7 +5,7 @@ Changes
 kdb 1.0.2.dev
 .............
 
--
+- Fixed a typo in Greeting Plugin
 
 
 kdb 1.0.1 (*2014-04-16*)
