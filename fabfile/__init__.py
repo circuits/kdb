@@ -2,7 +2,8 @@
 # Date:     18th June 2013
 # Author:   James Mills, j dot mills at griffith dot edu dot au
 
-"""Fabric fabfile"""
+
+"""Development Tasks"""
 
 
 from __future__ import print_function
@@ -10,7 +11,10 @@ from __future__ import print_function
 from os import getcwd
 
 
-from fabric.api import abort, cd, execute, hide, hosts, local, prefix, prompt, run, settings, task
+from fabric.api import (
+    abort, cd, execute, hide, hosts, local,
+    prefix, prompt, run, settings, task
+)
 
 
 import help  # noqa
@@ -23,7 +27,8 @@ from .utils import msg, pip, requires, tobool
 def build(**options):
     """Build and install required dependencies
 
-    Options can be provided to customize the build. The following options are supported:
+    Options can be provided to customize the build.
+    The following options are supported:
 
     - dev -> Whether to install in development mode (Default: Fase)
     """
