@@ -33,7 +33,7 @@ class Drone(BasePlugin):
         if self.data.state["nick"] != gethostname():
             self.fire(NICK(gethostname()))
 
-    @handler("connected")
-    def _on_connected(self, *args):
+    @handler("connected", "registered", "nick")
+    def update_nick(self, *args, **kwargs):
         if self.data.state["nick"] != gethostname():
             self.fire(NICK(gethostname()))
