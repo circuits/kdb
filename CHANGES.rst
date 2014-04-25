@@ -5,6 +5,7 @@ Changes
 kdb 1.0.2.dev
 .............
 
+- Added a JSON RPC Plugin.
 - Updated Drone Plugin to listen to ``registered`` and ``nick`` events.
 - Fixed a typo in Greeting Plugin
 
