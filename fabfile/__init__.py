@@ -85,7 +85,7 @@ def docker(**options):
     rebuild = tobool(options.get("rebuild", False))
 
     with msg("Building Image"):
-        if rebuidl:
+        if rebuild:
             local("docker build -t prologic/kdb --no-cache .")
         else:
             local("docker build -t prologic/kdb .")
