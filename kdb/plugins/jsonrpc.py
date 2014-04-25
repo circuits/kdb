@@ -1,11 +1,11 @@
-# Plugin:   xmlrpc
-# Date:     30th June 2006
+# Plugin:   jsonrpc
+# Date:     26th April 2014
 # Author:   James Mills, prologic at shortcircuit dot net dot au
 
 
-"""XML RPC
+"""JSON RPC
 
-This plugin provides an XML-RPC interface to kdb
+This plugin provides an JSON-RPC interface to kdb
 allowing other plugins to respond to "rpc" events.
 """
 
@@ -14,17 +14,17 @@ __version__ = "0.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
-from circuits.web import XMLRPC as XMLRPCDispatcher
+from circuits.web import JSONRPC as JSONRPCDispatcher
 
 
 from ..plugin import BasePlugin
 
 
-class XMLRPC(BasePlugin):
-    """XMLRPC Plugin
+class JSONRPC(BasePlugin):
+    """JSONRPC Plugin
 
     This plugin provides no user commands. This plugin gives
-    XML-RPC support to the system allowing other systems to
+    JSON-RPC support to the system allowing other systems to
     interact with the system and other loaded plugins.
 
     The "notify" plugin is one such plugin that uses this
@@ -33,6 +33,6 @@ class XMLRPC(BasePlugin):
     """
 
     def init(self, *args, **kwargs):
-        super(XMLRPC, self).init(*args, **kwargs)
+        super(JSONRPC, self).init(*args, **kwargs)
 
-        XMLRPCDispatcher("/xml-rpc", "utf-8", "rpc").register(self)
+        JSONRPCDispatcher("/json-rpc", "utf-8", "rpc").register(self)

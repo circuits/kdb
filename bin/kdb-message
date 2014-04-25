@@ -20,7 +20,7 @@ def parse_options():
 
     parser.add_option(
         "-u", "--url",
-        action="store", default="http://localhost:9000/rpc/", dest="url",
+        action="store", default="http://localhost:9000/xml-rpc/", dest="url",
         help="Specify url to send message to (XML-RPC)"
     )
 
