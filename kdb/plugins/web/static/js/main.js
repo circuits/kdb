@@ -1,20 +1,10 @@
 $(document).ready(function() {
-
-    $("#navbar").find("a").each(function(i) {
-        $(this).click(function() {
-            var url = $(this).attr("href");
-            $("#response").load(url);
+    $("body").terminal("/api", {
+        login: false,
+        greetings: "For help type: help",
+        onBlur: function() {
+            // the height of the body is only 2 lines initialy
             return false;
-        });
+        }
     });
-
-    $("#input > form").submit(function() {
-        var message = $("input:first").val();
-        $("input:field").val("");
-        $("#response > #content").load("/message", {"message": message});
-        return false;
-    });
-
 });
-
-// vim: nocindent

@@ -20,9 +20,10 @@ from traceback import format_exc
 from os.path import dirname, abspath
 
 
-from circuits import task, Component
 from circuits.protocols.irc import strip
-from circuits.web import Server, Controller, Static
+from circuits import handler, task, Component
+from circuits.web import Server, Controller, JSONRPC, Static
+
 
 import mako
 from mako.lookup import TemplateLookup
@@ -50,7 +51,15 @@ templates = TemplateLookup(
 )
 
 DEFAULTS = {
-    "software": "kdb/%s" % kdb.__version__
+    "title": "{0:s} v{1:s} - {2:s}".format(
+        kdb.__name__,
+        kdb.__version__,
+        kdb.__description__
+    ),
+    "software": "{0:s} v{1:s}".format(
+        kdb.__name__,
+        kdb.__version__,
+    ),
 }
 
 
@@ -87,17 +96,16 @@ class Commands(Component):
             yield "Web: Offline ({0:s})".format(error)
 
 
-class Root(Controller):
+class API(Component):
 
-    tpl = "index.html"
+    channel = "api"
 
-    def index(self):
-        return render(self.tpl)
+    @handler()
+    def _on_api_event(self, event, *args, **kwargs):
+        if event.channels != (self.channel,):
+            return
 
-    def message(self, message):
-        tokens = message.split(" ", 1)
-        command = tokens[0].encode("utf-8").lower()
-        args = (len(tokens) > 1 and tokens[1]) or ""
+        command = event.name
 
         if command not in self.parent.bot.command:
             yield log("Unknown Command: {0:s}", command)
@@ -106,12 +114,20 @@ class Root(Controller):
 
             try:
                 value = yield self.call(event, "commands")
-                for msg in wrapvalue(command, event, value.value):
-                    yield escape(strip(msg))
-                    yield "\n"
+                yield "\n".join(
+                    escape(strip(msg))
+                    for msg in wrapvalue(command, event, value.value)
+                )
             except Exception as error:
+                message = "{0:s} {1:s}".format(command, " ".join(args))
                 yield log("ERROR: {0:s}: ({1:s})", error, repr(message))
                 log(format_exc())
+
+
+class Root(Controller):
+
+    def index(self):
+        return render("index.html")
 
 
 class Web(BasePlugin):
@@ -140,6 +156,8 @@ class Web(BasePlugin):
         self.server = Server(self.bind).register(self)
 
         Static(docroot=self.docroot).register(self)
+        JSONRPC("/api", "utf-8", "api").register(self)
+        API().register(self)
         Root().register(self)
 
         Commands().register(self)

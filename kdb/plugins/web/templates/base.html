@@ -1,34 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
-<head>
-  <title>kdb - Knowledge Database Bot</title>
-  <meta http-equiv="content-type" content="application/xml+xhtml; charset=utf-8" />
-  <link rel="stylesheet" title="default" media="screen" href="css/base.css" type="text/css" />
-</head>
-<body>
-    <div id="window">
-        <div id="header">
-            <h1>kdb - Knowledge Database Bot</h1>
-        </div>
-        <div id="content">
-            ${self.body()}
-        </div>
-        <div id="footer">
-            <p>CopyRight (C) 2005-2009 by James Mills</p>
-            <div id="icons">
-                <a  href="http://validator.w3.org/check/referer">
-                    <img src="ico/xhtml.png" alt="Valid XHTML 1.0 Strict" />
-                </a>
-                <a href="http://jigsaw.w3.org/css-validator/check/referer">
-                    <img src="ico/css.png" alt="Valid CSS" />
-                </a>
-            </div>
-        </div>
-    </div>
- <script type="text/javascript" src="js/jquery-debug.js"></script>
- <script type="text/javascript" src="js/main.js"></script>
-</body>
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>${title}</title>
+    <link href="css/jquery.terminal.css" rel="stylesheet"/>
+    <script>
+    </script>
+  </head>
+  <body>
+    ${self.body()}
+  </body>
+  <script src="js/jquery-1.7.1.min.js"></script>
+  <script src="js/jquery.mousewheel-min.js"></script>
+  <script src="js/jquery.terminal-min.js"></script>
+  <script src="js/main.js"></script>
 </html>
