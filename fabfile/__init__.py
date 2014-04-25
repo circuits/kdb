@@ -72,6 +72,18 @@ def test():
 
 
 @task()
+@requires("docker")
+def docker():
+    """Build and Publish Docker Image"""
+
+    with msg("Building Image"):
+        local("docker build -t prologic/kdb .")
+
+    with msg("Pushing Image"):
+        local("docker push  prologic/kdb")
+
+
+@task()
 @hosts("localhost")
 def release():
     """Performs a full release"""
