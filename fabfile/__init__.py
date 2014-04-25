@@ -73,11 +73,22 @@ def test():
 
 @task()
 @requires("docker")
-def docker():
-    """Build and Publish Docker Image"""
+def docker(**options):
+    """Build and Publish Docker Image
+
+    Options can be provided to customize the build.
+    The following options are supported:
+
+    - rebuild -> Whether to rebuild without a cache.
+    """
+
+    rebuild = tobool(options.get("rebuild", False))
 
     with msg("Building Image"):
-        local("docker build -t prologic/kdb .")
+        if rebuidl:
+            local("docker build -t prologic/kdb --no-cache .")
+        else:
+            local("docker build -t prologic/kdb .")
 
     with msg("Pushing Image"):
         local("docker push  prologic/kdb")
