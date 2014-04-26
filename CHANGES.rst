@@ -2,8 +2,8 @@ Changes
 -------
 
 
-kdb 1.0.2.dev
-.............
+kdb 1.0.2 (*2014-04-27*)
+........................
 
 - Fixed a bug in the new Web API.
 - Fixed a bug with ``kdb.plugins.help.format_msg()``.
