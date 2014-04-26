@@ -29,7 +29,7 @@ from ..plugin import BasePlugin
 
 def format_msg(msg):
     return (
-        msg.strip().
+        msg.strip()
         .replace("\t\t", "\t")
         .replace("\t", "   ")
         .split("\n")
