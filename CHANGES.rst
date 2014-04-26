@@ -5,6 +5,7 @@ Changes
 kdb 1.0.2.dev
 .............
 
+- Fixed a bug with ``kdb.plugins.help.format_msg()``.
 - Updated the Web Plugin UI to use jQuery Terminal.
 - Added a JSON RPC Plugin.
 - Updated Drone Plugin to listen to ``registered`` and ``nick`` events.
