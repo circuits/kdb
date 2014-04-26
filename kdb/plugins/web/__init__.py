@@ -106,11 +106,11 @@ class API(Component):
             return
 
         command = event.name
-        args = " ".join(args)
 
         if command not in self.parent.bot.command:
             yield log("Unknown Command: {0:s}", command)
         else:
+            args = " ".join(args)
             event = cmd.create(command, None, None, args)
 
             try:
