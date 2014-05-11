@@ -5,7 +5,7 @@ Changes
 kdb 1.0.3.dev
 .............
 
--
+- Started adding tests to kdb's test suite.
 
 
 kdb 1.0.2 (*2014-04-27*)
