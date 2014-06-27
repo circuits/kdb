@@ -42,7 +42,7 @@ DEFAULTS = [
     "Yo {0:s}",
 ]
 
-EXPIRY = 60 * 60  # 1 hour
+EXPIRY = 60 * 60 * 24  # 24 hour(s)
 
 
 class GreetingsCommands(Component):
