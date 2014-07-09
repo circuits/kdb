@@ -94,6 +94,7 @@ class Commands(Component):
 
         if not args:
             yield "No command specified."
+            raise StopIteration()
 
         tokens = args.split(" ", 1)
         command, args = first(tokens), (second(tokens) or "")
