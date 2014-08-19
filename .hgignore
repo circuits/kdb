@@ -1,0 +1,11 @@
+syntax: glob
+
+tmp
+dist
+*.pyc
+*.pyo
+build
+coverage
+.coverage*
+docs/build
+*.egg-info
