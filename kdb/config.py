@@ -33,8 +33,8 @@ class Config(reprconf.Config):
     def __init__(self, file=None, **kwargs):
         super(Config, self).__init__(file, **kwargs)
 
-        self.parse_environ()
         self.parse_options()
+        self.parse_environ()
 
     def parse_environ(self):
         """Check the environment variables for options."""
