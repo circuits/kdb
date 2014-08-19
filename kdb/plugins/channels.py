@@ -15,7 +15,7 @@ __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
 from circuits import handler, Component
-from circuits.protocols.irc import JOIN, PART
+from circuits.protocols.irc import JOIN, PART, RPL_WELCOME
 
 from funcy import first, second
 
@@ -152,8 +152,8 @@ class Channels(BasePlugin):
         Commands().register(self)
 
     @handler("numeric")
-    def _on_numeric(self, source, target, numeric, args, message):
-        if numeric == 1:
+    def _on_numeric(self, source, numeric, *args):
+        if numeric == RPL_WELCOME:
             self.joinchannels()
 
     def cleanup(self):

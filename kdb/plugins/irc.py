@@ -18,8 +18,8 @@ from re import search
 
 
 from circuits.net.events import connect
-from circuits.protocols.irc import QUIT, NICK
-from circuits import handler, Component, Event
+from circuits import handler, Component
+from circuits.protocols.irc import QUIT, NICK, RPL_WELCOME, RPL_YOURHOST
 
 from funcy import first, second
 
@@ -149,8 +149,10 @@ class IRC(BasePlugin):
         Commands().register(self)
 
     @handler("numeric")
-    def _on_numeric(self, source, target, numeric, arg, message):
-        if numeric == "1":
+    def _on_numeric(self, source, numeric, *args):
+        if numeric == RPL_WELCOME:
+            message = args[1]
+
             m = search(
                 "Welcome to the ([a-zA-Z0-9]*) Internet Relay Chat Network",
                 message
@@ -158,7 +160,9 @@ class IRC(BasePlugin):
             self.data.state["network"] = (
                 m is not None and m.group(1)
             ) or "Unknown"
-        elif numeric == 2:
+        elif numeric == RPL_YOURHOST:
+            message = args[1]
+
             m = search("Your host is ([a-zA-Z.-]*)", message)
             self.data.state["server_host"] = (
                 m is not None and m.group(1)
@@ -168,5 +172,3 @@ class IRC(BasePlugin):
             self.data.state["server_version"] = (
                 m is not None and m.group(1)
             ) or "unknown"
-        elif numeric == 433:
-            self.fire(Event.create("nicksollision"))

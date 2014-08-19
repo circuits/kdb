@@ -19,7 +19,7 @@ from circuits.net.events import connect
 from circuits.net.sockets import TCPClient
 from circuits import handler, BaseComponent
 from circuits.protocols.irc import (
-    IRC, NICK, NOTICE, PASS, PRIVMSG, USER
+    IRC, NICK, NOTICE, PASS, PRIVMSG, USER, ERR_NICKNAMEINUSE
 )
 
 from cidict import cidict
@@ -168,14 +168,14 @@ class Bot(BaseComponent):
             self.data.state["nick"] = newnick
 
     @handler("numeric")
-    def _on_numeric(self, source, target, numeric, args, message):
-        if numeric == 433:
-            newnick = "{0:s}_".format(self.data.state["nick"])
+    def _on_numeric(self, source, numeric, *args):
+        if numeric == ERR_NICKNAMEINUSE:
+            newnick = "{0:s}_".format(args[0])
             self.data.state["nick"] = newnick
             self.fire(NICK(newnick))
 
-    @handler("message", "notice")
-    def _on_message_or_notice(self, event, source, target, message):
+    @handler("privmsg", "notice")
+    def _on_privmsg_or_notice(self, event, source, target, message):
         addressed, target, message = self.is_addressed(
             source, target, message
         )

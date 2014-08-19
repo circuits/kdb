@@ -13,7 +13,7 @@ configuration and terminate the system.
 from signal import SIGINT, SIGHUP, SIGTERM
 
 
-from circuits.protocols.irc import quit
+from circuits.protocols.irc import QUIT
 from circuits import handler, BaseComponent, Timer
 
 
@@ -50,8 +50,7 @@ class Core(BaseComponent):
         elif signo in (SIGINT, SIGTERM):
             self.bot.terminate = True
             Timer(5, terminate()).register(self)
-            self.fire(quit("Received SIGTERM, terminating..."), self.bot)
-        return True
+            self.fire(QUIT("Received SIGTERM, terminating..."), self.bot)
 
     @handler("terminate")
     def _on_terminate(self):
