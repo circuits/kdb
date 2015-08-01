@@ -1,4 +1,7 @@
 .. _#circuits: http://webchat.freenode.net/?randomnick=1&channels=circuits&uio=d4
+.. _Docker: https://www.docker.com/
+.. _Docker Compose: https://github.com/docker/compose
+.. _autodock-paas: https://github.com/prologic/autodock-paas
 .. _FreeNode IRC Network: http://freenode.net
 
 kdb is a small pluggable IRC Bot framework utilizing the
@@ -48,7 +51,7 @@ For other options::
 Installation and Usage on Docker
 --------------------------------
 
-kdb is now `Docker <https://docker.io>`_ ready and can be run with::
+kdb is now `Docker`_ ready and can be run with::
     
     $ CID=$(docker run -d -p 8000:8000 -v $(pwd)/etc:/etc/kdb --name="kdb" prologic/kdb --config=/etc/kdb/kdb.ini)
 
@@ -56,6 +59,24 @@ kdb is now `Docker <https://docker.io>`_ ready and can be run with::
           to suit your needs mounting the configuration directory
           from another path on your host.
 
+Alternatively you can spin up kdb using `Docker`_ and `Docker Compose`_::
+    
+    docker-compose up -d
+
+Using the following `docker-compose.yml <https://github.com/prologic/kdb/tree/master/docker-compose.yml>`_::
+
+    kdb:
+        image: prologic/kdb
+        volumes:
+            - ${PWD}/etc:/etc/kdb
+        environment:
+            - PORT=8000
+            - VIRTUALHOST=kdb.vz1.bne.shortcircuit.net.au
+        command: --config=/etc/kdb/kdb.ini
+        restart: always
+
+This also conveniently uses `autodock-paas`_ to setup virtualhost routing for
+the web interface for the domain: http://kdb.vz1.bne.shortcircuit.net.au/
 
 Plugins
 -------

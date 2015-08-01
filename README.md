@@ -27,7 +27,7 @@ For other options:
 Installation and Usage on Docker
 ================================
 
-kdb is now [Docker](https://docker.io) ready and can be run with:
+kdb is now [Docker](https://www.docker.com/) ready and can be run with:
 
     $ CID=$(docker run -d -p 8000:8000 -v $(pwd)/etc:/etc/kdb --name="kdb" prologic/kdb --config=/etc/kdb/kdb.ini)
 
@@ -36,6 +36,24 @@ kdb is now [Docker](https://docker.io) ready and can be run with:
 > Be sure to edit `etc/kdb.ini` or change the above line  
 > to suit your needs mounting the configuration directory from another path on your host.
 >
+Alternatively you can spin up kdb using [Docker](https://www.docker.com/) and [Docker Compose](https://github.com/docker/compose):
+
+    docker-compose up -d
+
+Using the following [docker-compose.yml](https://github.com/prologic/kdb/tree/master/docker-compose.yml):
+
+    kdb:
+        image: prologic/kdb
+        volumes:
+            - ${PWD}/etc:/etc/kdb
+        environment:
+            - PORT=8000
+            - VIRTUALHOST=kdb.vz1.bne.shortcircuit.net.au
+        command: --config=/etc/kdb/kdb.ini
+        restart: always
+
+This also conveniently uses [autodock-paas](https://github.com/prologic/autodock-paas) to setup virtualhost routing for the web interface for the domain: <http://kdb.vz1.bne.shortcircuit.net.au/>
+
 Plugins
 =======
 
