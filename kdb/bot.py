@@ -180,7 +180,7 @@ class Bot(BaseComponent):
             source, target, message
         )
 
-        Reply = PRIVMSG if event.name == "message" else NOTICE
+        Reply = PRIVMSG if event.name == "privmsg" else NOTICE
 
         if addressed:
             tokens = message.split(" ", 1)
