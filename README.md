@@ -6,8 +6,8 @@ You may use kdb as a framework to build your own projects that use the IRC proto
 
 kdb was created by and is primarily maintained by [James Mills](http://prologic.shortcircuit.net.au/)
 
--   [Website](http://bitbucket.org/prologic/kdb/)
--   [Issues](https://bitbucket.org/prologic/kdb/issues)
+-   [Website](https://github.com/prologic/kdb/)
+-   [Issues](https://github.com/prologic/kdb/issues)
 -   [\#circuits](http://webchat.freenode.net/?randomnick=1&channels=circuits&uio=d4) on the [FreeNode IRC Network](http://freenode.net)
 
 Installation
@@ -43,8 +43,8 @@ kdb has a full complementary set of plugins available.
 
 For a list of available plugins, see:
 
-<https://bitbucket.org/prologic/kdb/src/tip/kdb/plugins/>
+<https://github.com/prologic/kdb/tree/master/kdb/plugins/>
 
-You may install the latest [Development Version](https://bitbucket.org/prologic/kdb/get/tip.zip#egg=kdb-dev) via:
+You may install the latest [Development Version](https://github.com/prologic/kdb/archive/master.zip#egg=kdb-dev) via:
 
     $ pip install kdb==dev

@@ -20,8 +20,8 @@ kdb was created by and is primarily maintained by
 `James Mills <http://prologic.shortcircuit.net.au/>`_
 
 
-- `Website <http://bitbucket.org/prologic/kdb/>`_
-- `Issues <https://bitbucket.org/prologic/kdb/issues>`_
+- `Website <https://github.com/prologic/kdb/>`_
+- `Issues <https://github.com/prologic/kdb/issues>`_
 - `#circuits`_ on the `FreeNode IRC Network`_
 
 
@@ -64,9 +64,9 @@ kdb has a full complementary set of plugins available.
 
 For a list of available plugins, see:
 
-https://bitbucket.org/prologic/kdb/src/tip/kdb/plugins/
+https://github.com/prologic/kdb/tree/master/kdb/plugins/
 
 
-You may install the latest `Development Version <https://bitbucket.org/prologic/kdb/get/tip.zip#egg=kdb-dev>`_ via::
+You may install the latest `Development Version <https://github.com/prologic/kdb/archive/master.zip#egg=kdb-dev>`_ via::
     
     $ pip install kdb==dev
