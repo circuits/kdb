@@ -29,7 +29,7 @@ Installation and Usage on Docker
 
 kdb is now [Docker](https://www.docker.com/) ready and can be run with:
 
-    $ CID=$(docker run -d -p 8000:8000 -v $(pwd)/etc:/etc/kdb --name="kdb" prologic/kdb --config=/etc/kdb/kdb.ini)
+    $ docker run -d -p 8000:8000 -v $(pwd)/etc:/etc/kdb prologic/kdb --config=/etc/kdb/kdb.ini
 
 > **note**
 >
