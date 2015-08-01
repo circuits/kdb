@@ -164,14 +164,14 @@ class Bot(BaseComponent):
 
     @handler("nick")
     def _on_nick(self, source, newnick):
-        if source[0].lower() == self.data.state["nick"]:
-            self.data.state["nick"] = newnick
+        if source[0].lower() == self.data.state["nick"].lower():
+            self.data["state"]["nick"] = newnick
 
     @handler("numeric")
     def _on_numeric(self, source, numeric, *args):
         if numeric == ERR_NICKNAMEINUSE:
             newnick = "{0:s}_".format(args[1])
-            self.data.state["nick"] = newnick
+            self.data["state"]["nick"] = newnick
             self.fire(NICK(newnick))
 
     @handler("privmsg", "notice")
