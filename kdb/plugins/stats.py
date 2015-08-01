@@ -13,7 +13,6 @@ __version__ = "0.2.1"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
-from os import getpid
 from time import clock, time
 from collections import Counter
 from urllib import urlopen, urlencode
@@ -22,13 +21,12 @@ from urllib import urlopen, urlencode
 from circuits import handler, Component
 from circuits.tools import graph, inspect
 
-from pymills.utils import MemoryStats
+import resource
 from pymills.misc import bytes, duration, buildAverage
 
 
 import kdb
 from ..utils import log
-from ..events import cmd
 from ..plugin import BasePlugin
 
 
@@ -180,12 +178,10 @@ class Commands(Component):
         Syntax: MSTATS
         """
 
-        m = MemoryStats(getpid())
+        m = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
-        msg = "Memory: {0:s} {1:s} {2:s}".format(
-            "{0:0.2f}{1:s}".format(*bytes(m.size)),
-            "{0:0.2f}{1:s}".format(*bytes(m.rss)),
-            "{0:0.2f}{1:s}".format(*bytes(m.stack)),
+        msg = "Memory Usage: {0:s}".format(
+            "{0:0.2f}{1:s}".format(*bytes(m))
         )
 
         return msg
