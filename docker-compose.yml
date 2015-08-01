@@ -1,0 +1,9 @@
+kdb:
+    image: prologic/kdb
+    volumes:
+        - ${PWD}/etc:/etc/kdb
+    environment:
+        - PORT=8000
+        - VIRTUALHOST=kdb.vz1.bne.shortcircuit.net.au
+    command: --config=/etc/kdb/kdb.ini
+    restart: always
