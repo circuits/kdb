@@ -11,8 +11,9 @@ pyenchant
 feedparser
 html2text
 
+# circuits
 # Development version of circuits
--e hg+https://bitbucket.org/circuits/circuits#egg=circuits
+-e git+https://github.com/circuits/circuits.git#egg=circuits
 
 wheel
 pudb
