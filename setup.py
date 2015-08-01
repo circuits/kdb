@@ -1,36 +1,25 @@
 #!/usr/bin/env python
 
+
 from glob import glob
-from imp import new_module
-from os import getcwd, path
 
 
 from setuptools import setup, find_packages
 
 
-version = new_module("version")
+def parse_requirements(filename):
+    with open(filename, "r") as f:
+        for line in f:
+            if line and line[:2] not in ("#", "-e"):
+                yield line.strip()
 
-exec(
-    compile(
-        open(
-            path.join(
-                path.dirname(
-                    globals().get("__file__", path.join(getcwd(), "kdb"))
-                ),
-                "kdb/version.py"
-            ),
-            "r"
-        ).read(),
-        "kdb/version.py",
-        "exec"
-    ),
-    version.__dict__
-)
+
+from kdb.version import version
 
 
 setup(
     name="kdb",
-    version=version.version,
+    version=version,
     description="Knowledge (IRC) Database Bot",
     long_description="{0:s}\n\n{1:s}".format(
         open("README.rst").read(), open("CHANGES.rst").read()
@@ -68,24 +57,7 @@ setup(
     dependency_links=[
         "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",  # noqa
     ],
-    setup_requires=[
-        "fabric",
-    ],
-    install_requires=(
-        "Mako==0.9.1",
-        "funcy==0.10",
-        "cidict==0.1.1",
-        "procname==0.3",
-        "pymetar==0.19",
-        "pymills==3.4.0",
-        "requests==2.2.1",
-        "attrdict==0.2.1",
-        "simpleeval==0.8",
-        "pyenchant==1.6.5",
-        "feedparser==5.1.3",
-        "html2text==2014.4.5",
-        "circuits==3.0.0.dev",
-    ),
+    install_requires=list(parse_requirements("requirements.txt")),
     entry_points={
         "console_scripts": [
             "kdb=kdb.main:main",
