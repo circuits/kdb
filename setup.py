@@ -14,12 +14,8 @@ def parse_requirements(filename):
                 yield line.strip()
 
 
-from kdb.version import version
-
-
 setup(
     name="kdb",
-    version=version,
     description="Knowledge (IRC) Database Bot",
     long_description="{0:s}\n\n{1:s}".format(
         open("README.rst").read(), open("CHANGES.rst").read()
@@ -64,5 +60,11 @@ setup(
         ]
     },
     test_suite="tests.main.main",
-    zip_safe=False
+    zip_safe=False,
+    use_scm_version={
+        "write_to": "kdb/version.py",
+    },
+    setup_requires=[
+        "setuptools_scm"
+    ],
 )

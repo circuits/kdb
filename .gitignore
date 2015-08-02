@@ -2,9 +2,11 @@
 tmp
 .env
 dist
+.eggs
 build
 *.py[co]
 coverage
 .coverage*
 docs/build
 *.egg-info
+*/version.py
