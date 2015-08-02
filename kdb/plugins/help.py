@@ -1,20 +1,3 @@
-# Plugin:   help
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Help Messages
-
-This plugin allows the user to get help for command
-of other plugins. It retrieves the __doc__ of the
-specified command.
-"""
-
-
-__version__ = "0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from itertools import chain
 from inspect import getmodule
 
@@ -140,6 +123,9 @@ class Help(BasePlugin):
     other plugins and their commands.
     See: commands help
     """
+
+    __version__ = "0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Help, self).init(*args, **kwargs)

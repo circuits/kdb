@@ -1,15 +1,3 @@
-"""Broadtcasting Support
-
-This plugin provides support for listening to broadcast
-messages by listening for a certain pattern of message
-and performing some command or event on that.
-"""
-
-
-__version__ = "0.1.0"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import handler
 
 
@@ -17,7 +5,15 @@ from ..plugin import BasePlugin
 
 
 class Broadcast(BasePlugin):
-    "Broadcasting Support"
+    """Broadtcasting Support
+
+    This plugin provides support for listening to broadcast
+    messages by listening for a certain pattern of message
+    and performing some command or event on that.
+    """
+
+    __version__ = "0.1.0"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Broadcast, self).init(*args, **kwargs)

@@ -1,19 +1,3 @@
-# Plugin:   weather
-# Date:     01th July 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Weather
-
-This plugin provides weather information from metar
-stations around the world to the user.
-"""
-
-
-__version__ = "0.0.2"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import Component
 
 from funcy import first
@@ -113,6 +97,9 @@ class Weather(BasePlugin):
      - http://www.nws.noaa.gov/tg/siteloc.shtml
     See: help weather
     """
+
+    __version__ = "0.0.2"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Weather, self).init(*args, **kwargs)

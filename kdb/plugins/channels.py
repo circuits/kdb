@@ -1,19 +1,3 @@
-# Plugin:   channels
-# Date:     3th July 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Channel Management
-
-This plugin manages channels and what channels the bot
-joins automatically.
-"""
-
-
-__version__ = "0.0.3"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import handler, Component
 from circuits.protocols.irc import JOIN, PART, RPL_WELCOME
 
@@ -142,7 +126,14 @@ class Commands(Component):
 
 
 class Channels(BasePlugin):
-    "Channel Management"
+    """Channel Management
+
+    This plugin manages channels and what channels the bot
+    joins automatically.
+    """
+
+    __version__ = "0.0.3"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Channels, self).init(*args, **kwargs)

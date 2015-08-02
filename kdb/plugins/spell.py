@@ -1,20 +1,3 @@
-# Plugin:   spell
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Spell Checker
-
-This plugin provides to the user a command that
-can be used to check the spelling of words and
-give suggestions for incorrectly spelled words.
-"""
-
-
-__version__ = "0.0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from enchant import request_dict
 
 
@@ -52,7 +35,15 @@ class Commands(Component):
 
 
 class Spell(BasePlugin):
-    "Spell Checker"
+    """Spell Checker
+
+    This plugin provides to the user a command that
+    can be used to check the spelling of words and
+    give suggestions for incorrectly spelled words.
+    """
+
+    __version__ = "0.0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Spell, self).init(*args, **kwargs)

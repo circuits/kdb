@@ -1,20 +1,3 @@
-# Plugin:   greeting
-# Date:     14th July 2007
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Greeting
-
-Displays a greeting for users that join the channel.
-Users that have been greeted before will not get further
-greetings, unless they haven't been seen for over 3 days.
-"""
-
-
-__version__ = "0.0.3"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from time import time
 from random import choice, seed
 from traceback import format_exc
@@ -113,6 +96,9 @@ class Greeting(BasePlugin):
 
     There are no commands for this plugin.
     """
+
+    __version__ = "0.0.3"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Greeting, self).init(*args, **kwargs)

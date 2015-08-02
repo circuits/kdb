@@ -1,19 +1,3 @@
-# Plugin:   eval
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Expression Evaluation
-
-This plugin provides a command to evaluate python expressions
-and can be used as a simple way of performing calculations.
-"""
-
-
-__version__ = "0.0.3"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import Component
 
 from simpleeval import simple_eval
@@ -65,6 +49,9 @@ class Eval(BasePlugin):
 
     See: HELP eval
     """
+
+    __version__ = "0.0.3"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Eval, self).init(*args, **kwargs)

@@ -1,18 +1,3 @@
-# Plugin:   stats
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Statistics
-
-This plugin collects various statistics and allows the
-user to access and display them.
-"""
-
-__version__ = "0.2.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from time import clock, time
 from collections import Counter
 from urllib import urlopen, urlencode
@@ -197,13 +182,15 @@ class Commands(Component):
 
 
 class Stats(BasePlugin):
-
     """Statistics plugin
 
     Provides various statistical functions and information.
     Namely, network, uptime and error stats.
     See: commands stats
     """
+
+    __version__ = "0.2.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Stats, self).init(*args, **kwargs)

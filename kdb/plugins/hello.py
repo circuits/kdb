@@ -1,15 +1,3 @@
-# Plugin:   hello
-# Date:     8th April 2014
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""hello Plugin"""
-
-
-__version__ = "0.0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import Component
 
 
@@ -46,7 +34,15 @@ class Commands(Component):
 
 
 class Hello(BasePlugin):
-    """Hello Plugin"""
+    """Hello Plugin
+
+    An example of the simplest possible plugin.
+
+    See: command hello
+    """
+
+    __version__ = "0.0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Hello, self).init(*args, **kwargs)

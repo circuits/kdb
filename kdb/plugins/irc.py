@@ -1,19 +1,3 @@
-# Plugin:   irc
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""IRC
-
-This plugin provides various commands to control the
-IRC specific features of kdb. eg: Changing it's nickname.
-"""
-
-
-__version__ = "0.0.9"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from re import search
 
 
@@ -142,6 +126,9 @@ class IRC(BasePlugin):
     eg: NICK, QUIT, etc
     See: commands irc
     """
+
+    __version__ = "0.0.9"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(IRC, self).init(*args, **kwargs)

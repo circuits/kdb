@@ -1,20 +1,3 @@
-# Plugin:   rmessage
-# Date:     24th September 2007
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""RMessage
-
-This plugin listens for remote message events and
-sends a Message Event into the system and returning
-any replies generated.
-"""
-
-
-__version__ = "0.0.3"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from collections import deque
 
 
@@ -67,6 +50,9 @@ class RMessage(BasePlugin):
 
     Depends on: xmlrpc
     """
+
+    __version__ = "0.0.3"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(RMessage, self).init(*args, **kwargs)

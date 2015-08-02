@@ -1,14 +1,3 @@
-"""CTCP
-
-This plugin provides responses to IRC CTCP Events and
-responds to them appropiately.
-"""
-
-
-__version__ = "0.3"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from time import asctime
 
 
@@ -28,6 +17,9 @@ class CTCP(BasePlugin):
 
     NOTE: There are no commands for this plugin (yet).
     """
+
+    __version__ = "0.3"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     @handler("privmsg", "notice", priority=1.0)
     def _on_privmsg_or_notice(self, event, source, target, message):

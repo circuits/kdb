@@ -1,18 +1,3 @@
-# Plugin:   rplugins
-# Date:     14th April 2014
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Remote Plugin Management
-
-This plugin allows the user to manage remote plugins.
-"""
-
-
-__version__ = "0.0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from os import mkdir
 from hashlib import sha1
 from os.path import join as path_join
@@ -191,7 +176,13 @@ class Commands(Component):
 
 
 class RPlugins(BasePlugin):
-    """Remote Plugin Management"""
+    """Remote Plugin Management
+
+    This plugin allows the user to manage remote plugins.
+    """
+
+    __version__ = "0.0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(RPlugins, self).init(*args, **kwargs)

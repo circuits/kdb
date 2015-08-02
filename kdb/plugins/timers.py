@@ -1,20 +1,3 @@
-# Plugin:   timers
-# Date:     30th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Timers
-
-This plugin shows how to user the timers module.
-Provides a test command to create a message to be
-display in x seconds.
-"""
-
-
-__version__ = "0.0.2"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits import Component, Timer
 from circuits.protocols.irc import PRIVMSG
 
@@ -55,7 +38,15 @@ class Commands(Component):
 
 
 class Timers(BasePlugin):
-    "Timers"
+    """Timers
+
+    This plugin shows how to user the timers module.
+    Provides a test command to create a message to be
+    display in x seconds.
+    """
+
+    __version__ = "0.0.2"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Timers, self).init(*args, **kwargs)

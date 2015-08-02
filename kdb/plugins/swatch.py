@@ -1,20 +1,3 @@
-# Plugin:   swatch
-# Date:     19th December 2006
-# Author:   James Mills prologic at shortcircuit dot net dot au
-
-
-"""Swatch Time
-
-This plugin provides to the user a command that
-can be used to display the current Swatch Time or
-Internet Time or Beat.
-"""
-
-
-__version__ = "0.0.3"
-__author__ = "James Mills prologic at shortcircuit dot net dot au"
-
-
 from circuits import Component
 
 from pymills.misc import beat
@@ -50,6 +33,9 @@ class Swatch(BasePlugin):
     Provides commands to display Internet Time or Swatch Time.
     See: commands swatch
     """
+
+    __version__ = "0.0.3"
+    __author__ = "James Mills prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Swatch, self).init(*args, **kwargs)

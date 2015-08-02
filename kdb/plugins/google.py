@@ -1,18 +1,3 @@
-# Plugin:   google
-# Date:     10th April 2014
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""Google
-
-Plugin to perform Googles searches.
-"""
-
-
-__version__ = "0.0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from json import loads
 
 
@@ -81,6 +66,9 @@ class Google(BasePlugin):
 
     See: HELP google
     """
+
+    __version__ = "0.0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Google, self).init(*args, **kwargs)

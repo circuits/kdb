@@ -1,7 +1,3 @@
-# Module:   __init__
-# Date:     30 June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
 """Plugins
 
 Default kdb plugins
@@ -72,9 +68,9 @@ class Plugins(Component):
 
             m = safe__import__(name, globals(), locals(), package)
 
-            p1 = lambda x: isclass(x) and issubclass(x, BasePlugin)
-            p2 = lambda x: x is not BasePlugin
-            predicate = lambda x: p1(x) and p2(x)
+            p1 = lambda x: isclass(x) and issubclass(x, BasePlugin)  # noqa
+            p2 = lambda x: x is not BasePlugin  # noqa
+            predicate = lambda x: p1(x) and p2(x)  # noqa
             plugins = getmembers(m, predicate)
 
             for name, Plugin in plugins:

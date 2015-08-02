@@ -1,20 +1,3 @@
-# Plugin:   rss
-# Date:     25th March 2007
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""RSS
-
-This plugin provides RSS aggregation functionality to the
-user allowing the user to set personal and public RSS feeds
-to be retrieved at regular intervals and messages to them.
-"""
-
-
-__version__ = "0.0.8"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from itertools import chain
 from time import mktime, time
 from pickle import dumps, loads
@@ -249,6 +232,9 @@ class RSS(BasePlugin):
 
     See: COMMANDS rss
     """
+
+    __version__ = "0.0.8"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(RSS, self).init(*args, **kwargs)

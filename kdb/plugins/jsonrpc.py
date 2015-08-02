@@ -1,19 +1,3 @@
-# Plugin:   jsonrpc
-# Date:     26th April 2014
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
-"""JSON RPC
-
-This plugin provides an JSON-RPC interface to kdb
-allowing other plugins to respond to "rpc" events.
-"""
-
-
-__version__ = "0.1"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from circuits.web import JSONRPC as JSONRPCDispatcher
 
 
@@ -31,6 +15,9 @@ class JSONRPC(BasePlugin):
     to allow remote machines to send notification messages
     to a configured channel.
     """
+
+    __version__ = "0.1"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(JSONRPC, self).init(*args, **kwargs)
