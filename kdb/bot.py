@@ -1,8 +1,3 @@
-# Filename: bot.py
-# Module:   bot
-# Date:     17th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
 """bot - Bot Module
 
 This module defines the Bot Component which connects to an IRC
@@ -11,6 +6,7 @@ of the TCPClient and IRC Components.
 """
 
 
+import re
 from socket import gethostname
 from traceback import format_exc
 
@@ -87,11 +83,10 @@ class Bot(BaseComponent):
         if nick is None:
             return False, target, message
 
-        if target.lower() == nick.lower() or message.startswith(nick):
-            if message.startswith(nick):
-                message = message[len(nick):]
-            while len(message) > 0 and message[0] in [",", ":", " "]:
-                message = message[1:]
+        match = re.match("^@?{0:s}[,: ]*(.*)$(?i)".format(nick), message)
+        if target.lower() == nick.lower() or match is not None:
+            if match is not None:
+                message = match.group(1)
 
             if target.lower() == nick.lower():
                 return True, source[0], message
