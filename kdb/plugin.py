@@ -1,8 +1,3 @@
-# Module:   plugin
-# Date:     17th June 2006
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
 """Base Plugin
 
 This module provides the basic infastructure for kdb
