@@ -1,5 +1,4 @@
 from itertools import chain
-from inspect import getmodule
 
 
 from circuits import Component
@@ -99,11 +98,11 @@ class Commands(Component):
         name = first(args.split(" ", 1)).lower()
 
         if name in plugins:
-            m = getmodule(plugins[name])
-            description = m.__dict__.get("__doc__", name)
+            plugin = plugins[name]
+            description = getattr(plugin, "__doc__", name)
             description = description.split("\n", 1)[0]
-            version = m.__dict__.get("__version__", "Unknown")
-            author = m.__dict__.get("__author__", "Unknown")
+            version = getattr(plugin, "__version__", "Unknown")
+            author = getattr(plugin, "__author__", "Unknown")
             msg = "{0:s} - {1:s} v{2:s} by {3:s}".format(
                 name, description, version, author
             )
