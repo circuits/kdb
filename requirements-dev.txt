@@ -1,20 +1,20 @@
 Mako
 funcy
 cidict
-procname
 pymetar
 pymills
+procname
 requests
 attrdict
-simpleeval
 pyenchant
-feedparser
 html2text
+jsonrpclib
+simpleeval
+feedparser
 
 # circuits
 # Development version of circuits
 -e git+https://github.com/circuits/circuits.git#egg=circuits
-
 wheel
 pudb
 
