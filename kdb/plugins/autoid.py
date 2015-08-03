@@ -23,8 +23,8 @@ class AutoID(BasePlugin):
 
         [autoid]
         nickserv = "NickServ"
-        pattern = ".*registered nick.*login"
-        command = "LOGIN {0:s}"
+        pattern = "^This nickname is registered.*$"
+        command = "IDENTIFY {0:s}"
         password = "password"
     """
 
