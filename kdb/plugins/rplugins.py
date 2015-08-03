@@ -31,6 +31,10 @@ def verify_plugin(url, path, allowed):
     return False, plugin
 
 
+class ConfigError(Exception):
+    """Config Error"""
+
+
 class RPluginsCommands(Component):
 
     channel = "commands:rplugins"
@@ -186,6 +190,13 @@ class RPlugins(BasePlugin):
 
     def init(self, *args, **kwargs):
         super(RPlugins, self).init(*args, **kwargs)
+
+        if "rplugins" not in self.config:
+            raise ConfigError("Remote Plugins not configured!")
+
+        for param in ("path",):
+            if param not in self.config["rplugins"]:
+                raise ConfigError("Remote Plugins not configured! Missing: {0}".format(repr(param)))
 
         self.data.init(
             {
