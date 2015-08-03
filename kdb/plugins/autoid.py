@@ -22,10 +22,10 @@ class AutoID(BasePlugin):
     Example::
 
         [autoid]
-        nickserv = pronick
-        pattern = .*registered nick.*login
-        command = LOGIN {0:s}
-        password = password
+        nickserv = "NickServ"
+        pattern = ".*registered nick.*login"
+        command = "LOGIN {0:s}"
+        password = "password"
     """
 
     __version__ = "0.1"
