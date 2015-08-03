@@ -51,7 +51,7 @@ class Bot(BaseComponent):
             "server": self.host,
             "nick": self.config["nick"],
             "ident": kdb.__name__,
-            "name": kdb.__description__,
+            "name": self.config.get("settings", {}).get("name", kdb.__description__),
         }
 
         # command -> plugin
