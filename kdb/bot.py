@@ -22,9 +22,9 @@ from cidict import cidict
 
 
 import kdb
-from .utils import log
 from .events import cmd
 from .plugin import BasePlugin
+from .utils import log, parse_port
 
 
 def wrapvalue(command, event, value):
@@ -44,7 +44,7 @@ class Bot(BaseComponent):
         self.terminate = False
 
         self.host = self.config["host"]
-        self.port = self.config["port"]
+        self.ssl, self.port = parse_port(self.config["port"])
 
         self.auth = {
             "host": gethostname(),
@@ -128,7 +128,7 @@ class Bot(BaseComponent):
 
     @handler("ready")
     def _on_ready(self, component):
-        self.fire(connect(self.host, self.port))
+        self.fire(connect(self.host, self.port, self.ssl))
 
     @handler("connected")
     def _on_connected(self, host, port=None):

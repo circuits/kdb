@@ -1,11 +1,3 @@
-# Module:   config
-# Date:     12th July 2010
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-#
-# Borrowed from sahriswiki (https://sahriswiki.org/)
-# with permission from James Mills, prologic at shortcircuit dot net dot au
-
-
 """Configuration Handling
 
 Supports configuration of options via the command-line
@@ -119,8 +111,8 @@ class Config(reprconf.Config):
 
         add(
             "port",
-            action="store", nargs="?", default=6667, type=int, metavar="PORT",
-            help="Port to connect to"
+            action="store", nargs="?", default=6667, type=str, metavar="PORT",
+            help="Port to connect to (prefix with + for SSL)"
         )
 
         namespace = parser.parse_args()

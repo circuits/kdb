@@ -1,8 +1,3 @@
-# Module:   utils
-# Date:     8th April 2014
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
 """Utilities"""
 
 
@@ -20,3 +15,10 @@ def log(message, *args, **kwargs):
         sys.stderr.flush()
     finally:
         return output
+
+
+def parse_port(s):
+    ssl = s and s[0] == "+"
+    port = int(s.lstrip("+"))
+
+    return ssl, port
