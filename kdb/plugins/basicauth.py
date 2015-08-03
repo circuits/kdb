@@ -36,7 +36,7 @@ class BasicAuthFilter(Component):
         config = self.config["basicauth"]
 
         self.realm = config["realm"]
-        self.hasher = config.get("hasher", "sha")
+        self.hasher = config.get("hasher", "md5")
 
         if self.hasher not in HASHERS:
             raise ConfigError("Unsupported hasher: {0}".format(repr(self.hasher)))
