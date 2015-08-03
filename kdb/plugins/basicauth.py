@@ -48,9 +48,9 @@ class BasicAuthFilter(Component):
 
     @handler("request", priority=1.0)
     def on_request(self, event, req, res):
-        if not check_auth(req, res, self.realm, self.users, encrypt=self.encrypt):
+        if not check_auth(req, res, self.realm, self.users)
             event.stop()
-            return basic_auth(req, res, self.realm, self.users, encrypt=self.encrypt)
+            return basic_auth(req, res, self.realm, self.users)
 
 
 class BasicAuth(BasePlugin):
