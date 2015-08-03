@@ -41,14 +41,16 @@ class BasicAuthFilter(Component):
         if self.hasher not in HASHERS:
             raise ConfigError("Unsupported hasher: {0}".format(repr(self.hasher)))
 
+        self.encrypt = HASHERS[self.hasher]
+
         with open(config["passwd"], "r") as f:
             self.users = dict(imap(rpartial(str.split, ":"), imap(str.strip, f)))
 
     @handler("request", priority=1.0)
     def on_request(self, event, req, res):
-        if not check_auth(req, res, self.realm, self.users):
+        if not check_auth(req, res, self.realm, self.users, encrypt=self.encrypt):
             event.stop()
-            return basic_auth(req, res, self.realm, self.users)
+            return basic_auth(req, res, self.realm, self.users, encrypt=self.encrypt)
 
 
 class BasicAuth(BasePlugin):
