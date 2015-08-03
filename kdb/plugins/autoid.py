@@ -63,3 +63,4 @@ class AutoID(BasePlugin):
         password = self.config["autoid"]["password"]
 
         self.fire(PRIVMSG(nickserv, command.format(password)))
+        event.stop()
