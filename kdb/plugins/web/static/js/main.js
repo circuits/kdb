@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("#terminal").terminal("/api", {
+    $("#terminal").terminal("/wapi", {
         login: false,
         greetings: "For help type: help",
         onBlur: function() {

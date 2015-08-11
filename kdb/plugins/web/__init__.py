@@ -1,8 +1,3 @@
-# Plugin:   web
-# Date:     18th March 2009
-# Author:   James Mills, prologic at shortcircuit dot net dot au
-
-
 """Web Interface
 
 This plugin provides a Web Interface to the system allowing the system
@@ -10,7 +5,7 @@ to be interacted with via a Web Browser.
 """
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
 
@@ -96,12 +91,12 @@ class Commands(Component):
             yield "Web: Offline ({0:s})".format(error)
 
 
-class API(Component):
+class WAPI(Component):
 
-    channel = "api"
+    channel = "wapi"
 
     @handler()
-    def _on_api_event(self, event, *args, **kwargs):
+    def _on_wapi_event(self, event, *args, **kwargs):
         if event.channels != (self.channel,):
             return
 
@@ -157,8 +152,8 @@ class Web(BasePlugin):
         self.server = Server(self.bind).register(self)
 
         Static(docroot=self.docroot).register(self)
-        JSONRPC("/api", "utf-8", "api").register(self)
-        API().register(self)
+        JSONRPC("/wapi", "utf-8", "wapi").register(self)
+        WAPI().register(self)
         Root().register(self)
 
         Commands().register(self)
