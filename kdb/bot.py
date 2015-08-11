@@ -151,8 +151,6 @@ class Bot(BaseComponent):
         if self.terminate:
             raise SystemExit(0)
 
-        self.fire(connect(self.host, self.port))
-
     @handler("terminate")
     def _on_terminate(self):
         self.terminate = True
