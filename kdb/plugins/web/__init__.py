@@ -1,14 +1,3 @@
-"""Web Interface
-
-This plugin provides a Web Interface to the system allowing the system
-to be interacted with via a Web Browser.
-"""
-
-
-__version__ = "0.0.2"
-__author__ = "James Mills, prologic at shortcircuit dot net dot au"
-
-
 from os import path
 from cgi import escape
 from traceback import format_exc
@@ -83,9 +72,7 @@ class Commands(Component):
 
         try:
             url = self.parent.server.http.base
-            value = yield self.call(task(check_url, url), "workerthreads")
-            response = value.value
-            response.raise_for_status()
+            yield self.call(task(check_url, url), "workerthreads")
             yield "Web: Online"
         except Exception as error:
             yield "Web: Offline ({0:s})".format(error)
@@ -133,6 +120,9 @@ class Web(BasePlugin):
     a Web Interface to the system allowing the system to be
     interacted with via a Web Browser.
     """
+
+    __version__ = "0.1.0"
+    __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
         super(Web, self).init(*args, **kwargs)
