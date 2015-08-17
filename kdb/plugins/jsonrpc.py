@@ -14,6 +14,8 @@ class JSONRPC(BasePlugin):
     The "notify" plugin is one such plugin that uses this
     to allow remote machines to send notification messages
     to a configured channel.
+
+    Depends on: web
     """
 
     __version__ = "0.1"

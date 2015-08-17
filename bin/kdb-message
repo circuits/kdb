@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 
-import xmlrpclib
 from sys import stdin
 from os import environ
 from socket import gethostname
@@ -12,7 +11,7 @@ from traceback import format_exc
 from optparse import OptionParser
 
 
-import jsonrpclib
+from jsonrpc_requests import Server
 
 USAGE = "%prog [options] target message"
 
@@ -21,14 +20,8 @@ def parse_options():
     parser = OptionParser(USAGE)
 
     parser.add_option(
-        "-t", "--type",
-        action="store", default="xmlrpc", dest="rpctype",
-        help="RPC Type to use (xmlrpc or jsonrpc)"
-    )
-
-    parser.add_option(
         "-u", "--url",
-        action="store", default="http://localhost:9000/xml-rpc/", dest="url",
+        action="store", default="http://localhost:8000/json-rpc/", dest="url",
         help="Specify url to send message to (XML-RPC)"
     )
 
@@ -36,25 +29,16 @@ def parse_options():
 
     if len(args) < 2:
         parser.print_help()
-        raise SystemExit, 1
+        raise SystemExit(1)
 
     return opts, args
 
 
-def rpc(url, method, args, rpctype="xmlrpc"):
-    if rpctype == "xmlrpc":
-        from xmlrpclib import ServerProxy as Server
-        kwargs = {"allow_none": True}
-    elif rpctype == "jsonrpc":
-        from jsonrpclib import Server
-        kwargs = {}
-    else:
-        raise ValueError("Unsupported RPC Type: {0:s}".format(repr(rpctype)))
-
+def rpc(url, method, args):
     try:
-        server = Server(url, **kwargs)
+        server = Server(url)
         return getattr(server, method)(*args)
-    except Exception, error:
+    except Exception as error:
         return "ERROR: {0:s}\n{1:s}".format(error, format_exc())
 
 
@@ -72,7 +56,7 @@ def main():
     user = environ["USER"]
     hostname = gethostname()
     source = "{0:s}@{1:s}".format(user, hostname)
-    print(rpc(url, "rpc.message", [source, target, message], rpctype=opts.rpctype))
+    print(rpc(url, "rpc.message", [source, target, message]))
 
 
 if __name__ == "__main__":

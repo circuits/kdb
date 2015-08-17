@@ -48,10 +48,10 @@ class RMessage(BasePlugin):
     sends a Message Event into the system and returning
     any replies generated.
 
-    Depends on: xmlrpc
+    Depends on: jsonrpc
     """
 
-    __version__ = "0.0.3"
+    __version__ = "0.1.0"
     __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):

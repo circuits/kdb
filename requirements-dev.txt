@@ -8,9 +8,9 @@ requests
 attrdict
 pyenchant
 html2text
-jsonrpclib
 simpleeval
 feedparser
+jsonrpc-requests
 
 # circuits
 # Development version of circuits
