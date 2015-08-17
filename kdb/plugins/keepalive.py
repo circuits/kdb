@@ -1,5 +1,8 @@
-from circuits.net.events import write
+from time import time
+
+
 from circuits import handler, Event, Timer
+from circuits.protocols.irc import request, Message
 
 
 from ..plugin import BasePlugin
@@ -30,4 +33,5 @@ class KeepAlive(BasePlugin):
 
     @handler("keepalive")
     def keepalive(self):
-        self.fire(write(b"\x00"), self.bot.channel)
+        timestamp = int(time() * 10000)
+        self.fire(request(Message("PING", "LAB{0}".format(timestamp))))
