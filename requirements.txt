@@ -1,7 +1,9 @@
 Mako
 funcy
 cidict
+Jinja2
 pymetar
+pathlib
 pymills
 procname
 requests
