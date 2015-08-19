@@ -1,3 +1,4 @@
+from sys import platform
 from time import clock, time
 from collections import Counter
 from urllib import urlopen, urlencode
@@ -164,6 +165,8 @@ class Commands(Component):
         """
 
         m = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        if "linux" in platform:
+            m *= 1024  # KB -> Bytes
 
         msg = "Memory Usage: {0:s}".format(
             "{0:0.2f}{1:s}".format(*bytes(m))
