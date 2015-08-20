@@ -148,10 +148,11 @@ class Commands(Component):
 
         me = self.parent.data.state["nick"]
 
-        msg = "{0:s} [ {1:s} ] v{2:s} by {3:s} - {4:s}".format(
+        msg = "{0:s} [ {1:s} ] v{2:s} ({3:s}) by {4:s} - {5:s}".format(
             me,
             kdb.__description__,
             kdb.__version__,
+            kdb.__url__,
             kdb.__author__,
             kdb.__copyright__,
         )
@@ -192,7 +193,7 @@ class Stats(BasePlugin):
     See: commands stats
     """
 
-    __version__ = "0.2.1"
+    __version__ = "0.2.2"
     __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
