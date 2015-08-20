@@ -11,7 +11,7 @@ Knowledge Database Bot
 __author__ = "James Mills"
 __date__ = "28 January 2011"
 __copyright__ = "CopyRight (C) 2004-2015 by James Mills"
-__url__ = "https://bitbucket.org/prologic/kdb"
+__url__ = "https://github.com/prologic/kdb"
 __description__ = "Knowledge Database Bot"
 
 

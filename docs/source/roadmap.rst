@@ -20,4 +20,4 @@ kdb 0.1
 - Documentation
 - Test Suite
 
-.. seealso:: `kdb 0.1 milestone <https://bitbucket.org/prologic/kdb/issues?milestone=0.1&status=open&status=new>`_
+.. seealso:: `kdb 0.1 milestone <https://github.com/prologic/kdb/issues?milestone=0.1&status=open&status=new>`_

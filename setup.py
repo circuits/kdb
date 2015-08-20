@@ -22,8 +22,8 @@ setup(
     ),
     author="James Mills",
     author_email="James Mills, prologic at shortcircuit dot net dot au",
-    url="http://bitbucket.org/prologic/kdb/",
-    download_url="http://bitbucket.org/prologic/kdb/downloads/",
+    url="http://github.com/prologic/kdb/",
+    download_url="http://github.com/prologic/kdb/downloads/",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: No Input/Output (Daemon)",
@@ -50,9 +50,6 @@ setup(
     },
     include_package_data=True,
     scripts=glob("bin/*"),
-    dependency_links=[
-        "https://bitbucket.org/circuits/circuits/get/tip.zip#egg=circuits-3.0.0.dev",  # noqa
-    ],
     install_requires=list(parse_requirements("requirements.txt")),
     entry_points={
         "console_scripts": [
