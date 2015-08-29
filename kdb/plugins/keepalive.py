@@ -2,10 +2,10 @@ from time import time
 from collections import deque
 
 
+from funcy import first, rpartial, take
+
 from circuits.protocols.irc import request, Message
 from circuits import handler, Component, Event, Timer
-
-from funcy import rpartial, take
 
 
 from ..plugin import BasePlugin
@@ -76,6 +76,7 @@ class KeepAlive(BasePlugin):
         self.fire(request(Message("PING", "LAG{0}".format(timestamp))))
 
     @handler("pong")
-    def pong(self, source, target, timestamp):
+    def pong(self, source, *args):
+        timestamp = first(args)
         latency = int(time() * 1000) - int(timestamp[3:])
         self.data["lag"].append(latency)
