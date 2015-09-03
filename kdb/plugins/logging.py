@@ -78,6 +78,12 @@ class Logging(BasePlugin):
     separate files with log rotation suitable for viewing
     and processing by log analysis tools or web interfaces.
 
+    This will also serve up the RAW IRC Logs at /irclogs/
+    via the web plugin. So be sure to enable the web plugin
+    too!
+
+    Depends on: web
+
     Configuration::
 
     [logging]
