@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 
 
 from circuits.io import File
+from circuits.web import Static
 from circuits.io.file import _open
 from circuits import handler, Event, Timer
 from circuits.io.events import close, write
@@ -96,6 +97,10 @@ class Logging(BasePlugin):
 
         # Output log directory
         self.output = self.config.get("logging", {}).get("logdir", "logs")
+
+        # Serve logs at /irclogs
+        # Depends on web plugin
+        Static("/irclogs/", dirlisting=True, docroot=self.output).register(self)
 
         # Mapping of IRC Channel -> Logger
         self.loggers = {}
