@@ -14,9 +14,7 @@ from traceback import format_exc
 from circuits.net.events import connect
 from circuits.net.sockets import TCPClient
 from circuits import handler, BaseComponent
-from circuits.protocols.irc import (
-    IRC, NICK, NOTICE, PASS, PRIVMSG, USER, ERR_NICKNAMEINUSE
-)
+from circuits.protocols.irc import IRC, NICK, NOTICE, PASS, PRIVMSG, USER, ERR_NICKNAMEINUSE
 
 from cidict import cidict
 
@@ -53,6 +51,9 @@ class Bot(BaseComponent):
             "ident": kdb.__name__,
             "name": self.config.get("settings", {}).get("name", kdb.__description__),
         }
+
+        if self.config["password"]:
+            self.auth["password"] = self.config["password"]
 
         # command -> plugin
         self.command = cidict()

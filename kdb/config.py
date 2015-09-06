@@ -105,7 +105,13 @@ class Config(reprconf.Config):
         )
 
         add(
-            "-p", "--plugin",
+            "-p", "--password",
+            action="store", default=None, dest="password",
+            help="Password to use when connecting"
+        )
+
+        add(
+            "--plugin",
             action="append", default=plugins.DEFAULTS, dest="plugins",
             help="Plugin to load (multiple allowed)"
         )
