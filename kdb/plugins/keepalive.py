@@ -16,7 +16,7 @@ def avg(xs):
 
 
 def averages(xs):
-    return tuple(map(avg, map(rpartial(take, xs), range(5, 20, 5))))
+    return tuple(map(avg, map(rpartial(take, xs), [1, 5, 15])))
 
 
 class keepalive(Event):
@@ -28,7 +28,7 @@ class Commands(Component):
     channel = "commands"
 
     def lag(self, source, target, args):
-        """Display lag (latency) averages
+        """Display lag (latency) averages for 1, 5 and 15 mins respectively.
 
         Syntax: LAG
         """
