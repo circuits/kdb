@@ -45,7 +45,9 @@ class KeepAlive(BasePlugin):
 
     A KeepAlive Plugin to help keep the bot connected
     and detect when the connection might have gone
-    dead by periodically sending null byte packets.
+    dead by periodically sending PING commands to the
+    connected, irc server. This plugin also keeps track
+    of latency to the server (lag).
 
     There are no commands for this plugin.
     """
