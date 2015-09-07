@@ -52,7 +52,7 @@ class Bot(BaseComponent):
             "name": self.config.get("settings", {}).get("name", kdb.__description__),
         }
 
-        if self.config["password"]:
+        if "password" in self.config:
             self.auth["password"] = self.config["password"]
 
         # command -> plugin
