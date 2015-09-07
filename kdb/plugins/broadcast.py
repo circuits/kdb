@@ -10,9 +10,16 @@ class Broadcast(BasePlugin):
     This plugin provides support for listening to broadcast
     messages by listening for a certain pattern of message
     and performing some command or event on that.
+
+    The default prefix is: @ (which can be configured)
+
+    Example configuration:
+
+    [broadcast]
+    prefix = "!"
     """
 
-    __version__ = "0.1.0"
+    __version__ = "0.1.1"
     __author__ = "James Mills, prologic at shortcircuit dot net dot au"
 
     def init(self, *args, **kwargs):
